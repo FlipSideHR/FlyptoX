@@ -3,13 +3,14 @@
 	<h1>Welcome to FlyptoX</h1>
 	</head>
 <body>
-	<div ng-app="FlyptoX" ng-controller="orderbookCtrl">
+	<div ng-controller="orderbookCtrl">
 	        <h1>Exchange order book</h1>
-<!-- 	        <div ng-repeat="item in items">
-	            <span>{{item.product_name}}</span>
+	        <div ng-repeat="item in data">
+	            <span>{{item.orderSize}}</span>
 	            <span>{{item.price | currency}}</span>
+	            <span>{{item.filled}}</span>
 	            <button ng-click="remove($index);">Remove</button>
-	        </div> -->
+	        </div>
 	    </div>
 </body>
 </html>

@@ -1,5 +1,13 @@
-'use strict';
+// FlyptoX.controller('orderbookCtrl', function () {
+//   	// $scope.data = {};
+//   	// 	orderSize: 10,
+//   	// 	price: 50,
+//   	// 	filled: "yes"
+//   	// };
+//   });
 
-angular.module('FlyptoX')
-  .controller('orderbookCtrl', function () {
-  });
+// var myApp = angular.module('myApp',[]);
+
+// myApp.controller('GreetingController', ['$scope', function($scope) {
+//   $scope.greeting = 'Hola!';
+// }]);
