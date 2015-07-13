@@ -27,6 +27,8 @@ for(var modelName in models) {
     app.set(modelName, models[modelName]);
 }
 
+var apiRouter = require("./routes/api.js");
+
 if(globalConfig.environment == 'local') {
     app.use(require('connect-livereload')());
 }
@@ -58,14 +60,7 @@ app.get('/', function(req, res) {
     renderIndex(req.config, res);
 });
 
-app.get('/api/users', function(req, res) {
-    new User().fetchAll().then(function(users) {
-        res.send(users);
-    }).catch(function(error) {
-        console.log(error.stack);
-        res.send('Error getting Users');
-    });
-});
+app.use('/api', apiRouter);
 
 app.use(function(req, res) {
     res.redirect('/');
