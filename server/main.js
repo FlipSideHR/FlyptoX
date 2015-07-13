@@ -27,11 +27,19 @@ for(var modelName in models) {
     app.set(modelName, models[modelName]);
 }
 
+//signin and signup routes
+var authRouter = require("./routes/auth.js");
+
+//api routes
 var apiRouter = require("./routes/api.js");
 
 if(globalConfig.environment == 'local') {
     app.use(require('connect-livereload')());
 }
+
+
+app.use('/api/v1', apiRouter);
+app.use('/api/auth', authRouter);
 
 app.use(cookieParser());
 
@@ -58,12 +66,6 @@ app.use('/', express.static(path.join(rootPath, 'app')));
 
 app.get('/', function(req, res) {
     renderIndex(req.config, res);
-});
-
-app.use('/api', apiRouter);
-
-app.use(function(req, res) {
-    res.redirect('/');
 });
 
 app.listen(port, function() {
