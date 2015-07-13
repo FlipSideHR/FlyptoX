@@ -38,9 +38,27 @@ From within the root directory:
 
 ```sh
 sudo npm install -g bower
+sudo npm install -g knex
 npm install
 bower install
 ```
+
+### Database setup
+
+Create a database using `createdb` tool
+
+    createdb flyptox
+
+Enter `psql` command shell. Create a role and grant access to the database
+
+    create role flyptox with login;
+    grant all privileges on database flyptox to flyptox;
+
+exit psql
+
+Run knex migrations
+
+    knex migrate:latest
 
 ### Roadmap
 

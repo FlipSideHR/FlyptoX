@@ -5,7 +5,7 @@ module.exports = {
     connection: {
       host: 'localhost',
       database: 'flyptox',
-      user:     'Amylia'
+      user:     'flyptox'
     },
     seeds: {
       directory: './db/seeds'
