@@ -16,5 +16,17 @@
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
 	    </div>
+
+	 <div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="data">
+	     <div ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
+	        	<h6> {{testData}} </h6>
+	        	   <div ng-repeat="d in testData">
+	            <span>{{d}}</span>
+	            <span>{{d.price | currency}}</span>
+	            <span>{{d.filled}}</span>
+	            <button ng-click="remove($index);">Remove</button>
+	        </div>
+	    </div>
+	 </div>
 </body>
 </html>
