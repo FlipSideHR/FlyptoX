@@ -42,6 +42,20 @@ npm install
 bower install
 ```
 
+### Database setup
+Create a database using commandline tool
+
+    createdb flyptox
+
+In `psql` command line tool create a role and grant access to the database:
+
+    create role flyptox with login;
+    grant all privileges on database flyptox to flyptox;
+
+Run knex migrations
+
+    knex migrate:latest
+
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
