@@ -7,10 +7,10 @@
 		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
 	        <h5> {{data}}</h5>
-	        <div ng-repeat="item in data">
-	            <span>{{item.orderSize}}</span>
-	            <span>{{item.price | currency}}</span>
-	            <span>{{item.filled}}</span>
+	        <div ng-repeat="d in data">
+	            <span>{{d}}</span>
+	            <span>{{d.price | currency}}</span>
+	            <span>{{d.filled}}</span>
 	            <button ng-click="remove($index);">Remove</button>
 	        </div>
 	        <div class="close"></div>
