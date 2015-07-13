@@ -3,10 +3,9 @@
 	<h1>Welcome to FlyptoX</h1>
 	</head>
 <body>
-	<div ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="data">
+	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="data">
 		      <h4>Exchange order book</h4> 
-	        <div class="order"> 
-	        </div>
+	        <div class="order">Bid</div>
 	        <h5> {{data}}</h5>
 	        <div ng-repeat="item in data">
 	            <span>{{item.orderSize}}</span>
@@ -14,6 +13,8 @@
 	            <span>{{item.filled}}</span>
 	            <button ng-click="remove($index);">Remove</button>
 	        </div>
+	        <div class="close"></div>
+	        <div class="order">Ask</div>
 	    </div>
 </body>
 </html>
