@@ -3,7 +3,7 @@
 exports.up = function(knex, Promise) {
     return Promise.all([
         knex.schema.createTable('users', function(table) {
-            table.uuid("user_id").primary().notNullable();
+            table.uuid("id").primary().notNullable();
             table.string('username');
             table.string('password');
             table.string('salt');

@@ -3,7 +3,7 @@
 exports.up = function(knex, Promise) {
     return Promise.all([
         knex.schema.createTable('currencies', function(table) {
-            table.increments("currency_id").primary();
+            table.increments("id").primary();
             table.string("currency").notNullable();
         })
     ]);
