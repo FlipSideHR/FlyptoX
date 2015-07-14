@@ -23,11 +23,15 @@
 
 
 	 	<div style="float:right" class="execution" ng-app="FlyptoX" ng-controller="executionCtrl" ng-model="orderData">
-	 	 			<div class="close"></div>
-		      <h4>Place Orders</h4> 
+	 	 			<div class="close"> <h4>Place Orders</h4></div>
 	        <div class="order"></div>
-	       <input>
-	       <input>
+	        <h3> Order Type </h3>
+	        <select>
+						  <option value="market">Market</option>
+						  <option value="limit">Limit</option>
+					</select>
+	       <input placeholder="quantity">
+	       <input placeholder="price">
 	    </div>
 	 </div>
 </body>
