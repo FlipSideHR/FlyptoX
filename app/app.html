@@ -4,19 +4,19 @@
 	</head>
 <body>
 	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
-		      <h4>Exchange order book</h4> 
+		      <div class="close"><h4>Exchange order book</h4></div>
 	        <div class="order">Bid</div>
 	        <div ng-repeat="d in testData.bids | limitTo: 20">
-	         	<h7> {{ d[0] }} </h7>
-	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
-	         	<h7 style="float: right"> {{ d[2] }} </h7>
+	         	<h6> {{ d[0] }} </h6>
+	         	<h6 style="margin-left: 40px"> {{ d[1] }} </h6>
+	         	<h6 style="float: right"> {{ d[2] }} </h6>
 	         		        </div>
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
  					<div ng-repeat="d in testData.asks | limitTo: 20">
-	         	<h7> {{ d[0] }} </h7>
-	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
-	         	<h7 style="float: right"> {{ d[2] }} </h7>
+	         	<h6> {{ d[0] }} </h6>
+	         	<h6 style="margin-left: 40px"> {{ d[1] }} </h6>
+	         	<h6 style="float: right"> {{ d[2] }} </h6>
 	         	</div>
 	    </div>
 	 </div>
@@ -24,14 +24,13 @@
 
 	 	<div style="float:right" class="execution" ng-app="FlyptoX" ng-controller="executionCtrl" ng-model="orderData">
 	 	 			<div class="close"> <h4>Place Orders</h4></div>
-	        <div class="order"></div>
-	        <h3> Order Type </h3>
-	        <select>
+	        <div class="order"> <h3> Order Type </h3></div>
+	        <select style="margin-left:15px">
 						  <option value="market">Market</option>
 						  <option value="limit">Limit</option>
 					</select>
-	       <input placeholder="quantity">
-	       <input placeholder="price">
+	       <input style="margin-left:15px" placeholder="quantity">
+	       <input style="margin-left:15px" placeholder="price">
 	    </div>
 	 </div>
 </body>
