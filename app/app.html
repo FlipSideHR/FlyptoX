@@ -6,16 +6,18 @@
 	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
 		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
-	        <h6> {{testData.bids}} </h6>
-	        <div ng-repeat="d in data">
-	           <!--  <span>{{d}}</span>
-	        <span>{{ d[0] }}</span>
-	            <span>{{ d[1] }}</span> -->
-	          <button ng-click="remove($index);">Remove</button>
-	        </div>
+	        <div ng-repeat="d in testData.bids | limitTo: 20">
+	         	<h7> {{ d[0] }} </h7>
+	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
+	         	<h7 style="float: right"> {{ d[2] }} </h7>
+	         		        </div>
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
-	        <h6> {{testData.asks}} </h6>
+ 					<div ng-repeat="d in testData.asks | limitTo: 20">
+	         	<h7> {{ d[0] }} </h7>
+	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
+	         	<h7 style="float: right"> {{ d[2] }} </h7>
+	         	</div>
 	    </div>
 	 </div>
 </body>
