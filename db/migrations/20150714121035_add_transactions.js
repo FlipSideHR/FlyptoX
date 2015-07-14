@@ -7,7 +7,8 @@ exports.up = function(knex, Promise) {
             table.uuid("account_id").references("account_id").inTable("accounts");
             table.float("amount", 16, 8);
             table.float("balance", 16, 8);
-            table.text("type");
+            table.string("type");
+            table.uuid("trade_id").references("trade_id").inTable("trades");
         })
     ]);
 };
