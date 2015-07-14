@@ -29,10 +29,10 @@ Once the project moves into development, the press release can be used as a touc
   > Maintaining an up-to-date order book and executing trades against it is difficult. The quantity, complexity, and velocity of market data requires a sophisticated system in order to ensure users' orders are executed accurately and quickly.
 
 ## Solution ##
-  > FlyptoX enables 
+  > FlyptoX uses a highly precise, secure, and fast implementation of a market exchange, allowing operators to focus on other operational concerns such as legal and marketing. Essential requirements such as user account management, order processing, and exchange analytics are all met with a standard set of admin tools, along with an API that was designed with extensibility and cofiguration in mind.
 
 ## Quote from You ##
-  > "As the availability and accessibility of crypto-currencies grows, we expect unprecedented growth "
+  > "As the availability and accessibility of crypto-currencies grows, we expect unprecedented growth in the total transaction volume of crypto-currencies as a whole. This tool provides prospective exchange operators with an opportunity to focus on differentiating their offerings as opposed to replicating the functionality any exchange would need to operate. We have built FlyptoX to provide a secure, solid foundation upon which operators can bring new innovations to market."
 
 ## How to Get Started ##
   > The FlyptoX development team maintains up-to-date documentation describing the install procedure, a REST API for querying exchange data and submitting customer orders, and a set of tutorials to set up a basic crypto-currency exchange quickly.
