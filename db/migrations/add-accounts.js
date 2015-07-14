@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
             table.uuid("account_id").primary().notNullable();
             table.uuid("user_id").notNullable().refrences("user_id").inTable("users");
             table.integer("currency_id").notNullable().refrences("currency_id").inTable("curruencies");
-            table.float("balance", 8, 8);
-            table.float("available", 8, 8);
+            table.float("balance", 16, 8);
+            table.float("available", 16, 8);
         })
     ]);
 };

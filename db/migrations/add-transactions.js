@@ -5,8 +5,8 @@ exports.up = function(knex, Promise) {
         knex.schema.createTable('transactions', function(table) {
             table.uuid("transaction_id").primary();
             table.uuid("account_id").refrences("account_id").inTable("accounts");
-            table.float("amount", 8, 8);
-            table.float("balance", 8, 8);
+            table.float("amount", 16, 8);
+            table.float("balance", 16, 8);
             table.text("type");
         })
     ]);
