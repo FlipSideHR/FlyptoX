@@ -9,7 +9,6 @@ FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
   	};
 
   	/*jshint multistr: true */
-
   	var holdData = JSON.parse('{"sequence":151031658,"bids":[["294.16","0.25",1], \
   		["294.14","0.06775937",1],["294.13","0.07391931",1], \
   		["294.03","0.08623626",1],["294.02","0.108",1],["293.99","0.1108752",1],["293.98","0.544",1], \
@@ -43,3 +42,29 @@ FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
   	console.log(holdData);
   	console.log($scope.testData);
 }]);
+
+FlyptoX.controller('executionCtrl', ['$scope', 
+  '$interval', function($scope, $interval, AccountsService){
+    // hold order data
+    $scope.order = {};
+    
+    $scope.wallets = [];    
+    $scope.ordersList = [];
+
+    $scope.cancel = function(id){
+      console.log('canceling order: ', id);
+      AccountsService.cancel(id, function(result){
+        console.log(result); 
+      });
+    };
+      
+    $scope.buy = function(){
+      AccountsService.buy($scope.order.price, $scope.order.size);
+    };
+    
+    $scope.sell = function(){
+      AccountsService.sell($scope.order.price, $scope.order.size);
+    };
+
+  }]);
+
