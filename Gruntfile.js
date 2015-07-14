@@ -17,7 +17,7 @@ module.exports = function(grunt) {
               quiet: false, // Optionally suppress output to standard out (defaults to false)
               clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
             },
-            src: ['test/server/*.spec.js']
+            src: ['test/server/**/*.spec.js']
           }
         },
         copy: {
@@ -258,9 +258,8 @@ module.exports = function(grunt) {
     'watch'
   ]);
 
-  grunt.registerTask('test:server', [
-    'mochaTest'
-  ]);
+    // tast for running mocha tests on server components
+    grunt.registerTask('test:server', ['mochaTest']);
 
   function setEnvVars() {
     if(minOption()) {

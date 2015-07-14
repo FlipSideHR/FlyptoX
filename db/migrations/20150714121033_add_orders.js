@@ -3,7 +3,7 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('orders', function(table) {
-      table.uuid('id').primary();
+      table.uuid('id').primary().notNullable();
       table.integer('sequence');
       table.integer('currency_pair_id').notNullable().references('id').inTable('currency_pairs');
       table.string('order_type').notNullable();

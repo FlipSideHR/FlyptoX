@@ -9,5 +9,8 @@ dist/
 *.log
 .DS_Store
 
+#.jshintrc - so you can have yours customized the way you like?
+.jshintrc
+
 # test generated output
 results.txt
