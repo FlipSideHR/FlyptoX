@@ -49,36 +49,37 @@ FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
 // FlyptoX.controller('AccountsController', 
   //['$scope', '$interval', 'AccountsService', 
   //function($scope, $interval, AccountsService){
-FlyptoX.controller('executionCtrl', ['$scope', '$interval', function($scope, $interval){
+FlyptoX.controller('executionCtrl', 
+  ['$scope', '$interval', 'AccountsService', function($scope, $interval, AccountsService){
     // hold order data
     $scope.order = {};
     
     $scope.wallets = [];    
     $scope.ordersList = [];
 
-    // $scope.cancel = function(id){
-    //   console.log('canceling order: ', id);
-    //   AccountsService.cancel(id, function(result){
-    //     console.log(result); 
-    //   });
-    // };
+    $scope.cancel = function(id){
+      console.log('canceling order: ', id);
+      AccountsService.cancel(id, function(result){
+        console.log(result); 
+      });
+    };
 
-    // $interval(function(){
-    //   AccountsService.fetchWallets(function(wallets){
-    //     $scope.wallets = wallets;                            
-    //   });
+    $interval(function(){
+      AccountsService.fetchWallets(function(wallets){
+        $scope.wallets = wallets;                            
+      });
 
-    //   AccountsService.fetchOrders(function(orders){
-    //     $scope.ordersList = orders.list;                            
-    //   });
-    // }, 500);
+      AccountsService.fetchOrders(function(orders){
+        $scope.ordersList = orders.list;                            
+      });
+    }, 500);
       
-    // $scope.buy = function(){
-    //   AccountsService.buy($scope.order.price, $scope.order.size);
-    // };
+    $scope.buy = function(){
+      AccountsService.buy($scope.order.price, $scope.order.size);
+    };
     
-    // $scope.sell = function(){
-    //   AccountsService.sell($scope.order.price, $scope.order.size);
-    // };
+    $scope.sell = function(){
+      AccountsService.sell($scope.order.price, $scope.order.size);
+    };
   }]);
 
