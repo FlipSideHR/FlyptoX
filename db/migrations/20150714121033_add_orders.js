@@ -3,9 +3,9 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('orders', function(table) {
-      table.uuid('order_id').primary();
+      table.uuid('id').primary();
       table.integer('sequence');
-      table.integer('currency_pair_id').notNullable().references('currency_pair_id').inTable('currency_pairs');
+      table.integer('currency_pair_id').notNullable().references('id').inTable('currency_pairs');
       table.string('order_type').notNullable();
       table.string('side').notNullable();
       table.float('price', 16, 8).notNullable();
@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       table.dateTime('created_at').notNullable().defaultTo(knex.raw('now()'));
       table.dateTime('updated_at').notNullable().defaultTo(knex.raw('now()'));
       table.string('status');
-      table.uuid('user_id').notNullable().references('user_id').inTable('users');
+      table.uuid('user_id').notNullable().references('id').inTable('users');
     })
   ]);
 };
