@@ -1,5 +1,5 @@
-FlyptoX.config(function() {
-    //
+FlyptoX.config(function () {
+ 
 });
 
 FlyptoX.run(function() {
