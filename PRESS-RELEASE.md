@@ -17,29 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  > FlyptoX
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > An open-source implementation of a crypto-currency exchange using Node.js
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > FlyptoX provides a robust model for individuals seeking to become crypto-currency exchange operators. Among the many challenges necessary to successfully operate an exchange, FlyptoX solves for the technological component. Mission-critical processes, such as executing trades against the order book, calculating market summaries and statistics, and registering new accounts, are all ready out-of-the-box with support for detailed configuration.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Maintaining an up-to-date order book and executing trades against it is difficult. The quantity, complexity, and velocity of market data requires a sophisticated system in order to ensure users' orders are executed accurately and quickly.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > FlyptoX enables 
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "As the availability and accessibility of crypto-currencies grows, we expect unprecedented growth "
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > The FlyptoX development team maintains up-to-date documentation describing the install procedure, a REST API for querying exchange data and submitting customer orders, and a set of tutorials to set up a basic crypto-currency exchange quickly.
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
-  
