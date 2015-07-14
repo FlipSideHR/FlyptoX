@@ -49,8 +49,8 @@ FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
 // FlyptoX.controller('AccountsController', 
   //['$scope', '$interval', 'AccountsService', 
   //function($scope, $interval, AccountsService){
-FlyptoX.controller('executionCtrl', 
-  ['$scope', '$interval', 'AccountsService', function($scope, $interval, AccountsService){
+FlyptoX.controller('executionCtrl', ['$scope', 
+  '$interval', function($scope, $interval, AccountsService){
     // hold order data
     $scope.order = {};
     
@@ -81,5 +81,6 @@ FlyptoX.controller('executionCtrl',
     $scope.sell = function(){
       AccountsService.sell($scope.order.price, $scope.order.size);
     };
+
   }]);
 

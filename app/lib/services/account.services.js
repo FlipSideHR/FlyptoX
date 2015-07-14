@@ -1,5 +1,5 @@
-angular.module('FlyptoX', [])
-  .factory('AccountsService', ['$interval', function($interval){  
+angular.module('FlyptoX').factory('AccountsService', 
+  ['$interval', function($interval){  
     var authedClient = {};
 
     var fetchOrders = function(callback){
