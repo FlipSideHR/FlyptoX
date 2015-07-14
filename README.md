@@ -24,11 +24,11 @@
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
+- Node 0.12.x
+- Express 4.4.4 
+- Angular 1.2.26
 - Postgresql 9.1.x
-- etc
-- etc
+- ~~Redis 2.6.x~~
 
 ## Development
 
@@ -62,7 +62,7 @@ Run knex migrations
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
 
 
 ## Contributing
