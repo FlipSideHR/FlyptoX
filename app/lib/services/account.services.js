@@ -57,6 +57,7 @@ angular.module('FlyptoX').factory('AccountsService',
     };
 
     var sell = function(price, size){
+      console.log(price, size);
       var sellParams = {
         'price': price, // USD 
         'size': size,  // BTC 
@@ -71,6 +72,7 @@ angular.module('FlyptoX').factory('AccountsService',
 
     // sends a buy order at a price
     var buy = function(price, size) {
+      console.log(price, size);
       var buyParams = {
         'price': price, // USD 
         'size': size,  // BTC 

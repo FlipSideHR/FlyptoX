@@ -4,32 +4,39 @@
 	</head>
 <body>
 	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
-		      <div class="close"><h4>Exchange order book</h4></div>
+		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
-
 	        <div ng-repeat="d in testData.bids | limitTo: 20">
-	         	<h6 style="margin-top: -5px"> {{ d[0] }} {{ d[1] }} {{ d[2] }}</h6>
-	        </div>
-
+	         	<h7> {{ d[0] }} </h7>
+	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
+	         	<h7 style="float: right"> {{ d[2] }} </h7>
+	         		        </div>
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
  					<div ng-repeat="d in testData.asks | limitTo: 20">
-	         	<h6> {{ d[0] }} {{ d[1] }} {{ d[2] }} </h6>
+	         	<h7> {{ d[0] }} </h7>
+	         	<h7 style="margin-left: 40px"> {{ d[1] }} </h7>
+	         	<h7 style="float: right"> {{ d[2] }} </h7>
 	         	</div>
 	    </div>
 	 </div>
 
 	 	<div style="float:right" class="execution" ng-app="FlyptoX" ng-controller="executionCtrl">
 	 	 			<div class="close"> <h4>Place Orders</h4></div>
-	        <div class="order"> <h3> Order Type </h3></div>
-	        <select style="margin-left:15px">
-						  <option value="market">Market</option>
-						  <option value="limit">Limit</option>
-					</select>
-	        Lot Size<input id="size" type="number" value="1" min="0.0001" max="100" ng-model="order.size" /><br>
-	       Price<input id="price" type="number" min="" max="" ng-model="order.price" /><br>
-    	<button id="buy" ng-click="buy()">Buy</button>
-    	<button id="sell" ng-click="sell()">Sell</button>
+	        <div class="order" style="position: absolute"> <h3> Order Type </h3></div>
+	        <select style="margin-left: 120px; margin-top: 5px"> 
+	        		<option value="market">Market</option>
+						  <option value="limit">Limit</option> </select>
+					<div style="margin-top: 30px">
+	       		 Lot Size<input style="margin-left: 15px" id="size" type="number" value="1" min="0.0001" max="100" ng-model="order.size" /><br>
+	        </div>
+	        <div style="margin-top: 30px">
+	       		Price<input style="margin-left: 15px" id="price" type="number" min="" max="" ng-model="order.price" /><br>
+	       </div>
+	      <div style="margin-top: 20px">
+		    	<button id="buy" ng-click="buy()">Buy</button>
+		    	<button id="sell" ng-click="sell()">Sell</button>
+    	</div>
   </div>
 
   <div class="execution">
