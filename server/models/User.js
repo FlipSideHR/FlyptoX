@@ -31,6 +31,7 @@ module.exports = function(bookshelf){
     });
   });
 
+
   User.signup = Promise.method(function(email, password){
     if (!email || !password) throw new Error('Email and password are both required');
     return new User({email: email.toLowerCase().trim()}).fetch().then(function(user) {
@@ -41,7 +42,7 @@ module.exports = function(bookshelf){
             email: email.toLowerCase().trim(),
             password: hash,
             salt: salt
-          }).save({}, {method: 'insert'});
+          }).save();
         });
       });
     });
