@@ -37,7 +37,6 @@
     "knex": "0.7.3",
     "pg": "3.6.2",
     "require-directory": "2.0.0",
-    "techan": "andredumas/techan.js",
     "underscore": "^1.8.3"
   }
 }
