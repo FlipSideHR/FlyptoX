@@ -13,8 +13,15 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 //The following routes are intented to be used by angular services
 
-//to signin a user. On success they will return a JSON object containing a token
-//todo - rate limiting
+/*
+to signin a user. On success they will return a JSON object containing a token
+todo - rate limiting
+todo - return a new 'secret' to be used for HMAC signatures (attached as headers on api calls)
+returns a json object
+  {
+    "token": "9823409sz7632m4b2387fksd....."
+  }
+*/
 router.post('/signin', function(req, res) {
   if(!req.body.email || !req.body.password) return res.send(400);
   users.getToken(req.body.email, req.body.password)
@@ -26,8 +33,15 @@ router.post('/signin', function(req, res) {
     });
 });
 
-//to signup a new user. On success it will return a JSON object containing a token
-//todo rate limiting
+/*
+to signup a new user. On success it will return a JSON object containing a token
+todo - rate limiting
+todo - return a new 'secret' to be used for HMAC signatures (attached as headers on api calls)
+returns a json object
+  {
+    "token": "9823409sz7632m4b2387fksd....."
+  }
+*/
 router.post('/signup', function(req, res) {
   if(!req.body.email || !req.body.password) return res.send(400);
   users.registerNewUser(req.body.email, req.body.password)
@@ -35,13 +49,19 @@ router.post('/signup', function(req, res) {
       res.json({token: token});
     })
     .catch(function(err){
-      console.log(err);
       res.send(403);
     });
 });
 
-//This route is authenticated and can be used by angular to fetch the logged in user's
-//details (email, fullname) and serves as a check to verify if the held token is valid.
+/*
+This route is authenticated and can be used by angular to fetch the logged in user's
+details (email, fullname) and serves as a check to verify if the held token is valid or not.
+  returns a json object:
+  {
+    "email": "user@email.com",
+    "fullname": "Full Name"
+  }
+*/
 router.post('/whoami', privateApi, function(req, res) {
   //if the token was valid a userId property is attached to the request
   users.getInfoById(req.userId)
@@ -50,7 +70,7 @@ router.post('/whoami', privateApi, function(req, res) {
     })
     .catch(function(){
       //user no longer exists in the database
-      res.send(403);
+      res.send(401);
     });
 });
 

@@ -3,7 +3,7 @@ var users = module.exports;
 
 //method for registering a new user account and returns a new token
 users.registerNewUser = function(email, password){
-  return new User().signup(email, password)
+  return User.signup(email, password)
     .then(function(user){
       return tokens.generateToken(user.get("id"));
       //TODO ... emit event: new user registered,  (through app events object)
@@ -17,14 +17,17 @@ users.registerNewUser = function(email, password){
 //found in the database. This token is used to authenticate the user
 //when making api calls
 users.getToken = function(email, password) {
-  return new User().signin(email, password)
+  return User.signin(email, password)
     .then(function(user){
       //store the userId in the token
       return tokens.generateToken(user.get("id"));
     });
 };
 
-//return a simple object with the user's personal details
+
+/*
+  It returns a promise that on success will resolve to an object with user's information
+*/
 users.getInfoById = function(id){
   return new User({id:id}).fetch()
     .then(function(user){
