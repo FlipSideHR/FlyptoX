@@ -5,12 +5,11 @@ var express = require('express');
 // used for our template engine (handlebars)
 var cons = require('consolidate');
 
+// import our configed bookshelf object
+var bookshelf = require('./utils/bookshelf.js');
+
 // do we need this?
 var cookieParser = require('cookie-parser');
-
-var knexConfig = require('../knexfile');
-var knex = require('knex')(knexConfig.development);
-var bookshelf = require('bookshelf')(knex);
 
 var app = module.exports = express();
 
@@ -25,6 +24,9 @@ var port = Number(process.env.PORT || 9999);
 app.set('views', path.join(rootPath, 'server'));
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
+
+// import our configed bookshelf object
+var bookshelf = require('./utils/bookshelf.js');
 
 // set an application wide bookshelf property
 app.set('bookshelf', bookshelf);
@@ -46,6 +48,9 @@ var apiRouter = require("./routes/api.js");
 if(globalConfig.environment == 'local') {
     app.use(require('connect-livereload')());
 }
+
+app.use('/api/v1', apiRouter);
+app.use('/api/auth', authRouter);
 
 // why cookieParser if we are sessionless?
 app.use(cookieParser());
@@ -79,11 +84,6 @@ app.get('/', function(req, res) {
 app.listen(port, function() {
     console.log('Server listening on port ' + port);
 
-    // one could verify that the user model had loaded by 
-    // uncommenting this code... if one were so inclined
-    //app.get('User').fetchAll().then(function(users){
-    //  console.log(users);
-    //});
 });
 
 //

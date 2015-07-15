@@ -1,10 +1,11 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var knexConfig = require('./knexfile');
-var knex = require('knex')(knexConfig.development);
-var bookshelf = require('bookshelf')(knex);
+//var knexConfig = require('./knexfile');
+//var knex = require('knex')(knexConfig.development);
+//var bookshelf = require('bookshelf')(knex);
 
+var bookshelf = require('../../../server/utils/bookshelf.js');
 var User = require('../../../server/models/User.js')(bookshelf);
 
 // add a collection
