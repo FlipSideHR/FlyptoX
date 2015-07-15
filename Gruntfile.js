@@ -258,20 +258,13 @@ module.exports = function(grunt) {
     'watch'
   ]);
 
-<<<<<<< HEAD
-    grunt.registerTask('test:server', [
-      'mochaTest'
-    ]);
+  grunt.registerTask('test:server', [
+    'mochaTest'
+  ]);
 
-    function setEnvVars() {
-        if(minOption()) {
-            process.env.MINIFY = 'yes';
-        }
-=======
   function setEnvVars() {
     if(minOption()) {
       process.env.MINIFY = 'yes';
->>>>>>> Attempt to fix Gruntfile
     }
   }
 
