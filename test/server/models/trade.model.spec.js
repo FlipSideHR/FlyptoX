@@ -1,9 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var knexConfig = require('./knexfile');
-var knex = require('knex')(knexConfig.development);
-var bookshelf = require('bookshelf')(knex);
+var bookshelf = require('../../../server/utils/bookshelf.js');
 
 var uuid = require('node-uuid');
 var Trade = require('../../../server/models/Trade.js')(bookshelf);
