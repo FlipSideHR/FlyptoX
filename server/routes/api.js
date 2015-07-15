@@ -1,7 +1,7 @@
 var express = require('express');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
-var router = express.Router();
+var router = module.exports = express.Router();
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -15,6 +15,40 @@ var users = require("../controllers/users");
 var privateApi = require("../controllers/tokens").decodeToken;
 
 /*
+== Public (anonymous) ==
+GET /products
+GET /products/:id/book
+GET /products/:id/ticker
+GET /products/:id/trades
+GET /products/:id/candles (historic prices)
+GET /products/:id/stats (24 hour history)
+*/
+
+//return an array of currency pairs
+router.get("/products", function(req, res){
+  res.json([
+    {
+      id:0,
+      currency_pair:"BTC-USD"
+    }
+  ]);
+});
+
+
+/*
+== Private (authenticated) ==
+GET /accounts
+GET /accounts/:id
+GET /accounts/:id/ledger (history)
+GET /accounts/:id/holds
+POST /orders
+DELETE /orders/:id
+GET /orders
+GET /orders/:id
+GET /trades  (fills)
+*/
+
+/*
 todo: add a route for OAuth2 service
   .....
 
@@ -25,63 +59,4 @@ In the web app:
 For 3rd-party clients or web apps
   option a. A REST client will use an api key, secret and passphrase to sign their api calls
   option b. OAuth2 tokens (will need to implement OAuth2 service)
-
-Public API Methods
-
-getProducts
-
-getProductOrderBook //differnet levels (limit the size)
-
-getProductTicker
-
-getProductTrades //paged - default latest 100, can ask for additional pages
-
-publicClient.getProductHistoricRates({'granularity': 3000}, callback);
-
-getProduct24HrStats
-
-getCurrencies
-
-getTime
-
-
-Private API Methods
-getAccounts
-
-getAccount(accountID, callback);
-
-getAccountHistory(accountID, {'before': 3000}, callback);
-getAccountHolds(accountID, callback);
-
-getAccountHolds(accountID, {'before': 3000}, callback);
-
-// Buy 1 BTC @ 100 USD
-var buyParams = {
-  'price': '100.00', // USD
-  'size': '1',  // BTC
-  'product_id': 'BTC-USD',
-};
-
-buy(buyParams, callback); //returns and orderId
-
-// Sell 1 BTC @ 110 USD
-var sellParams = {
-  'price': '110.00', // USD
-  'size': '1', // BTC
-  'product_id': 'BTC-USD',
-};
-
-sell(sellParams, callback); //returns an orderId
-
-cancelOrder(orderID, callback);
-
-getOrders(callback); //paged
-
-getOrder(orderID, callback);
-
-getFills(callback);//paged
-
-getFills({'before': 3000}, callback);//paged
-
 */
-module.exports = router;
