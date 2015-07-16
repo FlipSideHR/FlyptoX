@@ -1,4 +1,5 @@
 // export a configed bookshelf instance
+
 // takes a string representing the desired environment ('test' or 'development')
 var Bookshelf;
 module.exports = function(environment){
