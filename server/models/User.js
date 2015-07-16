@@ -3,11 +3,25 @@ var Promise  = require('bluebird');
 var bcrypt   = Promise.promisifyAll(require('bcrypt-nodejs'));
 var uuid = require("node-uuid");
 
-var app = require('../main');
-var bookshelf = app.get('bookshelf');
+// returns a bookshelf user model
+// requires a configured bookshelf object be passed to it
+module.exports = function(bookshelf){
 
-var User = module.exports = bookshelf.Model.extend({
+  var User = bookshelf.Model.extend({
     tableName: 'users',
+
+    initialize: function(){
+      this.on('creating', this.onCreate, this);  
+    },
+
+    // event for capturing new user events
+    onCreate: function(model, attrs, options) {
+      // any kind of validation might go here
+
+      // create a new user id
+      this.set('id', uuid.v1());
+
+    },
 
     signin: Promise.method(function(email, password){
       if (!email || !password) throw new Error('Email and password are both required');
@@ -29,7 +43,6 @@ var User = module.exports = bookshelf.Model.extend({
           return bcrypt.genSaltAsync(10).then(function(salt){
             return bcrypt.hashAsync(password, salt, null).then(function(hash){
               return user = new User({
-                id: uuid.v1(),
                 email: email.toLowerCase().trim(),
                 password: hash,
                 salt: salt
@@ -39,4 +52,9 @@ var User = module.exports = bookshelf.Model.extend({
         }
       });
     }),
-});
+
+  });
+
+  return User;
+
+};
