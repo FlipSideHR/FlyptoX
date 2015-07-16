@@ -10,6 +10,14 @@ module.exports = function(bookshelf){
   var User = bookshelf.Model.extend({
     tableName: 'users',
 
+    accounts: function(){
+      return this.hasMany(Account, "user_id");
+    },
+
+    orders: function(){
+      return this.hasMany(Order, "user_id");
+    },
+
     initialize: function(){
       this.on('creating', this.onCreate, this);
     },
