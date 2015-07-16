@@ -79,7 +79,7 @@ module.exports = function(grunt) {
             },
             laxcomma: true,
             maxlen: 120,
-            unused: 'vars',
+            // unused: 'vars',
             undef: true
           },
           files: {
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
             })(),
             laxcomma: true,
             maxlen: 120,
-            unused: 'vars',
+            // unused: 'vars',
             undef: true
           },
           files: {
