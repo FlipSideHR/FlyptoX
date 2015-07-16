@@ -11,16 +11,12 @@ module.exports = function(bookshelf){
     tableName: 'trades',
 
     initialize: function(){
-      this.on('creating', this.onCreate, this);  
+      this.on('creating', this.onCreate, this);
     },
 
-    // event for capturing new user events
+    // order creation event
     onCreate: function(model, attrs, options) {
-      // any kind of validation might go here
-
-      // create a new user id
       this.set('id', uuid.v1());
-
     },
 
     maker: function(){
