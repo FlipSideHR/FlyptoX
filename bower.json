@@ -7,6 +7,7 @@
   "private": true,
   "dependencies": {
     "angular": "1.2.26",
-    "angular-mocks": "1.2.26"
+    "angular-mocks": "1.2.26",
+    "angular-chartist.js": "~3.3.6"
   }
 }

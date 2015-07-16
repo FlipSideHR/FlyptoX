@@ -3,7 +3,7 @@
 	<h1>Welcome to FlyptoX</h1>
 	</head>
 <body>
-	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
+	<div class="tx" ng-controller="orderbookCtrl" ng-model="testData">
 		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
 	        <div ng-repeat="d in testData.bids | limitTo: 20">
@@ -21,26 +21,33 @@
 	    </div>
 	 </div>
 
-	 	<div style="float:right" class="execution" ng-app="FlyptoX" ng-controller="executionCtrl">
-	 	 			<div class="close"> <h4>Place Orders</h4></div>
-	        <div class="order" style="position: absolute"> <h3> Order Type </h3></div>
-	        <select style="margin-left: 120px; margin-top: 5px"> 
-	        		<option value="market">Market</option>
-						  <option value="limit">Limit</option> </select>
-					<div style="margin-top: 30px">
-	       		 Lot Size<input style="margin-left: 15px" id="size" type="number" value="1" min="0.0001" max="100" ng-model="order.size" /><br>
-	        </div>
-	        <div style="margin-top: 30px">
-	       		Price<input style="margin-left: 15px" id="price" type="number" min="" max="" ng-model="order.price" /><br>
-	       </div>
-	      <div style="margin-top: 20px">
-		    	<button id="buy" ng-click="buy()">Buy</button>
-		    	<button id="sell" ng-click="sell()">Sell</button>
-    	</div>
+<!--   <div class="chart" ng-controller="chartCtrl" ng-model="">
+    <chartist class="ct-chart ct-golden-section" chartist-data="Chartist.barData" chartist-chart-type="Bar" chartist-chart-options="Chartist.barOptions" chartist-responsive-options="Chartist.barResponsiveOptions">
+      
+    </chartist>
+  </div> -->
+
+	<div style="float:right" class="execution" ng-controller="executionCtrl">
+ 		<div class="close"> <h4>Place Orders</h4></div>
+    <div class="order" style="position: absolute"> <h3> Order Type </h3></div>
+    <select style="margin-left: 120px; margin-top: 5px"> 
+    	<option value="market">Market</option>
+			<option value="limit">Limit</option>
+    </select>
+		<div style="margin-top: 30px">
+   		Lot Size<input style="margin-left: 15px" id="size" type="number" value="1" min="0.0001" max="100" ng-model="order.size" /><br>
+    </div>
+    <div style="margin-top: 30px">
+   	  Price<input style="margin-left: 15px" id="price" type="number" min="" max="" ng-model="order.price" /><br>
+    </div>
+    <div style="margin-top: 20px">
+      <button id="buy" ng-click="buy()">Buy</button>
+      <button id="sell" ng-click="sell()">Sell</button>
+    </div>
   </div>
 
   <div class="execution">
-		 <div id="openOrdersBox">
+		<div id="openOrdersBox">
 		    <h5>Orders:</h5>
 		    <div id="orders" ng-repeat="o in ordersList">
 		     <pre>{{o}}<button ng-click="cancel(o.id)">X</button></pre>

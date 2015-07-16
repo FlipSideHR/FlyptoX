@@ -33,6 +33,6 @@ users.getInfoById = function(id){
         email: user.get("email"),
         username: user.get("username"),
         fullname: user.get("fullname")
-      }
-    })
+      };
+    });
 };
