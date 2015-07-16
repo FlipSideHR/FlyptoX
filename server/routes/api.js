@@ -230,8 +230,9 @@ GET /accounts/:id/ledger
 GET /accounts/:id/holds
 */
 router.get('/accounts', privateApi, function(req, res){
-  res.json([]);
-  return;
+  Account.forge({user_id:req.userId}).fetchAll().then(function(accounts){
+    res.json(accounts);
+  });
   /*
   User.getAccounts(req.userId).then(function(accounts){
     res.json(accounts);
@@ -243,8 +244,9 @@ router.get('/accounts', privateApi, function(req, res){
 });
 
 router.get('/accounts/:id', privateApi, function(req, res){
-  res.json({});
-  return;
+  Account.forge({user_id:req.userId, id:req.params.id}).fetch().then(function(account){
+    res.json(account);
+  });
   /*
   User.getAccount(req.userId, req.params.id).then(function(account){
     res.json(account);
