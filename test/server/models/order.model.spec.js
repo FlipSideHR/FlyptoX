@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var bookshelf = require('../../../server/utils/bookshelf.js');
+var bookshelf = require('./bookshelf.js');
 
 var uuid = require('node-uuid');
 var Order = require('../../../server/models/Order.js')(bookshelf);
