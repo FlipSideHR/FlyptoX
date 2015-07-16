@@ -23,21 +23,21 @@ module.exports = function(grunt) {
         copy: {
             app_common: {
                 expand: true,
-                cwd: 'app',
+                cwd: 'client',
                 src: ['**/*', '!**/*.js'],
-                dest: 'dist/app'
+                dest: 'dist/client'
             },
             app_unminified: {
                 expand: true,
-                cwd: 'app',
+                cwd: 'client',
                 src: ['**/*.js', '!**/*_test.js'],
-                dest: 'dist/app/unminified'
+                dest: 'dist/client/unminified'
             },
             app_minified: {
                 expand: true,
-                cwd: 'app',
+                cwd: 'client',
                 src: ['**/*.js', '!**/*_test.js'],
-                dest: 'dist/app/minified'
+                dest: 'dist/client/app/minified'
             },
             server: {
                 expand: true,
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
             bower_copy: {
                 expand: true,
                 src: ['bower_components/**'],
-                dest: 'dist/app/unminified'
+                dest: 'dist/client/app/unminified'
             },
             knexfile: {
                 src: 'knexfile.js',
@@ -251,10 +251,10 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'jshint',
+    // 'jshint',
     'build-dist',
     'express',
-    'karma',
+    // 'karma',
     'watch'
   ]);
 
