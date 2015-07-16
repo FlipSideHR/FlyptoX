@@ -2,7 +2,6 @@ var express = require('express');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var router = module.exports = express.Router();
-var _ = require("underscore");
 var uuid = require("node-uuid");
 
 router.use(partials());
@@ -10,8 +9,6 @@ router.use(partials());
 router.use(bodyParser.json());
 // Parse forms (signup/login)
 router.use(bodyParser.urlencoded({ extended: true }));
-
-var users = require("../controllers/users");
 
 //middleware to restrict access to api to authenticated users
 var privateApi = require("../controllers/tokens").decodeToken;
@@ -28,12 +25,9 @@ GET /products/:id/stats (24 hour history)
 
 //return an array of currency pairs
 router.get("/products", function(req, res){
-  res.json([
-    {
-      id:0,
-      currency_pair:"BTC-USD"
-    }
-  ]);
+  CurrencyPair.forge().fetchAll().then(function(pairs){
+    res.json(pairs);
+  });
 });
 
 
@@ -96,6 +90,7 @@ router.get("/products/:id/book", function(req, res){
   return;
   //todo get orderbook from orderbook controller instead of doing a db query
   //req.query.level = 1 || 2 || 3
+  /*
   Order.getOpenOrders(req.query.level || 1).then(function(orders){
     //orders is a bookshelf collection
     //todo - use underscore, turn the collection into the expected format
@@ -104,6 +99,7 @@ router.get("/products/:id/book", function(req, res){
   .catch(function(){
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
+  */
 });
 
 /*
@@ -125,6 +121,7 @@ router.get("/products/:id/ticker", function(req, res){
   return;
   //query trades table for newest time
   //use knex query max(time)
+  /*
   Trade.getLatestTrade(req.params.id).then(function(trade){
     //trade is a bookshelf model
     //todo use underscore to pick only required fields
@@ -133,6 +130,7 @@ router.get("/products/:id/ticker", function(req, res){
   .catch(function(){
     res.status(500).json({message:'unable to retrieve ticker'});
   });
+  */
 });
 
 /*
@@ -157,6 +155,7 @@ router.get("/orders", privateApi, function(req, res){
         "created_at": "2014-11-14 06:39:55.189376+00"
     }]);
   return;
+  /*
   User.getOpenOrders(req.userId).then(function(orders){
     //orders is a collection of the user's open orders
     //todo - use underscore, turn the collection into the expected format
@@ -165,6 +164,7 @@ router.get("/orders", privateApi, function(req, res){
   .catch(function(){
     res.status(500).json({message:'unable to retrieve orders'});
   });
+  */
 });
 
 router.get("/orders/:id", privateApi, function(req, res){
@@ -183,6 +183,7 @@ router.get("/orders/:id", privateApi, function(req, res){
     "done_at": "2014-11-14 06:39:57.605998+00"
   });
   return;
+  /*
   User.getOrder(req.userId, req.params.id).then(function(order){
     //orders is bookshelf model
     //todo - use underscore, turn the collection into the expected format
@@ -191,6 +192,7 @@ router.get("/orders/:id", privateApi, function(req, res){
   .catch(function(){
     res.status(500).json({message:'unable to retrieve orders'});
   });
+  */
 });
 
 router.post("/orders", privateApi, function(req, res){
@@ -198,25 +200,27 @@ router.post("/orders", privateApi, function(req, res){
     order_id: uuid.v1()
   });
   return;
-  OrderBook.placeOrder();
+  //OrderBook.placeOrder();
 });
 
 router.delete("/orders/:id", privateApi, function(req, res){
   res.send(200);
   return;
-  OrderBook.cancelOrder(req.params.id);
+  //OrderBook.cancelOrder(req.params.id);
 });
 
 router.get("/trades", privateApi, function(req, res){
   res.json([]);
   return;
   //query orders table where maker_id or taker_id is the users's id
+  /*
   Trade.getUserTrades(req.userId).then(function(trades){
 
   })
   .catch(function(){
     res.status(500).json({message:"unable to retrieve list of trades"});
   });
+  */
 });
 /*
 == Private (accounts api) ==
@@ -228,21 +232,25 @@ GET /accounts/:id/holds
 router.get('/accounts', privateApi, function(req, res){
   res.json([]);
   return;
+  /*
   User.getAccounts(req.userId).then(function(accounts){
     res.json(accounts);
   })
   .catch(function(){
     res.status(500).json({message:"unable to retrieve accounts"});
   });
+  */
 });
 
 router.get('/accounts/:id', privateApi, function(req, res){
   res.json({});
   return;
+  /*
   User.getAccount(req.userId, req.params.id).then(function(account){
     res.json(account);
   })
   .catch(function(){
     res.status(500).json({message:"unable to retrieve account"});
   });
+  */
 });

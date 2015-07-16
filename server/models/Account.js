@@ -1,5 +1,3 @@
-var app = require('../main');
-var bookshelf = app.get('bookshelf');
 var uuid = require("node-uuid");
 
 module.exports = function(bookshelf){

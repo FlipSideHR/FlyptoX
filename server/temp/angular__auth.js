@@ -1,12 +1,13 @@
-// /*
-//   This will be the code required on client side to make use of the authentication
-//   service.
-// */
-// angular.module('FlyptoX', [])
-//   .config(function ($httpProvider) {
-//     //add http interceptor
-//     $httpProvider.interceptors.push('AttachTokens');
-//   })
+/*
+  This will be the code required on client side to make use of the authentication
+  service.
+*/
+/*
+angular.module('FlyptoX', [])
+  .config(function ($httpProvider) {
+    //add http interceptor
+    $httpProvider.interceptors.push('AttachTokens');
+  })
 
 //   .factory('AttachTokens', function ($window) {
 //     // this is an $httpInterceptor
@@ -111,4 +112,5 @@
 //       $location.path('/');
 //     };
 
-//   });
+  });
+*/

@@ -15,7 +15,7 @@ users.signup = Promise.method(function(email, password){
           {user_id:user.get('id'), currency_id:2},
         ],function(info){
           return Account.forge(info)
-            .save(null, {transacting: t})
+            .save(null, {transacting: t});
         });
       });
   }).then(function(user){

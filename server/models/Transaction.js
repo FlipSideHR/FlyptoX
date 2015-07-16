@@ -1,5 +1,3 @@
-var app = require('../main');
-var bookshelf = app.get('bookshelf');
 
 module.exports = function(bookshelf){
   var Transaction = bookshelf.Model.extend({
@@ -20,5 +18,5 @@ module.exports = function(bookshelf){
 
   });
 
-  return Account;
+  return Transaction;
 };
