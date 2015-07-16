@@ -1,7 +1,9 @@
 var chai = require('chai');
 var expect = chai.expect;
+// utils has some useful functions for testing our db
+var utils = require('./helpers.js');
 
-var bookshelf = require('./bookshelf.js');
+var bookshelf = require('../../../server/utils/bookshelf.js')('test');
 var User = require('../../../server/models/User.js')(bookshelf);
 
 // add a collection
@@ -15,36 +17,24 @@ describe('User Model', function(){
   // pushed on here so we can remove from db on after()
   var test_users = [];
 
+  // runs once before any of our tests start.
   before(function(done){
-    // populate database?
-
-    // currently populating with 1 item before running tests
-    // because thats all I need. I may create more users in
-    // this before function, or start creating users in the
-    // tests themselves at some point.....
-    var userData = {
-      email: 'msymmes@gmail.com',
-      password: 'plutox',
-      fullname: 'Mike Symmes'
-    };
-
-    // create a new user object
-    User.forge(userData).save()
-      .then(function(user){
-        // expect the new user to exist
-        if(user) test_users.push(user);
+    // create a single user for now
+    utils.user.createUUser()
+      .then(function(user){ 
+        test_users.push(user);
         done();
       })
       .catch(function(err){
         console.error('ERROR: ', err);
-        //throw 'ERROR: ' + err;
-        done();
+        throw err;
       });
   });
 
+  // runs once after our tests stop running
   after(function(){
     // delete all users
-    test_users.forEach(function(val, idx, collection){
+    test_users.forEach(function(val){
       val.destroy();
     });
   });
@@ -61,7 +51,7 @@ describe('User Model', function(){
 
    // requires unique email?
 
-   // unique user name?
+   // unique user name? 
 
 });
 

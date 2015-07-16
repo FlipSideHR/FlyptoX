@@ -1,5 +1,6 @@
 "use strict"; 
 
+// 
 var conn = {
   host     : '127.0.0.1',
   user     : 'recursion',
@@ -21,7 +22,7 @@ knex.raw('DROP DATABASE IF EXISTS ' + database + ';')
   .then(function(knex){
     // destroy connection?
     knex.destroy(); 
-
+  
     // now connect to our test db
     conn.database = 'flyptox_test';
     return require('knex')({ client: 'pg', connection: conn});

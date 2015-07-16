@@ -24,6 +24,7 @@ module.exports = function(bookshelf){
 
     onCreate: function(model, attrs, options) {
       var self = this;
+      console.log(model.get('email'));
       self.set('id', uuid.v4());
       self.set('email', self.get('email').toLowerCase().trim());
       return bcrypt.genSaltAsync(10).then(function(salt){
