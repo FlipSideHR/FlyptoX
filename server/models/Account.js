@@ -12,6 +12,10 @@ module.exports = function(bookshelf){
 
     transactions: function() {
       return this.hasMany(Transaction, "account_id");
+    },
+
+    currency: function(){
+      return this.belongsTo(Currency, "currency_id");
     }
   });
 

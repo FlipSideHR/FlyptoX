@@ -25,6 +25,14 @@ module.exports = function(bookshelf){
     onCreate: function(model, attrs, options) {
       var self = this;
       self.set('id', uuid.v4());
+      self.set('email', self.get('email').toLowerCase().trim());
+      return bcrypt.genSaltAsync(10).then(function(salt){
+        return bcrypt.hashAsync(self.get('password'), salt, null).then(function(hash){
+            self.set('password', hash);
+            self.set('salt', salt);
+            return;
+        });
+      });
     }
   });
 
@@ -39,21 +47,9 @@ module.exports = function(bookshelf){
     });
   });
 
-
   User.signup = Promise.method(function(email, password){
     if (!email || !password) throw new Error('Email and password are both required');
-    return new User({email: email.toLowerCase().trim()}).fetch().then(function(user) {
-      if(user) throw new Error('User Exists');
-      return bcrypt.genSaltAsync(10).then(function(salt){
-        return bcrypt.hashAsync(password, salt, null).then(function(hash){
-          return user = new User({
-            email: email.toLowerCase().trim(),
-            password: hash,
-            salt: salt
-          }).save();
-        });
-      });
-    });
+    return new User({email: email, password:password}).save();
   });
 
   return User;
