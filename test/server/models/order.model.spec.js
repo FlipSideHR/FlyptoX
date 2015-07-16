@@ -9,7 +9,7 @@ var User = require('../../../server/models/User.js')(bookshelf);
 
 // add a collection
 var Orders = bookshelf.Collection.extend({
-  model: Order 
+  model: Order
 });
 
 describe('Order Model', function(){
@@ -22,20 +22,28 @@ describe('Order Model', function(){
   var test_orders = [];
 
   before(function(done){
-    // populate database?
+    //delete test user account incase it wasn't removed due to a failed test
+    User.forge().where({email:'test@gmail.com'}).destroy();
 
-    // snag a user id and attach it to uid
-    User.fetchAll().then(function(collection){
-      uid = collection.models[0].attributes.id;
+    User.forge({email:'test@gmail.com', password:'test'})
+    .save()
+    .then(function(user){
+      // snag a user id and attach it to uid
+      uid = user.get('id');
       done();
     });
+
   });
 
   after(function(){
-    // delete all test-created-trades from the db? 
+    //delete the test user account
+    User.forge().where({email:'test@gmail.com'}).destroy();
+
+    // delete all test-created-trades from the db?
     test_orders.forEach(function(val, idx, collection){
       val.destroy();
     });
+
   });
 
   // make sure we have a Trade model object

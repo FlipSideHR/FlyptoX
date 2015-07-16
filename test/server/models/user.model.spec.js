@@ -20,21 +20,19 @@ describe('User Model', function(){
 
     // currently populating with 1 item before running tests
     // because thats all I need. I may create more users in
-    // this before function, or start creating users in the 
+    // this before function, or start creating users in the
     // tests themselves at some point.....
     var userData = {
-      username: 'Mike', 
-      password: 'plutox', 
-      salt: '192736', 
-      email: 'msymmes@gmail.com', 
+      email: 'msymmes@gmail.com',
+      password: 'plutox',
       fullname: 'Mike Symmes'
     };
 
-    // create a new user object 
-    User.forge(userData).save({}, {method: 'insert'})
-      .then(function(user){ 
+    // create a new user object
+    User.forge(userData).save()
+      .then(function(user){
         // expect the new user to exist
-        test_users.push(user);
+        if(user) test_users.push(user);
         done();
       })
       .catch(function(err){
@@ -63,7 +61,7 @@ describe('User Model', function(){
 
    // requires unique email?
 
-   // unique user name? 
+   // unique user name?
 
 });
 
@@ -86,5 +84,3 @@ describe('Users Collection', function(){
     });
   });
 });
-
-
