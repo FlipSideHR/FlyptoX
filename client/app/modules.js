@@ -1,5 +1,6 @@
 /* exported FlyptoX */
-var FlyptoX = angular.module('FlyptoX', ['angular-chartist']);
+var FlyptoX = angular.module('FlyptoX', []);
+// var FlyptoX = angular.module('FlyptoX', ['angular-chartist']);
 
 FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
 	$scope.data = {
@@ -69,69 +70,69 @@ FlyptoX.controller('executionCtrl', ['$scope',
   }]);
 
 
-FlyptoX.controller('chartCtrl', ['$scope', '$interval', '$timeout', 
-  function($scope, $interval, $timeout){
+// FlyptoX.controller('chartCtrl', ['$scope', '$interval', '$timeout', 
+//   function($scope, $interval, $timeout){
 
-    this.barData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      series: [
-        [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
-        [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
-      ]
-    };
+//     this.barData = {
+//       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//       series: [
+//         [5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
+//         [3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
+//       ]
+//     };
 
-    this.barOptions = {
-      seriesBarDistance: 15
-    };
+//     this.barOptions = {
+//       seriesBarDistance: 15
+//     };
 
-    this.barResponsiveOptions = [
-      ['screen and (min-width: 641px) and (max-width: 1024px)', {
-        seriesBarDistance: 10,
-        axisX: {
-          labelInterpolationFnc: function(value) {
-            return value;
-          }
-        }
-      }],
-      ['screen and (max-width: 640px)', {
-        seriesBarDistance: 5,
-        axisX: {
-          labelInterpolationFnc: function(value) {
-            return value[0];
-          }
-        }
-      }]
-    ];
+//     this.barResponsiveOptions = [
+//       ['screen and (min-width: 641px) and (max-width: 1024px)', {
+//         seriesBarDistance: 10,
+//         axisX: {
+//           labelInterpolationFnc: function(value) {
+//             return value;
+//           }
+//         }
+//       }],
+//       ['screen and (max-width: 640px)', {
+//         seriesBarDistance: 5,
+//         axisX: {
+//           labelInterpolationFnc: function(value) {
+//             return value[0];
+//           }
+//         }
+//       }]
+//     ];
 
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min)) + min;
-    }
+//     function getRandomInt(min, max) {
+//       return Math.floor(Math.random() * (max - min)) + min;
+//     }
 
-    function pushLimit(arr, elem, limit) {
-      arr.push(elem);
-      if (arr.length > limit) {
-        arr.splice(0, 1);
-      }
-    }
+//     function pushLimit(arr, elem, limit) {
+//       arr.push(elem);
+//       if (arr.length > limit) {
+//         arr.splice(0, 1);
+//       }
+//     }
 
-    var barUpdatePromise = $interval(function() {
-      var time = new Date();
+//     var barUpdatePromise = $interval(function() {
+//       var time = new Date();
 
-      pushLimit(this.barData.labels, [
-        time.getHours(),
-        time.getMinutes(),
-        time.getSeconds()
-      ].join(':'), 12);
+//       pushLimit(this.barData.labels, [
+//         time.getHours(),
+//         time.getMinutes(),
+//         time.getSeconds()
+//       ].join(':'), 12);
 
-      this.barData.series.forEach(function(series) {
-        pushLimit(series, getRandomInt(0, 10), 12);
-      });
-    }.bind(this), 1000);
+//       this.barData.series.forEach(function(series) {
+//         pushLimit(series, getRandomInt(0, 10), 12);
+//       });
+//     }.bind(this), 1000);
 
-    $scope.$on('$destroy', function() {
-      $interval.cancel(barUpdatePromise);
-    });
+//     $scope.$on('$destroy', function() {
+//       $interval.cancel(barUpdatePromise);
+//     });
 
 
-}]);
+// }]);
 

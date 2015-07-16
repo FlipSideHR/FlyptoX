@@ -3,7 +3,7 @@
 	<h1>Welcome to FlyptoX</h1>
 	</head>
 <body>
-	<div class="tx" ng-app="FlyptoX" ng-controller="orderbookCtrl" ng-model="testData">
+	<div class="tx" ng-controller="orderbookCtrl" ng-model="testData">
 		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
 	        <div ng-repeat="d in testData.bids | limitTo: 20">
@@ -21,13 +21,13 @@
 	    </div>
 	 </div>
 
-  <div class="chart" ng-app="FlyptoX" ng-controller="chartCtrl" ng-model="">
+<!--   <div class="chart" ng-controller="chartCtrl" ng-model="">
     <chartist class="ct-chart ct-golden-section" chartist-data="Chartist.barData" chartist-chart-type="Bar" chartist-chart-options="Chartist.barOptions" chartist-responsive-options="Chartist.barResponsiveOptions">
       
     </chartist>
-  </div>
+  </div> -->
 
-	<div style="float:right" class="execution" ng-app="FlyptoX" ng-controller="executionCtrl">
+	<div style="float:right" class="execution" ng-controller="executionCtrl">
  		<div class="close"> <h4>Place Orders</h4></div>
     <div class="order" style="position: absolute"> <h3> Order Type </h3></div>
     <select style="margin-left: 120px; margin-top: 5px"> 
