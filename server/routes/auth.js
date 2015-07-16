@@ -24,7 +24,7 @@ returns a json object
 */
 router.post('/signin', function(req, res) {
   if(!req.body.email || !req.body.password) return res.send(400);
-  users.getToken(req.body.email, req.body.password)
+  users.signin(req.body.email, req.body.password)
     .then(function(token){
       res.json({token: token});
     })
@@ -44,7 +44,7 @@ returns a json object
 */
 router.post('/signup', function(req, res) {
   if(!req.body.email || !req.body.password) return res.send(400);
-  users.registerNewUser(req.body.email, req.body.password)
+  users.signup(req.body.email, req.body.password)
     .then(function(token){
       res.json({token: token});
     })
@@ -64,7 +64,7 @@ details (email, fullname) and serves as a check to verify if the held token is v
 */
 router.post('/whoami', privateApi, function(req, res) {
   //if the token was valid a userId property is attached to the request
-  users.getInfoById(req.userId)
+  users.info(req.userId)
     .then(function(userInfo){
       res.json(userInfo);
     })

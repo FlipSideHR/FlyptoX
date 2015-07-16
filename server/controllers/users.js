@@ -2,7 +2,7 @@ var tokens = require("./tokens");
 var users = module.exports;
 
 //method for registering a new user account and returns a new token
-users.registerNewUser = function(email, password){
+users.signup = function(email, password){
   return User.signup(email, password)
     .then(function(user){
       return tokens.generateToken(user.get("id"));
@@ -16,7 +16,7 @@ users.registerNewUser = function(email, password){
 //generates a jwt token for a valid email password combination if
 //found in the database. This token is used to authenticate the user
 //when making api calls
-users.getToken = function(email, password) {
+users.signin = function(email, password) {
   return User.signin(email, password)
     .then(function(user){
       //store the userId in the token
@@ -28,7 +28,7 @@ users.getToken = function(email, password) {
 /*
   It returns a promise that on success will resolve to an object with user's information
 */
-users.getInfoById = function(id){
+users.info = function(id){
   return new User({id:id}).fetch()
     .then(function(user){
       if (!user) return {};
