@@ -36,20 +36,14 @@ module.exports = function(bookshelf){
     }
   });
 
-  User.signin = Promise.method(function(email, password){
+  User.verify = Promise.method(function(email, password){
     if (!email || !password) throw new Error('Email and password are both required');
-    return new User({email: email.toLowerCase().trim()}).fetch().then(function(user) {
-      if(!user) throw new Error("User Not Found");
-      return bcrypt.compareAsync(password, user.get('password')).then(function(match){
-        if(match) return user;
-        throw new Error("Wrong Password");
+    return new User({email: email.toLowerCase().trim()})
+      .fetch({require: true}).tap(function(user) {
+        return bcrypt.compareAsync(password, user.get('password')).then(function(match){
+          if(!match) throw new Error("Wrong Password");
+        });
       });
-    });
-  });
-
-  User.signup = Promise.method(function(email, password){
-    if (!email || !password) throw new Error('Email and password are both required');
-    return new User({email: email, password:password}).save();
   });
 
   return User;

@@ -1,23 +1,33 @@
 var tokens = require("./tokens");
 var users = module.exports;
+var bookshelf = require("../utils/bookshelf");
+var Promise = require("bluebird");
 
 //method for registering a new user account and returns a new token
-users.signup = function(email, password){
-  return User.signup(email, password)
-    .then(function(user){
-      return tokens.generateToken(user.get("id"));
-      //TODO ... emit event: new user registered,  (through app events object)
-      //event should be consumed by:
-      //Email verification Controller - to send email verification link
-      //Accounts controller - to create new USD and BTC accounts for the user
-    });
-};
+users.signup = Promise.method(function(email, password){
+  if (!email || !password) throw new Error('Email and password are both required');
+  return bookshelf.transaction(function(t){
+    return new User({email: email, password:password})
+      .save(null, {transacting: t})
+      .tap(function(user){
+        return Promise.map([
+          {user_id:user.get('id'), currency_id:1},
+          {user_id:user.get('id'), currency_id:2},
+        ],function(info){
+          return Account.forge(info)
+            .save(null, {transacting: t})
+        });
+      });
+  }).then(function(user){
+    return tokens.generateToken(user.get("id"));
+  });
+});
 
 //generates a jwt token for a valid email password combination if
 //found in the database. This token is used to authenticate the user
 //when making api calls
 users.signin = function(email, password) {
-  return User.signin(email, password)
+  return User.verify(email, password)
     .then(function(user){
       //store the userId in the token
       return tokens.generateToken(user.get("id"));
