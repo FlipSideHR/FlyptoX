@@ -48,7 +48,7 @@ module.exports = function(bookshelf){
                 salt: salt
               }).save({}, {method: 'insert'});
             });
-          })
+          });
         }
       });
     }),

@@ -25,9 +25,6 @@ app.set('views', path.join(rootPath, 'server'));
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
 
-// import our configed bookshelf object
-var bookshelf = require('./utils/bookshelf.js');
-
 // set an application wide bookshelf property
 app.set('bookshelf', bookshelf);
 
@@ -75,7 +72,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', express.static(path.join(rootPath, 'app')));
+app.use('/', express.static(path.join(rootPath, 'client')));
 
 app.get('/', function(req, res) {
     renderIndex(req.config, res);
