@@ -1,7 +1,8 @@
 var app = require('../main');
 var bookshelf = app.get('bookshelf');
 
-var Account = module.exports = bookshelf.Model.extend({
+module.exports = function(bookshelf){
+  var Account = bookshelf.Model.extend({
     tableName: 'accounts',
 
     //owner of the account
@@ -12,4 +13,7 @@ var Account = module.exports = bookshelf.Model.extend({
     transactions: function() {
       return this.hasMany(Transaction, "account_id");
     }
-});
+  });
+
+  return Account;
+};
