@@ -72,9 +72,9 @@ Run knex migrations
 ### Testing
 
 #### Server side
-- `NODE_ENV=test grunt test:server` to run all server tests
-- `NODE_ENV=test grunt test:models` to run only model tests
-- `NODE_ENV=test grunt test:controllers` to run only controller tests
+- `grunt test:server` to run all server tests
+- `grunt test:models` to run only model tests
+- `grunt test:controllers` to run only controller tests
 
 #### Client side
 
