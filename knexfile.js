@@ -28,4 +28,12 @@ module.exports = {
       directory: './db/migrations'
     }
   },
+  admin: {
+    client: 'pg',
+    connection: {
+      host: 'localhost',
+      database: 'recursion',
+      user:     'recursion'
+    },
+  }
 };
