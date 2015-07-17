@@ -2,8 +2,8 @@ var OrderBook = module.exports;
 var Promise = require("bluebird");
 var Order = require('../utils/models').Order;
 
-OrderBook.getBestPrice = function(side, pair_id) {
-  return Order.forge({status:'open', type:"limit", side:side, currency_pair_id: pair_id})
+OrderBook.getBestOrder = function(side, pair_id) {
+  return Order.where({status:'open', type:"limit", side:side, currency_pair_id: pair_id})
     .query('orderBy', 'price', side === 'buy' ? 'desc' : 'asc')
     .query('limit','1')
     .fetch();
@@ -11,7 +11,7 @@ OrderBook.getBestPrice = function(side, pair_id) {
 
 OrderBook.getPriceLevelInfo = function(price, side, pair_id) {
   if(!price) return [];
-  return Order.forge({status:'open', type:'limit', side:side, price:price, currency_pair_id: pair_id})
+  return Order.where({status:'open', type:'limit', side:side, price:price, currency_pair_id: pair_id})
     .fetchAll()
     .then(function(orders){
       if(!orders || !orders.length) return [];
@@ -72,7 +72,7 @@ OrderBook.level = {
   "3": function(pair_id) {
     return Promise.all([
       //bids
-      Order.forge({status:'open', type:"limit", side:"buy", currency_pair_id: pair_id})
+      Order.where({status:'open', type:"limit", side:"buy", currency_pair_id: pair_id})
         .query('orderBy','price','asc')
         .fetchAll()
         .then(function(orders){
@@ -82,7 +82,7 @@ OrderBook.level = {
         }),
 
       //asks
-      Order.forge({status:'open', type:"limit", side:"sell", currency_pair_id: pair_id})
+      Order.where({status:'open', type:"limit", side:"sell", currency_pair_id: pair_id})
         .query('orderBy','price','desc')
         .fetchAll()
         .then(function(orders){
@@ -96,7 +96,7 @@ OrderBook.level = {
   "2": function(pair_id){
     return Promise.all([
       //bids - aggregated
-      Order.forge({status:'open', type:"limit", side:"buy", currency_pair_id: pair_id})
+      Order.where({status:'open', type:"limit", side:"buy", currency_pair_id: pair_id})
         .query('orderBy','price','desc')//maybe limit number of records
         .fetchAll()
         .then(function(orders){
@@ -104,7 +104,7 @@ OrderBook.level = {
         }),
 
       //asks - aggregated
-      Order.forge({status:'open', type:"limit", side:"sell", currency_pair_id: pair_id})
+      Order.where({status:'open', type:"limit", side:"sell", currency_pair_id: pair_id})
         .query('orderBy','price','asc')
         .fetchAll()
         .then(function(orders){
@@ -116,16 +116,21 @@ OrderBook.level = {
   "1": function(pair_id) {
     return Promise.all([
       //best bid
-      OrderBook.getBestPrice('buy', pair_id)
-        .then(function(price){
-          return OrderBook.getPriceLevelInfo(price, 'buy', pair_id);
+      OrderBook.getBestOrder('buy', pair_id)
+        .then(function(order){
+          return OrderBook.getPriceLevelInfo(order.get('price'), 'buy', pair_id);
         }),
 
       //best ask
-      OrderBook.getBestPrice('sell', pair_id)
-        .then(function(price){
-          return OrderBook.getPriceLevelInfo(price, 'sell', pair_id);
+      OrderBook.getBestOrder('sell', pair_id)
+        .then(function(order){
+          return OrderBook.getPriceLevelInfo(order.get('price'), 'sell', pair_id);
         }),
-    ]);
+    ]).then(function(best){
+      return {
+        bids:[best[0]],
+        asks:[best[1]]
+      };
+    })
   }
 };
