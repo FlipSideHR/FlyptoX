@@ -6,18 +6,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
         clean: {
-            dist: 'dist/'
+          dist: 'dist/'
         },
-        // Configure a mochaTest task
+        // Configure mochaTest tasks
         mochaTest: {
-          test: {
-            options: {
-              reporter: 'spec',
-              captureFile: 'results.txt', // Optionally capture the reporter output to a file
-              quiet: false, // Optionally suppress output to standard out (defaults to false)
-              clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
-            },
+          server: {
             src: ['test/server/**/*.spec.js']
+          },
+          models: {
+            src: ['test/server/models/*.spec.js']
+          },
+          controllers: { 
+            src: ['test/server/controllers/*.spec.js']
           }
         },
         copy: {
@@ -260,8 +260,10 @@ module.exports = function(grunt) {
     'watch'
   ]);
 
-    // tast for running mocha tests on server components
-    grunt.registerTask('test:server', ['mochaTest']);
+  // tast for running mocha tests on server components
+  grunt.registerTask('test:server', ['mochaTest:server']);
+  grunt.registerTask('test:models', ['mochaTest:models']);
+  grunt.registerTask('test:controllers', ['mochaTest:controllers']);
 
   function setEnvVars() {
     if(minOption()) {

@@ -79,7 +79,7 @@ utils.order = {
     // create the order and save it.
     return Order.forge(myOrder).save({}, {method: 'insert'});
   },
-  deleteRows: function(done) {
+  deleteRows: function() {
     return bookshelf.knex.raw('DELETE FROM orders');
   }
 };
@@ -101,7 +101,13 @@ utils.user = {
     return User.forge(users[this.usersCreated++]).save({}, {method: 'insert'});
 
   },
-  deleteRows: function(done) {
+  // creates an order using custom parameters
+  createCustom: function(params){
+    return new User(params).save({}, {method: 'insert'});
+  },
+
+  // delete all users rows
+  deleteRows: function() {
     return bookshelf.knex.raw('DELETE FROM users');
   }
 };
