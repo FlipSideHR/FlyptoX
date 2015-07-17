@@ -18,19 +18,7 @@ describe('User Model', function(){
 
   // runs once before any of our tests start.
   before(function(done){
-    utils.clean(function(){
-
-      // create a single (unique) user 
-      utils.user.createUUser()
-        .then(function(user){
-          testUser = user;
-          done();
-        })
-        .catch(function(err){
-          console.error('ERROR: ', err);
-          throw err;
-        });
-    });
+    utils.clean(done);
   });
 
   // runs once after our tests stop running
@@ -44,18 +32,26 @@ describe('User Model', function(){
     expect(User).to.not.equal(null);
   });
 
-  it('has a verify function', function(){
-    expect(User.verify).to.be.a('function');
-  });
-
   describe('Creation', function(){
     // we should be able to create new users with the User model object
-    it('Attaches a unique id to the user', function(){
-      expect(testUser.get('id')).to.not.equal(null);
+    it('Attaches a unique id to the user', function(done){
+      // create a single (unique) user 
+      utils.user.createUUser()
+        .then(function(user){
+          expect(user.get('id')).to.not.equal(null);
+          done();
+        })
+        .catch(function(err){
+          console.error('ERROR: ', err);
+          expect(err).to.equal(undefined);
+          done(err);
+        });
     });
 
     // requires unique email
     it('Requires a unique email.', function(done){
+      // this should fail since the unique user was created in the previous 
+      // test ('Attaches a unique id to the user') 
       utils.user.createUUser()
         .then(function(user){
           expect(user).to.equal(null);
@@ -76,6 +72,7 @@ describe('User Model', function(){
       utils.user.createCustom(user)
         .then(function(result){
           expect(result).to.equal(null);
+          done();
         })
         .catch(function(err){
           expect(err).to.not.equal(null);
@@ -83,7 +80,7 @@ describe('User Model', function(){
         });
     });
 
-    xit('succeeds with valid password', function(done){
+    it('succeeds with valid password', function(done){
       var user = {
         password: 'success!',
         email: 'mmmyms@gailajdml.com', 
@@ -92,17 +89,60 @@ describe('User Model', function(){
 
       utils.user.createCustom(user)
         .then(function(result){
-          expect(result).to.equal(null);
+          expect(result.get('email')).to.equal('mmmyms@gailajdml.com');
           done();
         })
         .catch(function(err){
+          console.log(err);
           expect(err).to.equal(null);
           done();
         });
     });
 
-    xit('never stores a plaintext password', function(){
+    it('hashes password', function(done){
+      var user = {
+        password: 'success!',
+        email: 'mys@gildml.com', 
+        fullname: 'Terri Jo'
+      };
 
+      utils.user.createCustom(user)
+        .then(function(result){
+          expect(result.get('password')).to.not.equal('success!');
+          done();
+        })
+        .catch(function(err){
+          console.log(err);
+          expect(err).to.equal(null);
+          done();
+        });
+    });
+  });
+  describe('#verify', function(){
+    it('is a function', function(){
+      expect(User.verify).to.be.a('function');
+    });
+
+    it('verifies user credentials against the salted hashed password', function(done){
+      var user = {
+        password: 'ssoijdfuccess!',
+        email: 'lkjsdmys@gildml.com', 
+        fullname: 'Terri Jo'
+      };
+
+      utils.user.createCustom(user)
+        .then(function(){
+          // returns a user if the verify is successful
+          return User.verify(user.email, user.password);
+        })
+        .then(function(result){
+          expect(result.get('email')).to.equal(user.email);
+        })
+        .catch(function(err){
+          console.log('-->', err);
+          expect(err).to.equal(null);
+        })
+        .finally(done);
     });
   });
 });
