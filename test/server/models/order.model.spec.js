@@ -19,33 +19,26 @@ describe('Order Model', function(){
 
   // create an array to hold on to test orders we create
   // so they can easily be deleted later
-  var test_users = [];
-  var test_orders = [];
 
   before(function(done){
     // populate database?
     
-    // create a user and get his id
-    utils.user.createUser()
-      .then(function(user){
-        uid = user.get('id');
-        test_users.push(user);
-        done();
-      })
-      .catch(function(err){
-        console.error(err);
-      });
+    // clean the db first
+    utils.clean(function(){
+      // create a user and get his id
+      utils.user.createUser()
+        .then(function(user){
+          uid = user.get('id');
+          done();
+        })
+        .catch(function(err){
+          console.error(err);
+        });
+    });
   });
 
-  after(function(){
-    // delete all test-created-trades from the db? 
-    test_orders.forEach(function(val){
-      val.destroy();
-    });
-
-    test_users.forEach(function(val){
-      val.destroy();
-    });
+  after(function(done){
+    utils.clean(done);
   });
 
   // make sure we have a Trade model object
@@ -58,7 +51,6 @@ describe('Order Model', function(){
       .then(function(order){
         expect(order.attributes.price).to.equal(300.01);
         expect(order.attributes.user_id).to.equal(uid);
-        test_orders.push(order);
         done();
       })
       .catch(function(err){
@@ -67,16 +59,22 @@ describe('Order Model', function(){
       });
   });
 
-  // this doesnt seem to work?
-  it('references a real user', function(){
+  // this isnt working as expected
+  xit('references a real user', function(done){
     Order.fetchAll({withRelated: ['userId']})
       .then(function(orders){
+        //console.log(orders.models[0].related('user'));
         //console.log(orders.models[0].userId());
         //console.log(orders.models[0].related('userId'));
-        expect(orders.models[0]).to.not.equal(null);
+
+        // this test isnt a real test - it fails just to let you kno
+        // there is a problem with this test in general
+        expect(orders.models[0]).to.equal(null);
+        done();
       })
       .catch(function(err){
-        console.error(err);
+        expect(err).to.equal(null);
+        done();
       });
   });
 });
