@@ -4,8 +4,8 @@ var uuid = require('node-uuid');
 
 var utils = require('./helpers.js');
 var bookshelf = require('../../../server/utils/bookshelf.js')('test');
-var Order = require('../../../server/models/Order.js')(bookshelf);
-var User = require('../../../server/models/User.js')(bookshelf);
+var User = require('../../../server/utils/models').User;
+var Order = require('../../../server/utils/models').Order;
 
 // add a collection
 var Orders = bookshelf.Collection.extend({
@@ -22,7 +22,7 @@ describe('Order Model', function(){
 
   before(function(done){
     // populate database?
-    
+
     // clean the db first
     utils.clean(function(){
       // create a user and get his id

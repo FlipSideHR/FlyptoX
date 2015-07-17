@@ -1,5 +1,9 @@
 var uuid = require("node-uuid");
 
+var User = require("../utils/models").User;
+var Transaction = require("../utils/models").Transaction;
+var Currency = require("../utils/models").Currency;
+
 module.exports = function(bookshelf){
   var Account = bookshelf.Model.extend({
     tableName: 'accounts',

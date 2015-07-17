@@ -3,6 +3,9 @@ var Promise  = require('bluebird');
 var bcrypt   = Promise.promisifyAll(require('bcrypt-nodejs'));
 var uuid = require("node-uuid");
 
+var Account = require("../utils/models").Account;
+var Order = require("../utils/models").Order;
+
 // returns a bookshelf user model
 // requires a configured bookshelf object be passed to it
 module.exports = function(bookshelf){

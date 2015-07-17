@@ -10,6 +10,9 @@ var cons = require('consolidate');
 // process.env.NODE_ENV etc
 var bookshelf = require('./utils/bookshelf.js')();
 
+//initialises the models
+require('./utils/models.js');
+
 // do we need this?
 var cookieParser = require('cookie-parser');
 
@@ -26,17 +29,6 @@ var port = Number(process.env.PORT || 9999);
 app.set('views', path.join(rootPath, 'server'));
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
-
-// set an application wide bookshelf property
-app.set('bookshelf', bookshelf);
-
-// load our models into the global scope and the app properties
-var models = require('require-directory')(module, './models');
-for(var modelName in models) {
-    global[modelName] = models[modelName](bookshelf);
-    app.set(modelName, global[modelName]);
-}
-// load collections
 
 //signin and signup routes
 var authRouter = require("./routes/auth.js");

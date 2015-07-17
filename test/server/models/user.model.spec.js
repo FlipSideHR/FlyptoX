@@ -4,7 +4,7 @@ var expect = chai.expect;
 var utils = require('./helpers.js');
 
 var bookshelf = require('../../../server/utils/bookshelf.js')('test');
-var User = require('../../../server/models/User.js')(bookshelf);
+var User = require('../../../server/utils/models').User;
 
 // add a collection
 var Users = bookshelf.Collection.extend({
@@ -21,7 +21,7 @@ describe('User Model', function(){
     utils.clean(function(){
       // create a single user for now
       utils.user.createUUser()
-        .then(function(user){ 
+        .then(function(user){
           testUser = user;
           done();
         })
@@ -35,7 +35,7 @@ describe('User Model', function(){
   // runs once after our tests stop running
   after(function(done){
     // delete all users
-    utils.clean(done); 
+    utils.clean(done);
   });
 
   // make sure we have a User model object
@@ -50,7 +50,7 @@ describe('User Model', function(){
 
    // requires unique email?
 
-   // unique user name? 
+   // unique user name?
 
 });
 

@@ -1,26 +1,24 @@
 /* exported trade*/
 var uuid = require("node-uuid");
 
+var User = require("../utils/models").User;
+var Transaction = require("../utils/models").Transaction;
+var Order = require("../utils/models").Order;
+
 // returns a bookshelf trade model
 // requires a configured bookshelf object be passed to it
 module.exports = function(bookshelf){
-  var User = require('./User')(bookshelf);
-  var Order = require('./Order')(bookshelf);
 
   var Trade = bookshelf.Model.extend({
     tableName: 'trades',
 
     initialize: function(){
-      this.on('creating', this.onCreate, this);  
+      this.on('creating', this.onCreate, this);
     },
 
-    // event for capturing new user events
+    // order creation event
     onCreate: function(model, attrs, options) {
-      // any kind of validation might go here
-
-      // create a new user id
       this.set('id', uuid.v1());
-
     },
 
     maker: function(){
