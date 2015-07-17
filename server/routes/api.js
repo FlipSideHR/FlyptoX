@@ -100,14 +100,33 @@ router.get("/products/:id/book", function(req, res){
   //req.query.level = 1 || 2 || 3
 
   //default to level 3
-  Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending?
-    //.query({orderBy:})
-    .fetchAll().then(function(orders){
-      return orders.map(function(order){
-        return [order.get('price'), order.get('size'), order.get('id')];
+  Promise.all([
+    Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending?
+      .query('orderBy','price','desc')
+      .fetch()
+      .then(function(orders){
+        return orders.map(function(order){
+          return [order.get('price'), order.get('size'), order.get('id')];
+        });
+      }),
+
+    Order.forge({status:'open', type:"limit", side:"sell"})//howto order by price ascending?
+      .query('orderBy','price','asc')
+      .fetch()
+      .then(function(orders){
+        return orders.map(function(order){
+          return [order.get('price'), order.get('size'), order.get('id')];
+        });
       })
-    })
-  .catch(function(){
+  ])
+  .then(function(book){
+    res.json({
+      bids: book[0],
+      asks: book[1]
+    });
+  })
+  .catch(function(err){
+    console.log(err);
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
 });
