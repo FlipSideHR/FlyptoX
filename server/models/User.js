@@ -10,51 +10,42 @@ module.exports = function(bookshelf){
   var User = bookshelf.Model.extend({
     tableName: 'users',
 
+    accounts: function(){
+      return this.hasMany(Account, "user_id");
+    },
+
+    orders: function(){
+      return this.hasMany(Order, "user_id");
+    },
+
     initialize: function(){
-      this.on('creating', this.onCreate, this);  
+      this.on('creating', this.onCreate, this);
     },
 
-    // event for capturing new user events
     onCreate: function(model, attrs, options) {
-      // any kind of validation might go here
-
-      // create a new user id
-      this.set('id', uuid.v1());
-
-    },
-
-    signin: Promise.method(function(email, password){
-      if (!email || !password) throw new Error('Email and password are both required');
-      return new User({email: email.toLowerCase().trim()}).fetch().then(function(user) {
-        if(!user) throw new Error("User Not Found");
-        return bcrypt.compareAsync(password, user.get('password')).then(function(match){
-          if(match) return user;
-          throw new Error("Wrong Password");
+      var self = this;
+      console.log(model.get('email'));
+      self.set('id', uuid.v4());
+      self.set('email', self.get('email').toLowerCase().trim());
+      return bcrypt.genSaltAsync(10).then(function(salt){
+        return bcrypt.hashAsync(self.get('password'), salt, null).then(function(hash){
+            self.set('password', hash);
+            self.set('salt', salt);
+            return;
         });
       });
-    }),
+    }
+  });
 
-    signup: Promise.method(function(email, password){
-      if (!email || !password) throw new Error('Email and password are both required');
-      return new User({email: email.toLowerCase().trim()}).fetch().then(function(user) {
-        if(user) {
-          throw new Error('User Exists');
-        } else {
-          return bcrypt.genSaltAsync(10).then(function(salt){
-            return bcrypt.hashAsync(password, salt, null).then(function(hash){
-              return user = new User({
-                email: email.toLowerCase().trim(),
-                password: hash,
-                salt: salt
-              }).save({}, {method: 'insert'});
-            });
-          });
-        }
+  User.verify = Promise.method(function(email, password){
+    if (!email || !password) throw new Error('Email and password are both required');
+    return new User({email: email.toLowerCase().trim()})
+      .fetch({require: true}).tap(function(user) {
+        return bcrypt.compareAsync(password, user.get('password')).then(function(match){
+          if(!match) throw new Error("Wrong Password");
+        });
       });
-    }),
-
   });
 
   return User;
-
 };

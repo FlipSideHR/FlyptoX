@@ -93,7 +93,9 @@ module.exports = function(grunt) {
             node: true,
             globals: (function() {
               // add model names to globals
-              var globals = {};
+              var globals = {
+                Promise: true
+              };
               var models = grunt.file.expand('./server/models/**/*.js');
               for(var i in models) {
                 globals[

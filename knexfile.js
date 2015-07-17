@@ -13,6 +13,19 @@ module.exports = {
     migrations: {
       directory: './db/migrations'
     }
-  }
-
+  },
+  test: {
+    client: 'pg',
+    connection: {
+      host: 'localhost',
+      database: 'flyptox_test',
+      user:     'flyptox_test'
+    },
+    seeds: {
+      directory: './db/seeds'
+    },
+    migrations: {
+      directory: './db/migrations'
+    }
+  },
 };

@@ -1,15 +1,15 @@
 var chai = require('chai');
 var expect = chai.expect;
-
-var bookshelf = require('../../../server/utils/bookshelf.js');
-
 var uuid = require('node-uuid');
+
+var utils = require('./helpers.js');
+var bookshelf = require('../../../server/utils/bookshelf.js')('test');
 var Order = require('../../../server/models/Order.js')(bookshelf);
 var User = require('../../../server/models/User.js')(bookshelf);
 
 // add a collection
 var Orders = bookshelf.Collection.extend({
-  model: Order 
+  model: Order
 });
 
 describe('Order Model', function(){
@@ -19,21 +19,31 @@ describe('Order Model', function(){
 
   // create an array to hold on to test orders we create
   // so they can easily be deleted later
+  var test_users = [];
   var test_orders = [];
 
   before(function(done){
     // populate database?
-
-    // snag a user id and attach it to uid
-    User.fetchAll().then(function(collection){
-      uid = collection.models[0].attributes.id;
-      done();
-    });
+    
+    // create a user and get his id
+    utils.user.createUser()
+      .then(function(user){
+        uid = user.get('id');
+        test_users.push(user);
+        done();
+      })
+      .catch(function(err){
+        console.error(err);
+      });
   });
 
   after(function(){
     // delete all test-created-trades from the db? 
-    test_orders.forEach(function(val, idx, collection){
+    test_orders.forEach(function(val){
+      val.destroy();
+    });
+
+    test_users.forEach(function(val){
       val.destroy();
     });
   });
@@ -44,24 +54,29 @@ describe('Order Model', function(){
   });
 
   it('creates new orders when given proper inputs: ', function(done){
-    var myOrder = {
-      sequence: 1,
-      currency_pair_id: 1,
-      order_type: 'limit',
-      side: 'buy',
-      price: 300.01,
-      original_size: 5,
-      remaining_size: 0,
-      status: 'filled',
-      user_id: uid
-    };
+    utils.order.createOrder(uid)
+      .then(function(order){
+        expect(order.attributes.price).to.equal(300.01);
+        expect(order.attributes.user_id).to.equal(uid);
+        test_orders.push(order);
+        done();
+      })
+      .catch(function(err){
+        expect(err).to.equal(null);
+        console.error(err);
+      });
+  });
 
-    // create the order and save it.
-    Order.forge(myOrder).save({}, {method: 'insert'}).then(function(order){
-      test_orders.push(order);
-      expect(order.attributes.price).to.equal(300.01);
-      expect(order.attributes.user_id).to.equal(uid);
-      done();
-    });
+  // this doesnt seem to work?
+  it('references a real user', function(){
+    Order.fetchAll({withRelated: ['userId']})
+      .then(function(orders){
+        //console.log(orders.models[0].userId());
+        //console.log(orders.models[0].related('userId'));
+        expect(orders.models[0]).to.not.equal(null);
+      })
+      .catch(function(err){
+        console.error(err);
+      });
   });
 });
