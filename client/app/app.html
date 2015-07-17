@@ -58,12 +58,20 @@
   </style>
 <body>
 
-<div>
-    <div style="float:right; margin-top:-150px; margin-right: 150px">
-        <h3 class="auth" style="margin-left: 60px">Sign Up</h3>
-        <h3 class="auth" style="margin-right: -60px">Login</h3>
+<div ng-controller="signUpCtrl">
+      <div style="float:right; margin-top:-150px; margin-right: 150px">
+        <div><h3 class="auth" ng-click="toggle()"  style="margin-left: 60px">Sign Up</h3></div>
+        <div><h3 class="auth" ng-click="toggle()" ng-click="toggle()"  style="margin-right: -60px">Login</h3></div>
+    </div>
+
+  <div ng-show="visible" ng-model="authData">
+       <h2> Email </h2>
+      <input type="text" ng-model='authData.email' value="email" placeholder="satoshi@btc.com">
+      <h2> Password</h2>
+      <input  ng-model='authData.password' type="text" value="password" placeholder="******">
   </div>
 </div>
+
 
 	<div class="tx" ng-controller="orderbookCtrl" ng-model="testData">
 		      <h4>Exchange order book</h4> 
