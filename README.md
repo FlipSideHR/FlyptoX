@@ -60,11 +60,30 @@ Run knex migrations
 
     knex migrate:latest
 
+### Test Database Setup
+
+1. make sure you have followed the steps from above 'Database Setup'
+2. configure your knexfile.js admin object.
+   - your admin object should have postgres credentials to an admin level account
+   - most likely your system username and an empty password
+4. run `node server/utils/recreateDB`
+   - this will drop the test db and recreate it with the latest migration/seeds
+
+### Testing
+
+#### Server side
+- `grunt test:server` to run all server tests
+- `grunt test:models` to run only model tests
+- `grunt test:controllers` to run only controller tests
+
+#### Client side
+
+
 ### Roadmap
 
 View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
 
-
 ## Contributing
 
+PR's are welcome.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.

@@ -10,6 +10,9 @@ module.exports = function(grunt) {
         },
         // Configure mochaTest tasks
         mochaTest: {
+          options: {
+
+          },
           server: {
             src: ['test/server/**/*.spec.js']
           },
@@ -261,9 +264,14 @@ module.exports = function(grunt) {
   ]);
 
   // tast for running mocha tests on server components
-  grunt.registerTask('test:server', ['mochaTest:server']);
-  grunt.registerTask('test:models', ['mochaTest:models']);
-  grunt.registerTask('test:controllers', ['mochaTest:controllers']);
+  // use the format `grunt test:TYPE` where type i
+  // is the type of test you want to run
+  // test:server runs all server tests
+  grunt.registerTask('test', function(testType){
+    testType = testType || 'server';
+    process.env.NODE_ENV = 'test';
+    grunt.task.run('mochaTest:' + testType);
+  });
 
   function setEnvVars() {
     if(minOption()) {
