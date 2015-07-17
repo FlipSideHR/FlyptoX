@@ -13,13 +13,14 @@ var Users = bookshelf.Collection.extend({
 
 describe('User Model', function(){
 
-  // any users we create for testing should get
-  // pushed on here so we can remove from db on after()
+  // one user for some basic tests
   var testUser;
+
   // runs once before any of our tests start.
   before(function(done){
     utils.clean(function(){
-      // create a single user for now
+
+      // create a single (unique) user 
       utils.user.createUUser()
         .then(function(user){
           testUser = user;
@@ -43,6 +44,10 @@ describe('User Model', function(){
     expect(User).to.not.equal(null);
   });
 
+  it('has a verify function', function(){
+    expect(User.verify).to.be.a('function');
+  });
+
   describe('Creation', function(){
     // we should be able to create new users with the User model object
     it('Attaches a unique id to the user', function(){
@@ -62,13 +67,9 @@ describe('User Model', function(){
         });
     });
 
-    it('has a verify function', function(){
-      expect(User.verify).to.be.a('function');
-    });
-
-    it('requires a password', function(done){
+    it('fails without a password', function(done){
       var user = {
-        email: 'myms@gml.com', 
+        email: 'mms@gml.com', 
         fullname: 'Mike Symmes'
       };
 
@@ -78,24 +79,25 @@ describe('User Model', function(){
         })
         .catch(function(err){
           expect(err).to.not.equal(null);
-          var user = {
-            password: 'success!',
-            email: 'myms@gml.com', 
-            fullname: 'Mike Symmes'
-          };
+          done(); 
+        });
+    });
 
-          utils.user.createCustom(user)
-            .then(function(result){
-              expect(result).to.equal(null);
-            })
-            .catch(function(err){
-              expect(err).to.equal(null);
-            })
-            .finally(function(err, result){
-              console.log(err, result);
-              expect(err).to.equal(null);
-              done();
-            });
+    xit('succeeds with valid password', function(done){
+      var user = {
+        password: 'success!',
+        email: 'mmmyms@gailajdml.com', 
+        fullname: 'Terryaki Jones'
+      };
+
+      utils.user.createCustom(user)
+        .then(function(result){
+          expect(result).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.equal(null);
+          done();
         });
     });
 
