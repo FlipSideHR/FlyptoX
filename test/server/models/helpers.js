@@ -101,6 +101,12 @@ utils.user = {
     return User.forge(users[this.usersCreated++]).save({}, {method: 'insert'});
 
   },
+  // creates an order using custom parameters
+  createCustom: function(params){
+    return User.forge(params).save({}, {method: 'insert'});
+  },
+
+  // delete all users rows
   deleteRows: function(done) {
     return bookshelf.knex.raw('DELETE FROM users');
   }

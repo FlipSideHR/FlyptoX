@@ -43,15 +43,66 @@ describe('User Model', function(){
     expect(User).to.not.equal(null);
   });
 
-  // we should be able to create new users with the User model object
-  it('Creates new users with an id property of type uuid', function(){
-    expect(testUser.get('id')).to.not.equal(null);
+  describe('Creation', function(){
+    // we should be able to create new users with the User model object
+    it('Attaches a unique id to the user', function(){
+      expect(testUser.get('id')).to.not.equal(null);
+    });
+
+    // requires unique email
+    it('Requires a unique email.', function(done){
+      utils.user.createUUser()
+        .then(function(user){
+          expect(user).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err.error).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('has a verify function', function(){
+      expect(User.verify).to.be.a('function');
+    });
+
+    it('requires a password', function(done){
+      var user = {
+        email: 'myms@gml.com', 
+        fullname: 'Mike Symmes'
+      };
+
+      utils.user.createCustom(user)
+        .then(function(result){
+          expect(result).to.equal(null);
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          var user = {
+            password: 'success!',
+            email: 'myms@gml.com', 
+            fullname: 'Mike Symmes'
+          };
+
+          utils.user.createCustom(user)
+            .then(function(result){
+              expect(result).to.equal(null);
+            })
+            .catch(function(err){
+              expect(err).to.equal(null);
+            })
+            .finally(function(err, result){
+              console.log(err, result);
+              expect(err).to.equal(null);
+              done();
+            });
+        });
+    });
+
+    xit('never stores a plaintext password', function(){
+
+    });
   });
-
-   // requires unique email?
-
-   // unique user name?
-
 });
 
 // Users collection is not actually a file yet
