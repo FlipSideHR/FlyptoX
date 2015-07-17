@@ -1,6 +1,7 @@
 var Account = require("../utils/models").Account;
 var Trade = require("../utils/models").Trade;
 var Order = require("../utils/models").Order;
+var uuid = require("node-uuid");
 
 module.exports = function(bookshelf){
   var Transaction = bookshelf.Model.extend({

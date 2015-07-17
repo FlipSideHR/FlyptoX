@@ -3,7 +3,7 @@ var expect = chai.expect;
 var uuid = require('node-uuid');
 
 var utils = require('./helpers.js');
-var bookshelf = require('../../../server/utils/bookshelf.js')('test');
+var bookshelf = require('../../../server/utils/bookshelf.js');
 var User = require('../../../server/utils/models').User;
 var Order = require('../../../server/utils/models').Order;
 

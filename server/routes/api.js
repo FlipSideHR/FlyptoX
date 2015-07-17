@@ -21,6 +21,7 @@ var Trade = require('../utils/models').Trade;
 var Transaction = require('../utils/models').Transaction;
 var User = require('../utils/models').User;
 
+var OrderBook = require('../controllers/book');
 /*
 == Public (products api) ==
 GET /products
@@ -32,6 +33,7 @@ GET /products/:id/stats (24 hour history)
 */
 
 //return an array of currency pairs
+//todo - include miniumum size allowed to trade (0.01) ?
 router.get("/products", function(req, res){
   CurrencyPair.forge().fetchAll().then(function(pairs){
     res.json(pairs);
@@ -39,75 +41,18 @@ router.get("/products", function(req, res){
 });
 
 
-/*
-//level 1 - only best prices and total number of orders at those price
-{
-    "sequence": "3",
-    "bids": [
-        [ price, size, num-orders ]
-    ],
-    "asks": [
-        [ price, size, num-orders ]
-    ]
-}
 
-//level 2 - top 50 bids and asks - total number of orders at those prices
-{
-    "sequence": "3",
-    "bids": [
-        [ price, size, num-orders ],
-        [ price, size, num-orders ]
-        .
-        .
-        .
-
-    ],
-    "asks": [
-        [ price, size, num-orders ],
-        [ price, size, num-orders ]
-        .
-        .
-
-    ]
-}
-//level 3 - complete order book
-{
-    "sequence": "3",
-    "bids": [
-        [ price, size, order-id ],
-        [ price, size, order-id ]
-        .
-        .
-        .
-
-    ],
-    "asks": [
-        [ price, size, order-id ],
-        [ price, size, order-id ]
-        .
-        .
-
-    ]
-}
-
-return open orders - order statuses could be: open | unsettled | settled
-*/
+//return open orders - order statuses could be: open | unsettled | settled
 router.get("/products/:id/book", function(req, res){
-  //var mockdata = require("../temp/mock_orderbook_data.json");
-  //res.json(mockdata);
-  //return;
-  //todo get orderbook from orderbook controller instead of doing a db query
-  //req.query.level = 1 || 2 || 3
-
-  //default to level 3
-  Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending?
-    //.query({orderBy:})
-    .fetchAll().then(function(orders){
-      return orders.map(function(order){
-        return [order.get('price'), order.get('size'), order.get('id')];
-      })
-    })
-  .catch(function(){
+  //level: req.query.level
+  //pair: req.params.id
+  OrderBook.level[req.query.level || 2](req.params.id).then(function(book){
+    res.json({
+      bids: book[0],
+      asks: book[1]
+    });
+  })
+  .catch(function(err){
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
 });

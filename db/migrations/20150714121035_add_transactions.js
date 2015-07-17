@@ -11,7 +11,8 @@ exports.up = function(knex, Promise) {
             table.uuid("trade_id").references("id").inTable("trades");
             //user's order that resulted in this transaction
             table.uuid("order_id").references("id").inTable("orders");
-
+            table.dateTime('time').notNullable().defaultTo(knex.raw('now()'));
+            
             //we might need a transfer_id and a new transfers
             //table which stores a list deposits and withdrawls from and into
             //accounts (the migration file needs to preceed this one)

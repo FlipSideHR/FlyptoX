@@ -6,12 +6,8 @@ var express = require('express');
 var cons = require('consolidate');
 
 // import our configed bookshelf object
-// TODO: update this to pass environment to bookshelf ('test', 'development')
-// process.env.NODE_ENV etc
-var bookshelf = require('./utils/bookshelf.js')();
+var bookshelf = require('./utils/bookshelf.js');
 
-//initialises the models
-require('./utils/models.js');
 
 // do we need this?
 var cookieParser = require('cookie-parser');

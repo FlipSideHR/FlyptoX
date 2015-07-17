@@ -1,6 +1,6 @@
 var tokens = require("./tokens");
 var users = module.exports;
-var bookshelf = require("../utils/bookshelf")();
+var bookshelf = require("../utils/bookshelf");
 var Promise = require("bluebird");
 
 var User = require("../utils/models").User;

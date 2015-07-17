@@ -2,7 +2,6 @@ var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
 
-//users is not testable because it expects models to be loaded in on global scope
 var users = require("../../../server/controllers/users.js");
 
 describe('Users Controller', function(){

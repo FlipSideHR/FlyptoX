@@ -1,6 +1,6 @@
 "use strict";
 
-var bookshelf = require('../../../server/utils/bookshelf.js')('test');
+var bookshelf = require('../../../server/utils/bookshelf.js');
 var User = require('../../../server/utils/models').User;
 var Order = require('../../../server/utils/models').Order;
 var Trade = require('../../../server/utils/models').Trade;
@@ -31,7 +31,7 @@ var trade = {
   sequence: 1,
   type: 'test',
   price: 200.00,
-  amount: 0.04,
+  size: 0.04,
 };
 
 // clean the db in the proper order
@@ -67,12 +67,13 @@ utils.order = {
     var myOrder = {
       sequence: 1,
       currency_pair_id: 1,
-      order_type: 'limit',
+      type: 'limit',
       side: 'buy',
       price: 300.01,
-      original_size: 5,
-      remaining_size: 0,
-      status: 'filled',
+      size: 5,
+      filled_size: 5,
+      status: 'done',
+      done_reason:'filled',
       user_id: uid
     };
 

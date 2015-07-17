@@ -1,5 +1,5 @@
 var models = require('require-directory')(module,'../models');
-var bookshelf = require('./bookshelf')();
+var bookshelf = require('./bookshelf');
 
 
 for(var modelName in models) {

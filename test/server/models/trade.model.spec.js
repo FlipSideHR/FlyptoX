@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 
 var utils = require('./helpers.js');
 
-var bookshelf = require('../../../server/utils/bookshelf.js')('test');
+var bookshelf = require('../../../server/utils/bookshelf.js');
 var Trade = require('../../../server/utils/models').Trade;
 
 // add a collection
