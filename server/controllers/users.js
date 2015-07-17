@@ -3,6 +3,8 @@ var users = module.exports;
 var bookshelf = require("../utils/bookshelf");
 var Promise = require("bluebird");
 
+var User = require("../utils/models").User;
+
 //method for registering a new user account and returns a new token
 users.signup = Promise.method(function(email, password){
   if (!email || !password) throw new Error('Email and password are both required');

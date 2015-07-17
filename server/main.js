@@ -30,12 +30,9 @@ app.set('view engine', 'html');
 // set an application wide bookshelf property
 app.set('bookshelf', bookshelf);
 
-// load our models into the global scope and the app properties
-var models = require('require-directory')(module, './models');
-for(var modelName in models) {
-    global[modelName] = models[modelName](bookshelf);
-    app.set(modelName, global[modelName]);
-}
+//load all models
+require("./utils/models");
+
 // load collections
 
 //signin and signup routes

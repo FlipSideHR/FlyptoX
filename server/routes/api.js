@@ -85,21 +85,23 @@ router.get("/products", function(req, res){
 return open orders - order statuses could be: open | unsettled | settled
 */
 router.get("/products/:id/book", function(req, res){
-  var mockdata = require("../temp/mock_orderbook_data.json");
-  res.json(mockdata);
-  return;
+  //var mockdata = require("../temp/mock_orderbook_data.json");
+  //res.json(mockdata);
+  //return;
   //todo get orderbook from orderbook controller instead of doing a db query
   //req.query.level = 1 || 2 || 3
-  /*
-  Order.getOpenOrders(req.query.level || 1).then(function(orders){
-    //orders is a bookshelf collection
-    //todo - use underscore, turn the collection into the expected format
-    res.json(orders);
-  })
+
+  //default to level 3
+  Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending
+    .query({orderBy:})
+    .fetchAll().then(function(orders){
+      return orders.map(function(order){
+        return [order.get('price'), order.get('size'), order.get('id')];
+      })
+    })
   .catch(function(){
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
-  */
 });
 
 /*
