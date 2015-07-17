@@ -69,6 +69,15 @@ FlyptoX.controller('executionCtrl', ['$scope',
 
   }]);
 
+FlyptoX.controller('signUpCtrl', ['$scope', 
+    '$interval', function($scope, $interval, AccountsService){
+    $scope.visible = false;
+    $scope.toggle = function() {
+            $scope.visible = !$scope.visible;
+        };
+    $scope.authData = {};
+}]);
+
 
 // FlyptoX.controller('chartCtrl', ['$scope', '$interval', '$timeout', 
 //   function($scope, $interval, $timeout){
