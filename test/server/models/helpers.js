@@ -1,6 +1,6 @@
 "use strict";
 
-var bookshelf = require('../../../server/utils/bookshelf.js')('test');
+var bookshelf = require('../../../server/utils/bookshelf.js');
 var User = require('../../../server/utils/models').User;
 var Order = require('../../../server/utils/models').Order;
 var Trade = require('../../../server/utils/models').Trade;
