@@ -1,9 +1,10 @@
 var tokens = require("./tokens");
 var users = module.exports;
-var bookshelf = require("../utils/bookshelf");
+var bookshelf = require("../utils/bookshelf")();
 var Promise = require("bluebird");
 
 var User = require("../utils/models").User;
+var Account = require("../utils/models").Account;
 
 //method for registering a new user account and returns a new token
 users.signup = Promise.method(function(email, password){

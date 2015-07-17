@@ -5,11 +5,11 @@ var uuid = require('node-uuid');
 var utils = require('./helpers.js');
 
 var bookshelf = require('../../../server/utils/bookshelf.js')('test');
-var Trade = require('../../../server/models/Trade.js')(bookshelf);
+var Trade = require('../../../server/utils/models').Trade;
 
 // add a collection
 var Trades = bookshelf.Collection.extend({
-  model: Trade 
+  model: Trade
 });
 
 describe('Trade Model', function(){
@@ -24,14 +24,14 @@ describe('Trade Model', function(){
 
 
   before(function(done){
-    
+
     // clear all trades, users and orders
     // before creating new ones
     utils.clean(function(){
       // big old promise chain of users and orders
       // create some users
       utils.user.createUser()
-        .then(function(user){ 
+        .then(function(user){
           uid1 = user.get('id');
           return utils.user.createUser();
         })

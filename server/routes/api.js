@@ -13,6 +13,14 @@ router.use(bodyParser.urlencoded({ extended: true }));
 //middleware to restrict access to api to authenticated users
 var privateApi = require("../controllers/tokens").decodeToken;
 
+var Account = require('../utils/models').Account;
+var Currency = require('../utils/models').Currency;
+var CurrencyPair = require('../utils/models').CurrencyPair;
+var Order = require('../utils/models').Order;
+var Trade = require('../utils/models').Trade;
+var Transaction = require('../utils/models').Transaction;
+var User = require('../utils/models').User;
+
 /*
 == Public (products api) ==
 GET /products
@@ -92,8 +100,8 @@ router.get("/products/:id/book", function(req, res){
   //req.query.level = 1 || 2 || 3
 
   //default to level 3
-  Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending
-    .query({orderBy:})
+  Order.forge({status:'open', type:"limit", side:"buy"})//howto order by price ascending?
+    //.query({orderBy:})
     .fetchAll().then(function(orders){
       return orders.map(function(order){
         return [order.get('price'), order.get('size'), order.get('id')];

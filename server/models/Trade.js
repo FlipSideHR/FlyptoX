@@ -1,11 +1,13 @@
 /* exported trade*/
 var uuid = require("node-uuid");
 
+var User = require("../utils/models").User;
+var Transaction = require("../utils/models").Transaction;
+var Order = require("../utils/models").Order;
+
 // returns a bookshelf trade model
 // requires a configured bookshelf object be passed to it
 module.exports = function(bookshelf){
-  var User = require('./User')(bookshelf);
-  var Order = require('./Order')(bookshelf);
 
   var Trade = bookshelf.Model.extend({
     tableName: 'trades',

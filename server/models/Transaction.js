@@ -1,3 +1,6 @@
+var Account = require("../utils/models").Account;
+var Trade = require("../utils/models").Trade;
+var Order = require("../utils/models").Order;
 
 module.exports = function(bookshelf){
   var Transaction = bookshelf.Model.extend({
@@ -11,7 +14,7 @@ module.exports = function(bookshelf){
     onCreate: function(model, attrs, options) {
       this.set('id', uuid.v1());
     },
-    
+
     //owner of the account
     account: function() {
       return this.belongsTo(Account, "account_id");
