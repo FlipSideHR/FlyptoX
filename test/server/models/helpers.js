@@ -1,6 +1,9 @@
+"use strict";
+
 var bookshelf = require('../../../server/utils/bookshelf.js')('test');
 var User = require('../../../server/models/User.js')(bookshelf);
 var Order = require('../../../server/models/Order.js')(bookshelf);
+var Trade = require('../../../server/models/Trade.js')(bookshelf);
 
 var utils = module.exports;
 
@@ -23,6 +26,41 @@ var users = [
   }
 ];
 
+// this data should be randomly generated
+var trade = {
+  sequence: 1, 
+  type: 'test',
+  price: 200.00,
+  amount: 0.04,
+};
+
+// clean the db in the proper order
+utils.clean = function(done){
+  utils.trade.deleteRows()
+    .then(function(){
+      return utils.order.deleteRows();
+    })
+    .then(function(){
+      return utils.user.deleteRows();
+    })
+    .then(function(){
+      done();
+    });
+};
+
+utils.trade = {
+  create: function(uids, oids){
+    trade.maker_id = uids[0];
+    trade.taker_id = uids[1];
+    trade.maker_order_id = oids[0];
+    trade.taker_order_id = oids[1]; 
+    return Trade.forge(trade).save({}, {method: 'insert'});
+  },
+  deleteRows: function() {
+    return bookshelf.knex.raw('DELETE FROM trades');
+  }
+};
+
 utils.order = {
   createOrder: function(uid){
 
@@ -40,12 +78,15 @@ utils.order = {
 
     // create the order and save it.
     return Order.forge(myOrder).save({}, {method: 'insert'});
+  },
+  deleteRows: function(done) {
+    return bookshelf.knex.raw('DELETE FROM orders');
   }
 };
 
 utils.user = {
   // create a unique user
-  createUUser: function(callback){
+  createUUser: function(){
 
     // create a new user object 
     return User.forge(users[0]).save({}, {method: 'insert'});
@@ -54,11 +95,14 @@ utils.user = {
   // create a new user from our test data array
   // only 2 users currently
   usersCreated: 0,
-  createUser: function(callback){
+  createUser: function(){
 
     // create a new user object 
     return User.forge(users[this.usersCreated++]).save({}, {method: 'insert'});
  
+  },
+  deleteRows: function(done) {
+    return bookshelf.knex.raw('DELETE FROM users');
   }
 };
 
