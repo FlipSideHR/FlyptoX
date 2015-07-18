@@ -1,6 +1,7 @@
 # Dependency directories
 node_modules/
 bower_components/
+client/lib/
 
 # Compiled
 dist/
