@@ -62,6 +62,9 @@ utils.trade = {
 };
 
 utils.order = {
+  createCustom: function(params){
+    return Order.forge(params).save({}, {method: 'insert'});
+  },
   createOrder: function(uid){
 
     var myOrder = {

@@ -17,6 +17,18 @@ describe('Order Model', function(){
   // this is for certain tests that require a valid user id
   var uid;
 
+  // a generic order
+  var myOrder = {
+    sequence: 1,
+    currency_pair_id: 1,
+    type: 'limit',
+    price: 301.01,
+    side: 'buy',
+    size: 50,
+    filled_size: 0,
+    user_id: uid
+  };
+
   // create an array to hold on to test orders we create
   // so they can easily be deleted later
 
@@ -46,6 +58,36 @@ describe('Order Model', function(){
     expect(Order).to.not.equal(null);
   });
 
+  describe('.side', function(){
+
+    it('cannot be empty', function(done){
+      // test with no 'side' value defined
+      myOrder.side = undefined;
+      utils.order.createCustom(myOrder)
+        .then(function(order){
+          expect(order).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          done();
+        });
+    });
+    it('must be the string "buy" or "sell"', function(done){
+      // test with a junk string
+      myOrder.side = 'someJunKValue';
+      utils.order.createCustom(myOrder)
+        .then(function(order){
+          expect(order).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          done();
+        });
+    });
+  });
+
   it('creates new orders when given proper inputs: ', function(done){
     utils.order.createOrder(uid)
       .then(function(order){
@@ -60,19 +102,18 @@ describe('Order Model', function(){
   });
 
   // this isnt working as expected
-  xit('references a real user', function(done){
-    Order.fetchAll({withRelated: ['userId']})
+  it('references a real user', function(done){
+    Order.fetchAll()
       .then(function(orders){
-        //console.log(orders.models[0].related('user'));
-        //console.log(orders.models[0].userId());
-        //console.log(orders.models[0].related('userId'));
-
-        // this test isnt a real test - it fails just to let you kno
-        // there is a problem with this test in general
-        expect(orders.models[0]).to.equal(null);
-        done();
+        orders.at(0)
+          .load(['user'])
+          .then(function(model){
+            expect(model.relations.user.id === uid);
+            done();
+          });
       })
       .catch(function(err){
+        console.log(err);
         expect(err).to.equal(null);
         done();
       });

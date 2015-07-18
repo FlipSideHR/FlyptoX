@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/FlipSideHR/FlyptoX.svg?branch=master)](https://travis-ci.org/FlipSideHR/FlyptoX)
+
 # FlyptoX
 
 > Pithy project description
