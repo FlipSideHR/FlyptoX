@@ -1,9 +1,9 @@
 "use strict";
 
-var bookshelf = require('../../utils/bookshelf.js');
-var User = require('../../models/User');
-var Order = require('../../models/Order');
-var Trade = require('../../models/Trade');
+var bookshelf = require('../utils/bookshelf.js');
+var User = require('../models/User');
+var Order = require('../models/Order');
+var Trade = require('../models/Trade');
 
 var utils = module.exports;
 

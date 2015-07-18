@@ -2,7 +2,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var uuid = require('node-uuid');
 
-var utils = require('./helpers.js');
+var utils = require('../helpers.js');
 
 var bookshelf = require('../../utils/bookshelf.js');
 var Trade = require('../../models/Trade');

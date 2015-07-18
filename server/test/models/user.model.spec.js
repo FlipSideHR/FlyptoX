@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 // utils has some useful functions for testing our db
-var utils = require('./helpers.js');
+var utils = require('../helpers.js');
 
 var bookshelf = require('../../utils/bookshelf.js');
 var User = require('../../models/User');

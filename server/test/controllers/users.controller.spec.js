@@ -4,7 +4,7 @@ var should = chai.should();
 
 var bookshelf = require("../../utils/bookshelf");
 var users = require("../../../server/controllers/users.js");
-var helpers = require("../models/helpers");
+var helpers = require("../helpers");
 var User = require("../../../server/models/User");
 
 function clearTables(done){
