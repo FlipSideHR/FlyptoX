@@ -3,18 +3,18 @@ var Promise  = require('bluebird');
 var bcrypt   = Promise.promisifyAll(require('bcrypt-nodejs'));
 var uuid = require("node-uuid");
 
-var Account = require("./Account");
-var Order = require("./Order");
+require("./Account");
+require("./Order");
 
-var User = bookshelf.Model.extend({
+var User = module.exports = bookshelf.model('User', {
   tableName: 'users',
   hasTimestamps: ['created_at', 'updated_at'],
   accounts: function(){
-    return this.hasMany(Account, "user_id");
+    return this.hasMany("Account", "user_id");
   },
 
   orders: function(){
-    return this.hasMany(Order, "user_id");
+    return this.hasMany("Order", "user_id");
   },
 
   initialize: function(){
@@ -62,5 +62,3 @@ User.verify = Promise.method(function(email, password){
       });
     });
 });
-
-module.exports = User;

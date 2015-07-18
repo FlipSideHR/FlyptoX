@@ -1,5 +1,5 @@
 var bookshelf = require('../utils/bookshelf');
 
-module.exports = bookshelf.Model.extend({
+var Currency = module.exports = bookshelf.model('Currency', {
   tableName: 'currencies'
 });

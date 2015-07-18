@@ -5,7 +5,7 @@ var Trade = require("./Trade");
 var Order = require("./Order");
 var uuid = require("node-uuid");
 
-var Transaction = bookshelf.Model.extend({
+var Transaction = module.exports = bookshelf.model('Transaction', {
   tableName: 'transactions',
 
   initialize: function(){
@@ -19,17 +19,15 @@ var Transaction = bookshelf.Model.extend({
 
   //owner of the account
   account: function() {
-    return this.belongsTo(Account, "account_id");
+    return this.belongsTo('Account', "account_id");
   },
 
   trade: function () {
-    return this.belongsTo(Trade, "trade_id");
+    return this.belongsTo('Trade', "trade_id");
   },
 
   order: function() {
-    return this.belongsTo(Order, "order_id");
+    return this.belongsTo('Order', "order_id");
   }
 
 });
-
-module.exports = Transaction;

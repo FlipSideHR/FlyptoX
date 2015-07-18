@@ -1,11 +1,11 @@
 var uuid = require("node-uuid");
 var bookshelf = require('../utils/bookshelf');
 
-var User = require("./User");
-var Transaction = require("./Transaction");
-var Currency = require("./Currency");
+require("./User");
+require("./Transaction");
+require("./Currency");
 
-var Account = bookshelf.Model.extend({
+var Account = module.exports = bookshelf.model('Account', {
   tableName: 'accounts',
 
   initialize: function(){
@@ -19,16 +19,14 @@ var Account = bookshelf.Model.extend({
 
   //owner of the account
   user: function(){
-    return this.belongsTo(User, "user_id");
+    return this.belongsTo("User", "user_id");
   },
 
   transactions: function() {
-    return this.hasMany(Transaction, "account_id");
+    return this.hasMany("Transaction", "account_id");
   },
 
   currency: function(){
-    return this.belongsTo(Currency, "currency_id");
+    return this.belongsTo("Currency", "currency_id");
   }
 });
-
-module.exports = Account;
