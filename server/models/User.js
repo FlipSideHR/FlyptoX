@@ -7,60 +7,60 @@ var Account = require("./Account");
 var Order = require("./Order");
 
 var User = bookshelf.Model.extend({
-    tableName: 'users',
-    hasTimestamps: ['created_at', 'updated_at'],
-    accounts: function(){
-      return this.hasMany(Account, "user_id");
-    },
+  tableName: 'users',
+  hasTimestamps: ['created_at', 'updated_at'],
+  accounts: function(){
+    return this.hasMany(Account, "user_id");
+  },
 
-    orders: function(){
-      return this.hasMany(Order, "user_id");
-    },
+  orders: function(){
+    return this.hasMany(Order, "user_id");
+  },
 
-    initialize: function(){
-      this.on('creating', this.onCreate, this);
-    },
+  initialize: function(){
+    this.on('creating', this.onCreate, this);
+  },
 
-    onCreate: function(model, attrs, options) {
-      var self = this;
+  onCreate: function(model, attrs, options) {
+    var self = this;
 
-      // self.get('password') returns undefined if password doesnt exist
-      // so we must verify that these exist
-      if (self.get('password') === undefined){
-        throw Error('Password Required');
-      }
-      if (self.get('email') === undefined){
-        throw Error('Email Required');
-      }
-
-      // do other (email/password) validations here
-
-      // create a unique id
-      self.set('id', uuid.v4());
-
-      // normalize email address
-      self.set('email', self.get('email').toLowerCase().trim());
-
-      // salt and hash
-      return bcrypt.genSaltAsync(10).then(function(salt){
-        return bcrypt.hashAsync(self.get('password'), salt, null).then(function(hash){
-            self.set('password', hash);
-            self.set('salt', salt);
-            return;
-        });
-      });
+    // self.get('password') returns undefined if password doesnt exist
+    // so we must verify that these exist
+    if (self.get('password') === undefined){
+      throw Error('Password Required');
     }
-  });
+    if (self.get('email') === undefined){
+      throw Error('Email Required');
+    }
 
-  User.verify = Promise.method(function(email, password){
-    // thow an error here???
-    if (!email || !password) throw new Error('Email and password are both required');
-    return new User({email: email.toLowerCase().trim()})
-      .fetch({require: true}).tap(function(user) {
-        return bcrypt.compareAsync(password, user.get('password')).then(function(match){
-          if(!match) throw new Error("Wrong Password");
-        });
+    // do other (email/password) validations here
+
+    // create a unique id
+    self.set('id', uuid.v4());
+
+    // normalize email address
+    self.set('email', self.get('email').toLowerCase().trim());
+
+    // salt and hash
+    return bcrypt.genSaltAsync(10).then(function(salt){
+      return bcrypt.hashAsync(self.get('password'), salt, null).then(function(hash){
+          self.set('password', hash);
+          self.set('salt', salt);
+          return;
       });
-  });
+    });
+  }
+});
+
+User.verify = Promise.method(function(email, password){
+  // thow an error here???
+  if (!email || !password) throw new Error('Email and password are both required');
+  return new User({email: email.toLowerCase().trim()})
+    .fetch({require: true}).tap(function(user) {
+      return bcrypt.compareAsync(password, user.get('password')).then(function(match){
+        if(!match) throw new Error("Wrong Password");
+      });
+    });
+});
 
 module.exports = User;
