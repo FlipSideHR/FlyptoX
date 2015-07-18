@@ -1,11 +1,8 @@
+var bookshelf = require('../utils/bookshelf');
 var uuid = require('node-uuid');
 
-var User = require("../utils/models").User;
-var CurrencyPair = require("../utils/models").CurrencyPair;
-
-// returns a bookshelf trade model
-// requires a configured bookshelf object be passed to it
-module.exports = function(bookshelf){
+var User = require("./User");
+var CurrencyPair = require("./CurrencyPair");
 
   var Order = bookshelf.Model.extend({
     tableName: 'orders',
@@ -33,6 +30,4 @@ module.exports = function(bookshelf){
 
   });
 
-  return Order;
-
-};
+module.exports = Order;

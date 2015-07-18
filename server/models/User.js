@@ -1,16 +1,12 @@
-/* exported User */
+var bookshelf = require('../utils/bookshelf');
 var Promise  = require('bluebird');
 var bcrypt   = Promise.promisifyAll(require('bcrypt-nodejs'));
 var uuid = require("node-uuid");
 
-var Account = require("../utils/models").Account;
-var Order = require("../utils/models").Order;
+var Account = require("./Account");
+var Order = require("./Order");
 
-// returns a bookshelf user model
-// requires a configured bookshelf object be passed to it
-module.exports = function(bookshelf){
-
-  var User = bookshelf.Model.extend({
+var User = bookshelf.Model.extend({
     tableName: 'users',
     hasTimestamps: ['created_at', 'updated_at'],
     accounts: function(){
@@ -67,5 +63,4 @@ module.exports = function(bookshelf){
       });
   });
 
-  return User;
-};
+module.exports = User;

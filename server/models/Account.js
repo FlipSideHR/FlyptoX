@@ -1,11 +1,11 @@
 var uuid = require("node-uuid");
+var bookshelf = require('../utils/bookshelf');
 
-var User = require("../utils/models").User;
-var Transaction = require("../utils/models").Transaction;
-var Currency = require("../utils/models").Currency;
+var User = require("./User");
+var Transaction = require("./Transaction");
+var Currency = require("./Currency");
 
-module.exports = function(bookshelf){
-  var Account = bookshelf.Model.extend({
+var Account = bookshelf.Model.extend({
     tableName: 'accounts',
 
     initialize: function(){
@@ -31,5 +31,4 @@ module.exports = function(bookshelf){
     }
   });
 
-  return Account;
-};
+module.exports = Account;

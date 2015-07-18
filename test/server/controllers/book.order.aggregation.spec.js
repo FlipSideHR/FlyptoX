@@ -3,8 +3,8 @@ var expect = chai.expect;
 var should = chai.should();
 
 var bookshelf = require("../../../server/utils/bookshelf");
-var Order = require("../../../server/utils/models").Order;
-var User = require("../../../server/utils/models").User;
+var Order = require("../../../server/models/Order");
+var User = require("../../../server/models/User");
 var helpers = require("../models/helpers");
 
 var Orders = bookshelf.Collection.extend({
