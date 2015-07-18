@@ -32,6 +32,14 @@ module.exports = {
     client: 'pg',
     connection: {
       host: 'localhost',
+      database: 'recursion',
+      user:     'recursion'
+    },
+  },
+  travis: {
+    client: 'pg',
+    connection: {
+      host: 'localhost',
       database: 'postgres',
       user:     'postgres'
     },
