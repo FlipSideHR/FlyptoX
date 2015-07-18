@@ -3,9 +3,8 @@ var expect = chai.expect;
 var should = chai.should();
 
 var bookshelf = require("../../../server/utils/bookshelf");
-var Order = require("../../../server/utils/models").Order;
-var User = require("../../../server/utils/models").User;
-var helpers = require("../models/helpers");
+var Order = require("../../../server/models/Order");
+var User = require("../../../server/models/User");
 
 var Orders = bookshelf.Collection.extend({
   model: Order
@@ -59,8 +58,22 @@ function makeOrderBook(done){
     });
 }
 
+function clearTables(done){
+  bookshelf.knex('accounts').del()
+  .then(function(){
+      return bookshelf.knex('orders').del();
+  })
+  .then(function(){
+      return bookshelf.knex('users').del();
+  }).then(function(){
+    done();
+  })
+  .catch(done);
+}
+
 describe('Order Book', function(){
-  before(helpers.clean);
+  before(clearTables);
+  after(clearTables);
   before(makeUser);
   before(makeOrderBook);
 

@@ -1,6 +1,6 @@
 var OrderBook = module.exports;
 var Promise = require("bluebird");
-var Order = require('../utils/models').Order;
+var Order = require('../models/Order');
 
 OrderBook.getBestOrder = function(side, pair_id) {
   return Order.where({status:'open', type:"limit", side:side, currency_pair_id: pair_id})

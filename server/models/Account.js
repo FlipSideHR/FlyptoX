@@ -1,35 +1,32 @@
 var uuid = require("node-uuid");
+var bookshelf = require('../utils/bookshelf');
 
-var User = require("../utils/models").User;
-var Transaction = require("../utils/models").Transaction;
-var Currency = require("../utils/models").Currency;
+require("./User");
+require("./Transaction");
+require("./Currency");
 
-module.exports = function(bookshelf){
-  var Account = bookshelf.Model.extend({
-    tableName: 'accounts',
+var Account = module.exports = bookshelf.model('Account', {
+  tableName: 'accounts',
 
-    initialize: function(){
-      this.on('creating', this.onCreate, this);
-    },
+  initialize: function(){
+    this.on('creating', this.onCreate, this);
+  },
 
-    onCreate: function(model, attrs, options) {
-      var self = this;
-      self.set('id', uuid.v4());
-    },
+  onCreate: function(model, attrs, options) {
+    var self = this;
+    self.set('id', uuid.v4());
+  },
 
-    //owner of the account
-    user: function(){
-      return this.belongsTo(User, "user_id");
-    },
+  //owner of the account
+  user: function(){
+    return this.belongsTo("User", "user_id");
+  },
 
-    transactions: function() {
-      return this.hasMany(Transaction, "account_id");
-    },
+  transactions: function() {
+    return this.hasMany("Transaction", "account_id");
+  },
 
-    currency: function(){
-      return this.belongsTo(Currency, "currency_id");
-    }
-  });
-
-  return Account;
-};
+  currency: function(){
+    return this.belongsTo("Currency", "currency_id");
+  }
+});

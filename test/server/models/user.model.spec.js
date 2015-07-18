@@ -4,7 +4,7 @@ var expect = chai.expect;
 var utils = require('./helpers.js');
 
 var bookshelf = require('../../../server/utils/bookshelf.js');
-var User = require('../../../server/utils/models').User;
+var User = require('../../../server/models/User');
 
 // add a collection
 var Users = bookshelf.Collection.extend({
@@ -35,7 +35,7 @@ describe('User Model', function(){
   describe('Creation', function(){
     // we should be able to create new users with the User model object
     it('Attaches a unique id to the user', function(done){
-      // create a single (unique) user 
+      // create a single (unique) user
       utils.user.createUUser()
         .then(function(user){
           expect(user.get('id')).to.not.equal(null);
@@ -50,8 +50,8 @@ describe('User Model', function(){
 
     // requires unique email
     it('Requires a unique email.', function(done){
-      // this should fail since the unique user was created in the previous 
-      // test ('Attaches a unique id to the user') 
+      // this should fail since the unique user was created in the previous
+      // test ('Attaches a unique id to the user')
       utils.user.createUUser()
         .then(function(user){
           expect(user).to.equal(null);
@@ -65,7 +65,7 @@ describe('User Model', function(){
 
     it('fails without a password', function(done){
       var user = {
-        email: 'mms@gml.com', 
+        email: 'mms@gml.com',
         fullname: 'Mike Symmes'
       };
 
@@ -76,14 +76,14 @@ describe('User Model', function(){
         })
         .catch(function(err){
           expect(err).to.not.equal(null);
-          done(); 
+          done();
         });
     });
 
     it('succeeds with valid password', function(done){
       var user = {
         password: 'success!',
-        email: 'mmmyms@gailajdml.com', 
+        email: 'mmmyms@gailajdml.com',
         fullname: 'Terryaki Jones'
       };
 
@@ -102,7 +102,7 @@ describe('User Model', function(){
     it('hashes password', function(done){
       var user = {
         password: 'success!',
-        email: 'mys@gildml.com', 
+        email: 'mys@gildml.com',
         fullname: 'Terri Jo'
       };
 
@@ -126,7 +126,7 @@ describe('User Model', function(){
     it('verifies user credentials against the salted hashed password', function(done){
       var user = {
         password: 'ssoijdfuccess!',
-        email: 'lkjsdmys@gildml.com', 
+        email: 'lkjsdmys@gildml.com',
         fullname: 'Terri Jo'
       };
 

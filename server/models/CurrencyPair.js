@@ -1,10 +1,5 @@
+var bookshelf = require('../utils/bookshelf');
 
-module.exports = function(bookshelf){
-
-  var CurrencyPair = bookshelf.Model.extend({
-    tableName: 'currency_pairs',
-
-  });
-
-  return CurrencyPair;
-};
+var CurrencyPair = module.exports = bookshelf.model('CurrencyPair', {
+  tableName: 'currency_pairs'
+});
