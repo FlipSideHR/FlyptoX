@@ -14,13 +14,13 @@ module.exports = function(grunt) {
 
           },
           server: {
-            src: ['test/server/**/*.spec.js']
+            src: ['server/test/**/*.spec.js']
           },
           models: {
-            src: ['test/server/models/*.spec.js']
+            src: ['server/test/models/*.spec.js']
           },
           controllers: { 
-            src: ['test/server/controllers/*.spec.js']
+            src: ['server/test/controllers/*.spec.js']
           }
         },
         copy: {

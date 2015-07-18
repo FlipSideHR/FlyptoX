@@ -3,8 +3,8 @@ var expect = chai.expect;
 // utils has some useful functions for testing our db
 var utils = require('./helpers.js');
 
-var bookshelf = require('../../../server/utils/bookshelf.js');
-var User = require('../../../server/models/User');
+var bookshelf = require('../../utils/bookshelf.js');
+var User = require('../../models/User');
 
 // add a collection
 var Users = bookshelf.Collection.extend({

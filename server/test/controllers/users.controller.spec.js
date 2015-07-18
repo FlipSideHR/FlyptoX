@@ -2,7 +2,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
 
-var bookshelf = require("../../../server/utils/bookshelf");
+var bookshelf = require("../../utils/bookshelf");
 var users = require("../../../server/controllers/users.js");
 var helpers = require("../models/helpers");
 var User = require("../../../server/models/User");

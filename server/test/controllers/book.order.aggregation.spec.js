@@ -3,9 +3,9 @@ var expect = chai.expect;
 var should = chai.should();
 
 var Promise = require('bluebird');
-var bookshelf = require("../../../server/utils/bookshelf");
-var Order = require("../../../server/models/Order");
-var User = require("../../../server/models/User");
+var bookshelf = require("../../utils/bookshelf");
+var Order = require("../../models/Order");
+var User = require("../../models/User");
 
 var Orders = bookshelf.Collection.extend({
   model: Order

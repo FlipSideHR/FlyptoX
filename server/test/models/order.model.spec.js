@@ -3,9 +3,9 @@ var expect = chai.expect;
 var uuid = require('node-uuid');
 
 var utils = require('./helpers.js');
-var bookshelf = require('../../../server/utils/bookshelf.js');
-var User = require('../../../server/models/User');
-var Order = require('../../../server/models/Order');
+var bookshelf = require('../../utils/bookshelf.js');
+var User = require('../../models/User');
+var Order = require('../../models/Order');
 
 // add a collection
 var Orders = bookshelf.Collection.extend({
