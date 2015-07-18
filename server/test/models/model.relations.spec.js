@@ -1,4 +1,4 @@
-var bookshelf = require("../../../server/utils/bookshelf");
+var bookshelf = require("../../utils/bookshelf");
 
 describe('Model Relationships', function(){
 

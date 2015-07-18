@@ -4,8 +4,8 @@ var uuid = require('node-uuid');
 
 var utils = require('./helpers.js');
 
-var bookshelf = require('../../../server/utils/bookshelf.js');
-var Trade = require('../../../server/models/Trade');
+var bookshelf = require('../../utils/bookshelf.js');
+var Trade = require('../../models/Trade');
 
 // add a collection
 var Trades = bookshelf.Collection.extend({
