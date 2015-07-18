@@ -1,0 +1,13 @@
+services:
+  - postgresql
+
+install:
+  - npm install 
+before_script:
+  - node server/utils/recreateDB.js
+
+language: node_js
+node_js:
+  - "0.12"
+  - "0.11"
+  - "0.10"
