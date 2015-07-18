@@ -14,21 +14,21 @@ var ngAnnotate = require('gulp-ng-annotate');
 
 var paths = {
   scripts: [
-    './client/lib/angular/angular.min.js', 
-    './client/lib/angular-chartist.js/dist/angular-chartist.min.js', 
-    './client/lib/angular-mocks/angular-mocks.js', 
-    './client/lib/chartist/dist/chartist.min.js', 
+    './client/lib/angular/angular.min.js',
+    './client/lib/angular-chartist.js/dist/angular-chartist.min.js',
+    './client/lib/angular-mocks/angular-mocks.js',
+    './client/lib/chartist/dist/chartist.min.js',
 
-    './client/app/app.js', 
-    './client/app/modules.js', 
+    './client/app/app.js',
+    './client/app/modules.js',
 
     './client/app/lib/services/account.services.js'
   ],
   stylesheets: [
-    './client/lib/chartist/dist/chartist.min.css', 
+    './client/lib/chartist/dist/chartist.min.css',
 
     './client/assets/css/app.css'
-  ], 
+  ],
   sass: [
     './client/assets/sass/*.scss'
   ]
