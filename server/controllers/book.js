@@ -80,20 +80,25 @@ OrderBook.level = {
         .fetchAll()
         .then(function(orders){
           return orders.map(function(order){
-            return [order.get('price'), order.get('size'), order.get('id')];
+            return [order.get('price').toFixed(2), order.get('size').toFixed(8), order.get('id')];
           });
         }),
 
       //asks
       Order.where({status:'open', type:"limit", side:"sell", currency_pair_id: pair_id})
-        .query('orderBy','price','desc')
+        .query('orderBy','price','asc')
         .fetchAll()
         .then(function(orders){
           return orders.map(function(order){
-            return [order.get('price'), order.get('size'), order.get('id')];
+            return [order.get('price').toFixed(2), order.get('size').toFixed(8), order.get('id')];
           });
         })
-    ]);
+    ]).then(function(book){
+      return {
+        bids: book[0],
+        asks: book[1]
+      }
+    })
   },
 
   "2": function(pair_id){

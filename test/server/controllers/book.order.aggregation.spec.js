@@ -43,12 +43,12 @@ function makeOrderBook(done){
         makeOrder(uid, 'buy', 204, 1.0),
         makeOrder(uid, 'buy', 300, 0.5),
         makeOrder(uid, 'buy', 300, 0.5),//best bid (highest buy order)
-        makeOrder(uid, 'sell', 100, 0.5),//best ask (lowest sell order)
         makeOrder(uid, 'sell', 300, 0.5),
         makeOrder(uid, 'sell', 400, 0.5),
         makeOrder(uid, 'sell', 400, 0.5),
         makeOrder(uid, 'sell', 200, 0.5),
         makeOrder(uid, 'sell', 200, 0.5),
+        makeOrder(uid, 'sell', 100, 0.5),//best ask (lowest sell order)
       ]);
 
       return Promise.all(orders.invoke('save'));
@@ -59,7 +59,7 @@ function makeOrderBook(done){
     });
 }
 
-describe('Order Aggregator', function(){
+describe('Order Book', function(){
   before(helpers.clean);
   before(makeUser);
   before(makeOrderBook);
@@ -102,8 +102,17 @@ describe('Order Aggregator', function(){
     .catch(done);
   });
 
-  xit('level 3 - should return all bids and asks from the order book', function(){
+  it('level 3 - should return all bids and asks from the order book', function(done){
+    orderBook.level[3](1).then(function(book){
 
+      expect(book.bids.length).to.equal(7);
+      expect(book.bids[0][0]).to.equal('201.00');
+      expect(book.bids[0][1]).to.equal('0.50000000');
+      expect(book.asks.length).to.equal(6);
+      expect(book.asks[0][0]).to.equal('100.00');
+      expect(book.asks[0][1]).to.equal('0.50000000');
+      done();
+    }).catch(done);
   });
 
 });
