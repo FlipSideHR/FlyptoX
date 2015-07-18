@@ -32,8 +32,8 @@ module.exports = {
     client: 'pg',
     connection: {
       host: 'localhost',
-      database: 'recursion',
-      user:     'recursion'
+      database: 'postgres',
+      user:     'postgres'
     },
   }
 };
