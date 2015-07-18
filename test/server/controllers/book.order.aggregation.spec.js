@@ -34,20 +34,21 @@ function makeOrder(user_id, side, price, size) {
 function makeOrderBook(done){
     User.forge({email:"test"}).fetch()
     .then(function(user){
+      var uid = user.get('id');
       var orders = Orders.forge([
-        makeOrder(user.get('id'), 'buy', 201, 0.5),
-        makeOrder(user.get('id'), 'buy', 203, 0.5),
-        makeOrder(user.get('id'), 'buy', 204, 1.0),
-        makeOrder(user.get('id'), 'buy', 205, 0.5),
-        makeOrder(user.get('id'), 'buy', 204, 1.0),
-        makeOrder(user.get('id'), 'buy', 300, 0.5),
-        makeOrder(user.get('id'), 'buy', 300, 0.5),//best bid (highest buy order)
-        makeOrder(user.get('id'), 'sell', 100, 0.5),//best ask (lowest sell order)
-        makeOrder(user.get('id'), 'sell', 300, 0.5),
-        makeOrder(user.get('id'), 'sell', 400, 0.5),
-        makeOrder(user.get('id'), 'sell', 400, 0.5),
-        makeOrder(user.get('id'), 'sell', 200, 0.5),
-        makeOrder(user.get('id'), 'sell', 200, 0.5),
+        makeOrder(uid, 'buy', 201, 0.5),
+        makeOrder(uid, 'buy', 203, 0.5),
+        makeOrder(uid, 'buy', 204, 1.0),
+        makeOrder(uid, 'buy', 205, 0.5),
+        makeOrder(uid, 'buy', 204, 1.0),
+        makeOrder(uid, 'buy', 300, 0.5),
+        makeOrder(uid, 'buy', 300, 0.5),//best bid (highest buy order)
+        makeOrder(uid, 'sell', 100, 0.5),//best ask (lowest sell order)
+        makeOrder(uid, 'sell', 300, 0.5),
+        makeOrder(uid, 'sell', 400, 0.5),
+        makeOrder(uid, 'sell', 400, 0.5),
+        makeOrder(uid, 'sell', 200, 0.5),
+        makeOrder(uid, 'sell', 200, 0.5),
       ]);
 
       return Promise.all(orders.invoke('save'));
@@ -68,31 +69,41 @@ describe('Order Aggregator', function(){
   it('level 1 - should return best bid and ask from the order book', function(done){
     orderBook.level[1](1).then(function(book){
       expect(book.bids).to.deep.equal([
-        [300, 1, 2],
+        ["300.00", "1.00000000", 2],
       ]);
 
       expect(book.asks).to.deep.equal([
-        [100, 0.5, 1]
+        ["100.00", "0.50000000", 1]
       ]);
       done();
     })
-    .catch(function(err){
-      done(err)
-    });
+    .catch(done);
   });
 
-  xit('level 2 - should return top 50 best bids and asks from the order book', function(){
+  it('level 2 - should return top 50 best bids and asks from the order book', function(done){
+    orderBook.level[2](1).then(function(book){
+      expect(book.bids).to.deep.equal([
+        ["201.00", "0.50000000", 1],
+        ["203.00", "0.50000000", 1],
+        ["204.00", "2.00000000", 2],
+        ["205.00", "0.50000000", 1],
+        ["300.00", "1.00000000", 2]
+      ]);
 
+      expect(book.asks).to.deep.equal([
+        ["100.00", "0.50000000", 1],
+        ["200.00", "1.00000000", 2],
+        ["300.00", "0.50000000", 1],
+        ["400.00", "1.00000000", 2]
+      ]);
+
+      done();
+    })
+    .catch(done);
   });
 
   xit('level 3 - should return all bids and asks from the order book', function(){
 
   });
-
-});
-
-describe('Order Aggregator - Level 2', function(){
-
-
 
 });

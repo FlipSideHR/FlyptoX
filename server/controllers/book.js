@@ -18,7 +18,7 @@ OrderBook.getPriceLevelInfo = function(price, side, pair_id) {
       var size = orders.reduce(function(size, order){
         return size + order.get('size');//or size - filled_size ?
       },0);
-      return [price, size, orders.length];
+      return [price.toFixed(2), size.toFixed(8), orders.length];
     });
 };
 
@@ -29,6 +29,7 @@ OrderBook.aggregateOrders = function(orders, MAX){
   var numLevels = 0, i = 0;
   var numRecords = orders.length;
   var price, size, level;
+  var levelOrder = [];
 
   while(numLevels < MAX && i < numRecords){
     price = orders.at(i).get('price');
@@ -38,17 +39,19 @@ OrderBook.aggregateOrders = function(orders, MAX){
       levels[price].total++;
     } else {
       numLevels++;
-      levels[price].size = size;
-      levels[price].total = 1;
+      levels[price] = {
+        size: size,
+        total: 1
+      };
+      levelOrder.push(price);
     }
     i++;
   }
 
-  for(level in levels) {
-    aggregatedOrders.push([level.price, level.size, level.total]);
-  }
+  return levelOrder.map(function(price){
+    return [price.toFixed(2), levels[price].size.toFixed(8), levels[price].total];
+  });
 
-  return aggregatedOrders;
 };
 
 
@@ -110,7 +113,12 @@ OrderBook.level = {
         .then(function(orders){
           return OrderBook.aggregateOrders(orders, 50);
         })
-    ]);
+    ]).then(function(aggregated){
+      return {
+        bids: aggregated[0],
+        asks: aggregated[1]
+      };
+    });
   },
 
   "1": function(pair_id) {
@@ -131,6 +139,6 @@ OrderBook.level = {
         bids:[best[0]],
         asks:[best[1]]
       };
-    })
+    });
   }
 };
