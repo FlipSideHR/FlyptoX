@@ -58,8 +58,9 @@ describe('Order Model', function(){
     expect(Order).to.not.equal(null);
   });
 
-  describe('.side', function(){
 
+
+  describe('.side', function(){
     it('cannot be empty', function(done){
       // test with no 'side' value defined
       myOrder.side = undefined;
@@ -88,6 +89,49 @@ describe('Order Model', function(){
     });
   });
 
+  describe('.price', function(){
+    it('must be a positive number.', function(done){
+      myOrder.price = -500.55;
+      utils.order.createCustom(myOrder)
+        .then(function(order){
+          expect(order).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          done();
+        });
+    });
+  });
+
+  describe('.size', function(){
+    it('must be a positive number.', function(done){
+      myOrder.size = -5;
+      utils.order.createCustom(myOrder)
+        .then(function(order){
+          expect(order).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('must be greater than MIN_SIZE: '+new Order().MIN_SIZE, function(done){
+      myOrder.size = 0.0001;
+      utils.order.createCustom(myOrder)
+        .then(function(order){
+          expect(order).to.equal(null);
+          done();
+        })
+        .catch(function(err){
+          expect(err).to.not.equal(null);
+          done();
+        });
+    });
+  });
+
   it('creates new orders when given proper inputs: ', function(done){
     utils.order.createOrder(uid)
       .then(function(order){
@@ -101,7 +145,10 @@ describe('Order Model', function(){
       });
   });
 
-  // this isnt working as expected
+  it('Has a MIN_SIZE property', function(){
+    expect(new Order().MIN_SIZE).to.equal(0.001);
+  });
+
   it('references a real user', function(done){
     Order.fetchAll()
       .then(function(orders){
