@@ -6,10 +6,33 @@
 // and adds proper privileges, and runs migrations and seeds
 // TODO: same thing for the development db
 "use strict"; 
-var database = 'flyptox_test';
 
 var knexConfig = require('../../knexfile');
-var knex = require('knex')(knexConfig.admin);
+
+// assume its the test db unless otherwise specified
+var database = 'flyptox_test';
+
+// default knex config to use (should be a local pg account with admin access)
+var kConfig = knexConfig.admin;
+
+// see if an options switch was used
+// always ignore first 2 args
+process.argv.slice(2).forEach(function(val, index, array){
+  if (val[0] === '-'){
+    // option switch used -check flag
+    console.log(val);
+    // check for dev flag
+    if (val.slice(1) === 'dev'){
+      // set database to development
+      database = 'flyptox';
+    } else if (val.slice(1) === 'travis'){
+      // set user to travis
+      kConfig = knexConfig.travis;
+    }
+  }
+});
+
+var knex = require('knex')(kConfig);
 
 console.log('Dropping database!' + database);
 knex.raw('DROP DATABASE IF EXISTS ' + database + ';')
