@@ -2,6 +2,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
 
+var Promise = require('bluebird');
 var bookshelf = require("../../../server/utils/bookshelf");
 var Order = require("../../../server/models/Order");
 var User = require("../../../server/models/User");
