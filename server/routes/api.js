@@ -47,10 +47,7 @@ router.get("/products/:id/book", function(req, res){
   //level: req.query.level
   //pair: req.params.id
   OrderBook.level[req.query.level || 2](req.params.id).then(function(book){
-    res.json({
-      bids: book[0],
-      asks: book[1]
-    });
+    res.json(book);
   })
   .catch(function(err){
     res.status(500).json({message:'unable to retrieve orderbook'});
