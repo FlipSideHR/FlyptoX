@@ -58,6 +58,8 @@ var Order = module.exports = bookshelf.model('Order', {
     this.set('id', uuid.v1());
   },
 
+  MIN_SIZE: MIN_SIZE,
+
   currency_pair: function(){
     return this.belongsTo('CurrencyPair','currency_pair_id');
   },
@@ -68,6 +70,6 @@ var Order = module.exports = bookshelf.model('Order', {
 
   transactions: function(){
     return this.hasMany('Transaction', 'order_id');
-  }
+  },
 
 });
