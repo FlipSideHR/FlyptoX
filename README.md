@@ -2,7 +2,14 @@
 
 # FlyptoX
 
-> Pithy project description
+> FlyptoX is an open-source crypto currency exchange generator.
+####**Currently under development and not in a usable state
+- Basically: A generator that allows you to configure, create, and deploy your own crypto-currency exchange.
+- The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
+- Fiat currency withdrawels, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.
+
+TODO:
+- Everything.
 
 ## Team
 
@@ -22,14 +29,19 @@
 
 ## Usage
 
-> Some usage instructions
+> `npm install flyptox`
+
+> `yo flyptox`
+
+> Follow the prompts to custom generate your exchange package.
 
 ## Requirements
 
 - Node 0.12.x
-- Express 4.4.4 
+- Express 4.4.4
 - Angular 1.2.26
 - Postgresql 9.1.x
+- Bookshelfjs 0.7.7 
 - ~~Redis 2.6.x~~
 
 ## Development
@@ -47,29 +59,10 @@ bower install
 
 ### Database setup
 
-Create a database using `createdb` tool
-
-    createdb flyptox
-
-Enter `psql` command shell. Create a role and grant access to the database
-
-    create role flyptox with login;
-    grant all privileges on database flyptox to flyptox;
-
-exit psql
-
-Run knex migrations
-
-    knex migrate:latest
-
-### Test Database Setup
-
-1. make sure you have followed the steps from above 'Database Setup'
-2. configure your knexfile.js admin object.
-   - your admin object should have postgres credentials to an admin level account
-   - most likely your system username and an empty password
-4. run `node server/utils/recreateDB`
-   - this will drop the test db and recreate it with the latest migration/seeds
+- Edit the knexfile.js
+   - set admin: username and database to your postgres admin user
+- run `node server/utils/recreateDB -dev`
+- run `node server/utils/recreateDB`
 
 ### Testing
 
@@ -79,7 +72,7 @@ Run knex migrations
 - `grunt test:controllers` to run only controller tests
 
 #### Client side
-
+- `gulp test`
 
 ### Roadmap
 
