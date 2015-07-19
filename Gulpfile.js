@@ -105,7 +105,6 @@ gulp.task('watch', function() {
 //
 gulp.task('nodemon', function() {
 
-  // We use this `called` variable to make sure the callback is only executed once
   return nodemon({
     // run our server and watch the server files for changes
     script: paths.server,
