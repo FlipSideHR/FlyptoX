@@ -7,9 +7,6 @@ var stylish = require('jshint-stylish');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var plugins = gulpLoadPlugins();
 
-//
-// PATH INFO
-//
 var paths = {
   server: {
     main: 'server/main.js',
