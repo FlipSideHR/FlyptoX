@@ -7,7 +7,9 @@ var stylish = require('jshint-stylish');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var plugins = gulpLoadPlugins();
 
-
+//
+// PATH INFO
+//
 var paths = {
   server: {
     main: 'server/main.js',
@@ -81,31 +83,31 @@ gulp.task('clean-html', function(cb){
 gulp.task('scripts', ['clean-scripts'], function() {
   return gulp.src(paths.client.scripts)
     .pipe(plugins.sourcemaps.init())
-      .pipe(plugins.concat('main.js'))
-      .pipe(plugins.uglify())
-      .pipe(plugins.rename('main.min.js'))
-      .pipe(plugins.sourcemaps.write())
-      .pipe(gulp.dest(paths.client.dist + 'app'));
+    .pipe(plugins.concat('main.js'))
+    .pipe(plugins.uglify())
+    .pipe(plugins.rename('main.min.js'))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
 // run our sass build pipeline
 gulp.task('sass', ['clean-sass'], function() {
   return gulp.src(paths.client.sass)
     .pipe(plugins.sourcemaps.init())
-      .pipe(plugins.sass().on('error', plugins.sass.logError))
-        .pipe(plugins.concat('main.css'))
-          .pipe(plugins.cssmin())
-          .pipe(plugins.rename('main.min.css'))
-          .pipe(plugins.sourcemaps.write())
-          .pipe(gulp.dest(paths.client.dist + 'assets/css'));
+    .pipe(plugins.sass().on('error', plugins.sass.logError))
+    .pipe(plugins.concat('main.css'))
+    .pipe(plugins.cssmin())
+    .pipe(plugins.rename('main.min.css'))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(paths.client.dist + 'assets/css'));
 });
 
 // this copies html from our app components
 // into the dist dir.
 gulp.task('copy-html', ['clean-html'], function() {
-    gulp.src(paths.client.html)
-    // Perform minification tasks, etc here
-    .pipe(gulp.dest(paths.client.dist + 'app'));
+    return gulp.src(paths.client.html)
+      // Perform minification tasks, etc here
+      .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
 
