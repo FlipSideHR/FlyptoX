@@ -67,12 +67,12 @@ bower install
 ### Testing
 
 #### Server side
-- `grunt test:server` to run all server tests
-- `grunt test:models` to run only model tests
-- `grunt test:controllers` to run only controller tests
+- `gulp test:server` to run all server tests
+- ~~`grunt test:models` to run only model tests~~
+- ~~`grunt test:controllers` to run only controller tests~~
 
 #### Client side
-- `gulp test`
+- `gulp test:client` to run all client tests
 
 ### Roadmap
 

@@ -16,10 +16,6 @@ var del = require('del');
 var argv = require('yargs').argv;
 var stylish = require('jshint-stylish');
 
-if (argv.server){
-  console.log('Yeah!');
-}
-
 var paths = {
   server: {
     main: 'server/main.js',
@@ -182,7 +178,9 @@ gulp.task('test:server', ['lint:server'], function() {
 gulp.task('watch', function() {
   gulp.watch(paths.client.scripts, ['scripts']);
   gulp.watch(paths.client.sass, ['sass']);
-  gulp.watch(paths.client.html, ['html']);
+  gulp.watch(paths.client.html, ['copy-html']);
+  gulp.watch(paths.client.scripts, ['test:client']);
+  gulp.watch(paths.server.all, ['test:server']);
 });
 
 /////////////////////////////////////////

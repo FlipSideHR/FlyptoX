@@ -1,6 +1,7 @@
 (function(){
   /* exported FlyptoX */
   var FlyptoX = angular.module('FlyptoX', []);
+  //
   // var FlyptoX = angular.module('FlyptoX', ['angular-chartist']);
 
   FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
