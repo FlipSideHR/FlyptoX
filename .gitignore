@@ -1,6 +1,7 @@
 # Dependency directories
 node_modules/
 bower_components/
+client/lib/
 
 # Compiled
 dist/
@@ -14,3 +15,7 @@ dist/
 
 # test generated output
 results.txt
+
+# knexfile - the master copy of this file works for travis, but most likeley
+# will require some changes to run on your dev environment. see the README.md
+knexfile.js
