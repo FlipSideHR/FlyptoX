@@ -50,7 +50,7 @@ knex.raw('DROP DATABASE IF EXISTS ' + database + ';')
   })
   .then(function(){
     console.log('Granting privileges!');
-    return knex.raw('grant all privileges on database flyptox_test to flyptox_test;');
+    return knex.raw('grant all privileges on database '+database+' to '+database+';');
   })
   .then(function(){
     console.log('Disconnecting from DB');
