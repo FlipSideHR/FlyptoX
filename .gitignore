@@ -10,12 +10,10 @@ dist/
 *.log
 .DS_Store
 
-#.jshintrc - so you can have yours customized the way you like?
-.jshintrc
-
 # test generated output
 results.txt
 
 # knexfile - the master copy of this file works for travis, but most likeley
 # will require some changes to run on your dev environment. see the README.md
-knexfile.js
+# TODO: This???
+#knexfile.js
