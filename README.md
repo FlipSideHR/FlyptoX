@@ -2,7 +2,14 @@
 
 # FlyptoX
 
-> Pithy project description
+> FlyptoX is an open-source crypto currency exchange generator.
+####**Currently under development and not in a usable state
+- Basically: A generator that allows you to configure, create, and deploy your own crypto-currency exchange.
+- The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
+- Fiat currency withdrawels, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.
+
+TODO:
+- Everything.
 
 ## Team
 
@@ -22,7 +29,11 @@
 
 ## Usage
 
-> Some usage instructions
+> `npm install flyptox`
+
+> `yo flyptox`
+
+> Follow the prompts to custom generate your exchange package.
 
 ## Requirements
 
