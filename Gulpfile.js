@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var browserSync = require('browser-sync');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
@@ -6,68 +7,85 @@ var uglify = require('gulp-uglify');
 var cssMin = require('gulp-cssmin');
 var sass = require('gulp-sass');
 var rename = require('gulp-rename');
-var install = require('gulp-install');
 var karma = require('gulp-karma');
 var nodemon = require('gulp-nodemon');
 var sourcemaps = require('gulp-sourcemaps');
 var ngAnnotate = require('gulp-ng-annotate');
+var del = require('del');
 
 var paths = {
+  server: 'server/main.js',
   scripts: [
-    './client/lib/angular/angular.min.js',
-    './client/lib/angular-chartist.js/dist/angular-chartist.min.js',
-    './client/lib/angular-mocks/angular-mocks.js',
-    './client/lib/chartist/dist/chartist.min.js',
+    // bower components
+    'client/lib/angular/angular.min.js',
+    'client/lib/angular-chartist.js/dist/angular-chartist.min.js',
+    'client/lib/angular-mocks/angular-mocks.min.js',
+    'client/lib/chartist/dist/chartist.min.js',
 
-    './client/app/app.js',
-    './client/app/modules.js',
+    // main application file
+    'client/app/*.js',
 
-    './client/app/lib/services/account.services.js'
+    // get all modules
+    'client/app/components/**/*.js',
+
+    // services
+    'client/app/lib/services/*.services.js'
   ],
-  stylesheets: [
-    './client/lib/chartist/dist/chartist.min.css',
-
-    './client/assets/css/app.css'
-  ],
+  html: ['client/app/**/*.html'],
   sass: [
-    './client/assets/sass/*.scss'
+    'client/app/components/*.scss',
+    'client/app/*.scss'
   ]
 };
 
+// this gets run by the build task
+gulp.task('clean-dist', function(){
+  console.log('Cleaning dist dir');
+  del(['client/dist/**/*.*']);
+});
+
+// concats sourcemaps and minifies all js
 gulp.task('scripts', function() {
+  console.log('Running js tasks');
   return gulp.src(paths.scripts)
     .pipe(sourcemaps.init())
       .pipe(concat('main.js'))
       .pipe(ngAnnotate())
       .pipe(uglify())
       .pipe(rename('main.min.js'))
-    .pipe(sourcemaps.write())
-    // Output to app/dist
-    // TODO: UGLIFY AND RENAME FILE FOR MINIFY VERSION
-    .pipe(gulp.dest('./client/dist/app'));
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('client/dist/app'));
 });
 
-gulp.task('stylesheets', function() {
+// run our sass build pipeline
+gulp.task('sass', function() {
+  console.log('Running sass tasks');
   return gulp.src(paths.sass)
     .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
-      .pipe(gulp.dest('./client/assets/css'))
         .pipe(concat('main.css'))
-        .pipe(gulp.dest('./client/assets/dist'))
           .pipe(cssMin())
           .pipe(rename('main.min.css'))
           .pipe(sourcemaps.write())
-          .pipe(gulp.dest('./client/dist/assets'));
+          .pipe(gulp.dest('client/dist/assets/css'));
 });
 
+// this copies html from our app components
+// into the dist dir.
+gulp.task('copy-html', function() {
+    gulp.src(paths.html)
+    // Perform minification tasks, etc here
+    .pipe(gulp.dest('client/dist/app'));
+});
+
+// test client files
 gulp.task('test', function() {
   return gulp.src([
-    './client/app/**/*.js',
-    './server/**/*.js'
+    'client/app/**/*.js',
   ]).pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(karma({
-      configFile: './test/karma.conf.js',
+      configFile: 'test/karma.conf.js',
       action: 'run'
     }))
     .on('error', function(err) {
@@ -75,34 +93,72 @@ gulp.task('test', function() {
     });
 });
 
-// gulp.task('install', function() {
-//   return gulp.src(['./bower.json'])
-//     .pipe(install());
-// });
-
-// gulp.task('deploy', ['install'], function() {
-//   gulp.start('stylesheets');
-//   gulp.start('scripts');
-// });
-
+// watch scripts, sass, and html
+// and run build tasks when they change
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['scripts']);
-  gulp.watch(paths.sass, ['stylesheets']);
+  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.html, ['html']);
 });
 
-gulp.task('serve', function() {
-  nodemon({
-    script: './server/main.js',
-    ext: 'html js css scss',
-    tasks: ['scripts', 'stylesheets']
-  }).on('restart', function() {
-    console.log('restarted nodemon');
+// configure our nodemon tasks
+//
+gulp.task('nodemon', function() {
+
+  // We use this `called` variable to make sure the callback is only executed once
+  return nodemon({
+    // run our server and watch the server files for changes
+    script: paths.server,
+    watch: ['server/main.js', 'server/**/*.*']
+  })
+  .on('start', function onStart() {
+    // nothing to do here?
+  })
+  .on('restart', function onRestart() {
+
+    // Also reload the browsers after a slight delay
+    setTimeout(function reload() {
+      browserSync.reload({
+        stream: false
+      });
+    }, 500);
   });
 });
 
-gulp.task('build', function(){
-  gulp.start('stylesheets');
-  gulp.start('scripts');
+// Make sure `nodemon` is started before running `browser-sync`.
+gulp.task('browser-sync', ['nodemon'], function() {
+  // the port the server is running on
+  var port = process.env.PORT || 9999;
+  browserSync.init({
+
+    // All of the following files will be watched
+    // watching files in our dist directory ensures
+    // we only inject things after they are built
+    files: ['client/dist/**/*.*'],
+
+    // Tells BrowserSync on where the express app is running
+    proxy: 'http://localhost:' + port,
+
+    notify: true,
+    injectChanges: true,
+
+    // the port browser sync runs on (and your browser will connect to)
+    port: 4000,
+
+    // Which browser should we launch?
+    browser: ['google chrome']
+  });
 });
 
-gulp.task('default', ['serve', 'watch']);
+// the build task builds all sass out to dist
+// concats and minifies all .js out to dist
+// and copys all html out to dist
+// always clean dist dir first
+gulp.task('build', ['clean-dist'], function(){
+  gulp.start('sass');
+  gulp.start('scripts');
+  gulp.start('copy-html');
+});
+
+// our default task
+gulp.task('default', ['build', 'watch', 'browser-sync']);

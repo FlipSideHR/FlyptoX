@@ -23,7 +23,7 @@ var apiRouter = require("./routes/api.js");
 app.use('/api/v1', apiRouter);
 app.use('/api/auth', authRouter);
 
-app.use('/', express.static(path.join(rootPath, 'client')));
+app.use('/', express.static(path.join(rootPath, 'client/dist/')));
 
 app.get('/', function(req, res) {
   res.render('index.html');

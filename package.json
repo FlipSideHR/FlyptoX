@@ -8,6 +8,7 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "connect-livereload": "0.5.0",
+    "del": "^1.2.0",
     "grunt": "0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-clean": "0.6.0",
@@ -22,6 +23,7 @@
     "grunt-mocha-test": "^0.12.7",
     "grunt-usemin": "2.4.0",
     "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
     "gulp-concat": "^2.6.0",
     "gulp-cssmin": "^0.1.7",
     "gulp-install": "^0.4.0",
@@ -44,6 +46,7 @@
     "bluebird": "^2.3.6",
     "body-parser": "^1.9.0",
     "bookshelf": "0.7.7",
+    "browser-sync": "^2.7.13",
     "coinbase-exchange": "^0.2.0",
     "ejs": "^2.3.3",
     "express": "4.4.4",

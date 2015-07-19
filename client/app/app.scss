@@ -1,12 +1,14 @@
 body {
   font-family: arial, sans-serif;
-  background: #EEEEEE; }
+  background: #eeeeee;
+}
 
 h1 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 3.5em;
   color: gray;
-  text-align: center; }
+  text-align: center;
+}
 
 h2, h3, h4, h5, h6 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -16,25 +18,30 @@ h2, h3, h4, h5, h6 {
   font-variant: normal;
   font-weight: 500;
   line-height: 15.3999996185303px;
-  margin-top: 5px; }
+  margin-top: 5px;
+}
 
 .order {
   background: #ff7b81;
   height: 30px;
-  width: 100px; }
+  width: 100px;
+}
 
 .tx {
   background: #ffffff;
   height: 870px;
   width: 300px;
-  position: absolute; }
+  position: absolute;
+}
 
 .execution {
   background: #ffffff;
   height: 200px;
-  width: 300px; }
+  width: 300px;
+}
 
 .close {
   background: #4b6e84;
   height: 30px;
-  width: 300px; }
+  width: 300px;
+}
