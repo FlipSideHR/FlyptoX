@@ -1,20 +1,12 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
-var jshint = require('gulp-jshint');
-var concat = require('gulp-concat');
-var mocha = require('gulp-mocha');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
-var cssMin = require('gulp-cssmin');
-var sass = require('gulp-sass');
-var rename = require('gulp-rename');
-var karma = require('gulp-karma');
-var nodemon = require('gulp-nodemon');
-var sourcemaps = require('gulp-sourcemaps');
-var ngAnnotate = require('gulp-ng-annotate');
+var karmaServer = require('karma').Server
 var del = require('del');
 var argv = require('yargs').argv;
 var stylish = require('jshint-stylish');
+var gulpLoadPlugins = require('gulp-load-plugins');
+var plugins = gulpLoadPlugins();
+
 
 var paths = {
   server: {
@@ -33,16 +25,19 @@ var paths = {
     all: ['client/app/**/*.*'],
     scripts: [
       // bower components
-      'client/lib/angular/angular.min.js',
-      'client/lib/angular-chartist.js/dist/angular-chartist.min.js',
-      'client/lib/angular-mocks/angular-mocks.min.js',
-      'client/lib/chartist/dist/chartist.min.js',
+      'client/lib/angular/angular.js',
+      'client/lib/angular-chartist.js/dist/angular-chartist.js',
+      'client/lib/angular-mocks/angular-mocks.js',
+      'client/lib/chartist/dist/chartist.js',
 
       // main application file
       'client/app/*.js',
 
       // get all modules
       'client/app/components/**/*.js',
+
+      // dont include specs
+      '!client/app/**/*.spec.js',
 
       // services
       'client/app/lib/services/*.services.js'
@@ -85,24 +80,23 @@ gulp.task('clean-html', function(cb){
 // concats sourcemaps and minifies all js
 gulp.task('scripts', ['clean-scripts'], function() {
   return gulp.src(paths.client.scripts)
-    .pipe(sourcemaps.init())
-      .pipe(concat('main.js'))
-      .pipe(ngAnnotate())
-      .pipe(uglify())
-      .pipe(rename('main.min.js'))
-      .pipe(sourcemaps.write())
+    .pipe(plugins.sourcemaps.init())
+      .pipe(plugins.concat('main.js'))
+      .pipe(plugins.uglify())
+      .pipe(plugins.rename('main.min.js'))
+      .pipe(plugins.sourcemaps.write())
       .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
 // run our sass build pipeline
 gulp.task('sass', ['clean-sass'], function() {
   return gulp.src(paths.client.sass)
-    .pipe(sourcemaps.init())
-      .pipe(sass().on('error', sass.logError))
-        .pipe(concat('main.css'))
-          .pipe(cssMin())
-          .pipe(rename('main.min.css'))
-          .pipe(sourcemaps.write())
+    .pipe(plugins.sourcemaps.init())
+      .pipe(plugins.sass().on('error', plugins.sass.logError))
+        .pipe(plugins.concat('main.css'))
+          .pipe(plugins.cssmin())
+          .pipe(plugins.rename('main.min.css'))
+          .pipe(plugins.sourcemaps.write())
           .pipe(gulp.dest(paths.client.dist + 'assets/css'));
 });
 
@@ -121,15 +115,15 @@ gulp.task('copy-html', ['clean-html'], function() {
 // run jshint against client files
 gulp.task('lint:client', function(){
   return gulp.src(paths.client.all)
-    .pipe(jshint({}))
-    .pipe(jshint.reporter(stylish))
+    .pipe(plugins.jshint({}))
+    .pipe(plugins.jshint.reporter(stylish))
 });
 
 // run jshint against server files
 gulp.task('lint:server', function(){
   return gulp.src(paths.server.all)
-    .pipe(jshint({}))
-    .pipe(jshint.reporter(stylish))
+    .pipe(plugins.jshint({}))
+    .pipe(plugins.jshint.reporter(stylish))
 });
 
 
@@ -137,20 +131,12 @@ gulp.task('lint:server', function(){
 //                  TEST TASKS
 
 // test client files
-gulp.task('test:client', ['lint:client'], function() {
-  return gulp.src(paths.client.spec.all)
-
-    // only run karma is these are client tests
-    .pipe(karma({
-      configFile: 'test/karma.conf.js',
-      action: 'run'
-    }))
-    .once('error', function () {
-      process.exit(1);
-    })
-    .once('end', function () {
-      process.exit();
-    });
+gulp.task('test:client', ['lint:client'], function(done) {
+  new karmaServer({
+    configFile: __dirname + '/karma.conf.js'
+  }, function(){
+    done();
+  }).start();
 });
 
 // test server files
@@ -158,7 +144,7 @@ gulp.task('test:server', ['lint:server'], function() {
   process.env.NODE_ENV = 'test';
   return gulp.src(paths.server.spec.all)
     // only run mocha tests if server files
-    .pipe(mocha({
+    .pipe(plugins.mocha({
       reporter: argv.reporter || 'spec'
     }))
     .once('error', function () {
@@ -180,6 +166,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.client.sass, ['sass']);
   gulp.watch(paths.client.html, ['copy-html']);
   gulp.watch(paths.client.scripts, ['test:client']);
+  gulp.watch(paths.client.spec.all, ['test:client']);
   gulp.watch(paths.server.all, ['test:server']);
 });
 
@@ -188,7 +175,7 @@ gulp.task('watch', function() {
 gulp.task('nodemon', function(cb) {
   // We use this `called` variable to make sure the callback is only executed once
   var called = false;
-  return nodemon({
+  return plugins.nodemon({
     // run our server and watch the server files for changes
     script: paths.server.main,
     watch: ['server/main.js', 'server/**/*.*']
