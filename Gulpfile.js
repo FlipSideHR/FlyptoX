@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync');
+var browserSync = require('browser-sync').create();
 var karmaServer = require('karma').Server
 var del = require('del');
 var argv = require('yargs').argv;
