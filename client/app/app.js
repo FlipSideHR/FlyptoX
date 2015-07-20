@@ -49,6 +49,7 @@
           templateUrl: 'app/components/chart/chart.html',
           controller: 'chartCtrl as Chartist'
       });
+
       $httpProvider.interceptors.push('AttachTokens');
       // use the HTML5 History API
       $locationProvider.html5Mode(true);
