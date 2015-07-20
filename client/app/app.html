@@ -63,14 +63,14 @@
     </div>
   </div>
 
-  <div style="float:right" class="wallet" ng-controller="executionCtrl">
+  <div style="float:right" class="wallet" ng-controller="walletCtrl">
     <div class="close"> <h4>Wallet</h4></div>
-    <div class="order" style="position: absolute"> <h3> Or </h3></div>
+    <div class="order" style="position: absolute"> <h3></h3></div>
     <div style="margin-top: 30px">
       Balance
     </div>
     <div style="margin-top: 20px">
-      <button id="deposit" >Deposit</button>
+      <button id="deposit" ng-click="getAddress()">Get Address</button>
       <button id="withdraw" >Withdraw</button>
     </div>
   </div>
