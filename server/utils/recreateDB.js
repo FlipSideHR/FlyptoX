@@ -15,6 +15,9 @@ var database = 'flyptox_test';
 // default knex config to use (should be a local pg account with admin access)
 var kConfig = knexConfig.admin;
 
+// for tracking which environment we are in
+var ENV = 'test';
+
 // see if an options switch was used
 // always ignore first 2 args
 process.argv.slice(2).forEach(function(val, index, array){
@@ -25,6 +28,8 @@ process.argv.slice(2).forEach(function(val, index, array){
     if (val.slice(1) === 'dev'){
       // set database to development
       database = 'flyptox';
+      ENV = 'development';
+    // give travis a switch to run so we can use his creds
     } else if (val.slice(1) === 'travis'){
       // set user to travis
       kConfig = knexConfig.travis;
@@ -57,16 +62,16 @@ knex.raw('DROP DATABASE IF EXISTS ' + database + ';')
     return knex.destroy();
   })
   .then(function(){
-    knex = require('knex')(knexConfig.test);
-    console.log('Migrating latest to test');
-    return knex.migrate.latest({env: 'test'});
+    knex = require('knex')(knexConfig[ENV]);
+    console.log('Migrating latest to ' + ENV);
+    return knex.migrate.latest({env: ENV});
   })
   .then(function(){
-    console.log('Seeding test');
-    return knex.seed.run({env: 'test'});
+    console.log('Seeding ' + ENV);
+    return knex.seed.run({env: ENV});
   })
   .then(function(){
-    console.log('Migration and seeding complete');
+    console.log('Migration and seeding to ' + ENV + ' complete');
   })
   .catch(function(err){
     console.error('Error when creating database. ', err);
