@@ -31,8 +31,8 @@ GET /products
 GET /products/:id/book
 GET /products/:id/ticker
 GET /products/:id/trades
-GET /products/:id/candles (historic prices)
-GET /products/:id/stats (24 hour history)
+GET /products/:id/candles (historic prices) -- PENDING
+GET /products/:id/stats (24 hour history) -- PENDING
 */
 
 //return an array of currency pairs
@@ -91,6 +91,67 @@ router.get("/products/:id/ticker", function(req, res){
     console.log(err);
     res.status(500).json({message:'unable to retrieve ticker'});
   });
+});
+
+//return array of last 50 trades
+/*
+[
+  {
+    "trade_id": trade-id,
+    "price": "301.00",
+    "size": "1.50000000",
+    "time": "2015-05-05T23:17:30.310036Z",
+    "side": "buy"
+  },
+  {
+
+  }
+]
+*/
+router.get("/products/:id/trades", function(req, res){
+  Trade.where({currency_pair_id:req.params.id})
+  .query('orderBy', 'created_at', 'desc')
+  .query('limit', 50)
+  .fetchAll({columns:['id','price','size','created_at']})
+  .then(function(trades){
+    res.json(trades.map(function(trade){
+      return {
+        trade_id: trade.get('id'),
+        price: trade.get('price').toFixed(2),
+        size: trade.get('size').toFixed(8),
+        time: trade.get('created_at').toISOString(),
+        side: trade.get('side')
+      };
+    }));
+  })
+  .catch(function(err){
+    console.log(err);
+    res.status(500).json({message:'unable to retrieve trades'});
+  });
+});
+
+//return an array of candlesitck data for past trades
+/*
+[
+    [1415398768, 0.32, 4.2, 0.35, 4.2, 12.3],
+    ...
+]
+*/
+router.get("/products/:id/candles", function(req, res){
+  res.json([]);
+});
+
+//return open, high, low, close, size (calculated over last 24hrs)
+/*
+  {
+      open: "34.19000000",
+      high: "95.70000000",
+      low: "7.06000000",
+      volume: "2.41000000"
+  }
+*/
+router.get("/products/:id/stats", function(req, res){
+  res.json({});
 });
 
 /*
