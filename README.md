@@ -3,10 +3,11 @@
 # FlyptoX
 
 > FlyptoX is an open-source crypto currency exchange generator.
-####**Currently under development and not in a usable state
-- Basically: A generator that allows you to configure, create, and deploy your own crypto-currency exchange.
+####**Currently under development and not ready for production use.
+- A generator that allows you to configure, create, and deploy your own crypto-currency exchange.
 - The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
-- Fiat currency withdrawels, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.
+- Crypto->Fiat exchange requires extra setup for regulation compliance and chargeback protections. This is the responsibility of the exchange operator to implement.
+- *Fiat currency withdrawals, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.*
 
 TODO:
 - Everything.
@@ -29,6 +30,7 @@ TODO:
 
 ## Usage
 
+**NOT IMPLEMENTED**
 > `npm install flyptox`
 
 > `yo flyptox`
@@ -59,17 +61,23 @@ bower install
 
 ### Database setup
 
-- Edit the knexfile.js
-   - set admin: username and database to your postgres admin user
-- run `node server/utils/recreateDB -dev`
-- run `node server/utils/recreateDB`
+##### Edit the knexfile.js
+ - The knexfile has 4 configs: test, development, travis, and admin.
+ - Test and development should always stay as they are.
+ - Admin should be the postgres username and database you use on your dev machine (almost definitely your username)
+
+##### run the db create/migrate/seed script
+- `node server/utils/recreateDB -dev` to build out the dev db
+- `node server/utils/recreateDB` to build out the test db (tests run against this)
+
+### Now You are ready to develop!
+- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes. 
+- `gulp serverTestRunner` runs a watcher on server files, and runs linting and tests when they change.
 
 ### Testing
 
 #### Server side
 - `gulp test:server` to run all server tests
-- ~~`grunt test:models` to run only model tests~~
-- ~~`grunt test:controllers` to run only controller tests~~
 
 #### Client side
 - `gulp test:client` to run all client tests
