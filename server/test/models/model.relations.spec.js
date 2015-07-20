@@ -32,4 +32,10 @@ describe('Model Relationships', function(){
     }).catch(done);
   });
 
+  it('CurrencyPair', function(done){
+    bookshelf.model('CurrencyPair').fetchAll({withRelated:['base_currency', 'quote_currency']}).then(function(){
+      done();
+    }).catch(done);
+  });
+
 });
