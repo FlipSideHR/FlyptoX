@@ -306,3 +306,26 @@ router.get('/accounts/:id', privateApi, function(req, res){
     res.status(500).json({message:"unable to retrieve account"});
   });
 });
+
+router.get('/accounts/:id/ledger', privateApi, function(req, res){
+  Account.where({user_id:req.userId, id:req.params.id})
+  .fetch({withRelated:['transactions']})
+  .then(function(account){
+    res.json(account.related('transactions').map(function(transaction){
+      return {
+        id: transaction.id,
+        created_at: transaction.get('created_at'),
+        amount: transaction.get('amount').toFixed(8),
+        balance: transaction.get('balance').toFixed(8),
+        type: transaction.get('type'),
+        order_id: transaction.get('order_id'),
+        trade_id: transaction.get('trade_id')
+        //transfer_id: transaction.get('transfer_id'),
+      }
+    }));
+  })
+  .catch(function(err){
+    console.log(err);
+    res.status(500).json({message:"unable to retrieve account history"});
+  });
+});
