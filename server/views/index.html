@@ -1,15 +1,35 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>FlyptoX</title>
-  <link rel="stylesheet" type="text/css" href="assets/css/main.min.css">
-</head>
-<body ng-app="FlyptoX">
-  <div class="view-container">
-    <div ui-view></div>
-  </div>
+<html lang="en" ng-app="FlyptoX">
+  <head>
+    <base href="/">
+    <link href="/assets/css/main.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- this should be some sort of template that the operater can config -->
+    <!-- basically whatever the admin chooses gets loaded here instead of this.. -->
+    <header>
+      <h1>FlyptoX Crypto-Currency Exchange</h1>
+      <div ng-controller="AuthController">
+        <h3 class="auth" ng-click="toggle()">Sign Up</h3>
+        <h3 class="auth" ng-click="toggle()">Login</h3>
+        <div ng-show="visible" ng-model="authData">
+          <h2> Email </h2>
+          <input type="text" ng-model='authData.email' value="email" placeholder="satoshi@btc.com">
+          <h2> Password</h2>
+          <input  ng-model='authData.password' type="text" value="password" placeholder="******">
+        </div>
+      </div>
+    </header>
 
-  <script src="/app/app.min.js"></script>
-</body>
+    <!-- the whole app runs in here -->
+    <div class="container" ui-view></div>
+
+    <!--
+    load our minified js
+    TODO: have gulp change this to non-min version during dev
+    so we can remove the minification time from build process during dev
+    gulp can just write this line based on the environment or something
+    -->
+    <script src="/app/main.min.js"></script>
+  </body>
 </html>

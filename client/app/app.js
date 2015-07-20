@@ -4,7 +4,9 @@
   //---------------------------------------------------------
   // Dependencies for module 'FlyptoX'
   var dependencies = [
-    'ui.router'
+    'ui.router',
+    'FlyptoX.auth',
+    'FlyptoX.orderbook'
   ];
 
   // Create a new module named 'FlyptoX' using 'dependencies'.
@@ -16,22 +18,21 @@
 
   // ROUTING
   //---------------------------------------------------------
-  app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+  app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
     // For any unmatched URL, redirect to /login
-    $urlRouterProvider.otherwise('/signup');
+    $urlRouterProvider.otherwise('/');
 
     // Set up states
     $stateProvider
-      .state('login', {
-        url: '/login',
-        templateUrl: 'app/components/login/login.html',
-        controller: 'LoginCtrl as login'
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'app/components/signup/signup.html',
-        controller: 'AuthController as auth'
+      .state('home', {
+        url: '/',
+        templateUrl: 'app/app.html'
+        // this needs a controller
+        // but right now its a mishmash
       });
+      $httpProvider.interceptors.push('AttachTokens');
+      // use the HTML5 History API
+      $locationProvider.html5Mode(true);
   }]);
   //---------------------------------------------------------
 
@@ -49,11 +50,6 @@
 
   // AUTHENTICATION
   //---------------------------------------------------------
-  app.config(['$httpProvider', function ($httpProvider) {
-      //add http interceptor
-      $httpProvider.interceptors.push('AttachTokens');
-    }]);
-
 
   app.factory('AttachTokens', ['$window', function ($window) {
       // this is an $httpInterceptor
@@ -128,41 +124,6 @@
       };
     }])
 
-    .controller('AuthController', ['$scope', '$window', '$location', 'Auth',
-      function ($scope, $window, $location, Auth) {
-        $scope.user = {};
-
-        $scope.signin = function () {
-          Auth.signin($scope.user)
-            .then(function (token) {
-              $window.localStorage.setItem('com.flyptox', token);
-              //redirect user after successful login
-              // $location.path('/'); // TODO: Probably need to use $state.to(...) here
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        };
-
-        $scope.signup = function () {
-          Auth.signup($scope.user)
-            .then(function (token) {
-              $window.localStorage.setItem('com.flyptox', token);
-              //redirect user after successful login
-              // $location.path('/');
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        };
-
-        $scope.signout = function() {
-          Auth.signout();
-          //redirect after logout
-          // $location.path('/');
-        };
-
-    }]);
   //---------------------------------------------------------
 
 })();
