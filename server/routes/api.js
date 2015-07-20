@@ -69,7 +69,7 @@ router.get("/products", function(req, res){
 
 
 
-//return open orders - order statuses could be: open | unsettled | settled
+//return open orders - order statuses could be: open | done
 router.get("/products/:id/book", function(req, res){
   //level: req.query.level
   //pair: req.params.id
@@ -102,7 +102,7 @@ router.get("/products/:id/ticker", function(req, res){
     } else {
       res.json({
         id: trade.get('id'),
-        price: trade.get('price').toFixed(2),
+        price: trade.get('price').toFixed(8),
         size: trade.get('size').toFixed(8),
         time: trade.get('created_at').toISOString()
       });
@@ -138,7 +138,7 @@ router.get("/products/:id/trades", function(req, res){
     res.json(trades.map(function(trade){
       return {
         id: trade.get('id'),
-        price: trade.get('price').toFixed(2),
+        price: trade.get('price').toFixed(8),
         size: trade.get('size').toFixed(8),
         time: trade.get('created_at').toISOString(),
         side: trade.get('side')
@@ -191,7 +191,7 @@ router.get("/orders", privateApi, function(req, res){
         return {
           "id": order.id,
           "size": order.get('size').toFixed(8),
-          "price": order.get('price').toFixed(2),
+          "price": order.get('price').toFixed(8),
           "currency_pair": order.related('currency').get('currency'),
           "status": order.get('status'),
           "filled_size": order.get('filled_size').toFixed(8),
@@ -218,7 +218,7 @@ router.get("/orders/:id", privateApi, function(req, res){
       return {
         "id": order.id,
         "size": order.get('size').toFixed(8),
-        "price": order.get('price').toFixed(2),
+        "price": order.get('price').toFixed(8),
         "currency_pair": order.related('currency').get('currency'),
         "status": order.get('status'),
         "filled_size": order.get('filled_size').toFixed(8),
@@ -251,18 +251,43 @@ router.delete("/orders/:id", privateApi, function(req, res){
   //OrderBook.cancelOrder(req.params.id);
 });
 
+/*
+[
+  {
+      "trade_id": trade-id,
+      "currency_pair": "BTC-USD",
+      "price": "10.00",
+      "size": "0.01",
+      "order_id": "d50ec984-77a8-460a-b958-66f114b0de9b",
+      "created_at": "2014-11-07 22:19:28.578544+00",
+      "liquidity": "T",
+      "side": "buy"
+  },
+]
+*/
 router.get("/trades", privateApi, function(req, res){
-  res.json([]);
-  return;
-  //query orders table where maker_id or taker_id is the users's id
-  /*
-  Trade.getUserTrades(req.userId).then(function(trades){
-
-  })
-  .catch(function(){
-    res.status(500).json({message:"unable to retrieve list of trades"});
-  });
-  */
+  Trade.query({where:{maker_id:req.userId}}, {orWhere:{taker_id:req.userId}})
+    .fetchAll({withRelated:['currency_pair']})
+    .then(function(trades){
+      return trades.map(function(trade){
+        return {
+          id: trade.id,
+          currency_pair: tade.related('currency').get('currency'),
+          price: trade.get('price').toFixed(8),
+          size: trade.get('size').toFixed(8),
+          liquidity: trade.get('maker_id') === req.userId ? "M" : "T",
+          order_id: trade.get('maker_id') === req.userId ? trade.get('maker_order_id') : trade.get('taker_order_id'),
+          side: trade.get('side'),
+          created_at: trade.get('create_at').toISOString()
+        };
+      });
+    })
+    .then(function(data){
+      res.json(data);
+    })
+    .catch(function(){
+      res.status(500).json({message:"unable to retrieve list of trades"});
+    });
 });
 /*
 == Private (accounts api) ==
