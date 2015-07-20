@@ -1,6 +1,5 @@
 var chai = require('chai');
 var expect = chai.expect;
-var should = chai.should();
 
 var Promise = require('bluebird');
 var bookshelf = require("../../utils/bookshelf");

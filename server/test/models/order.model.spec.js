@@ -1,16 +1,13 @@
 var chai = require('chai');
 var expect = chai.expect;
-var uuid = require('node-uuid');
 
 var utils = require('../helpers.js');
-var bookshelf = require('../../utils/bookshelf.js');
-var User = require('../../models/User');
 var Order = require('../../models/Order');
 
 // add a collection
-var Orders = bookshelf.Collection.extend({
-  model: Order
-});
+//var Orders = bookshelf.Collection.extend({
+//  model: Order
+//});
 
 describe('Order Model', function(){
 
@@ -29,11 +26,7 @@ describe('Order Model', function(){
     user_id: uid
   };
 
-  // create an array to hold on to test orders we create
-  // so they can easily be deleted later
-
   before(function(done){
-    // populate database?
 
     // clean the db first
     utils.clean(function(){
@@ -58,7 +51,9 @@ describe('Order Model', function(){
     expect(Order).to.not.equal(null);
   });
 
-
+  it('Has a MIN_SIZE property', function(){
+    expect(Order.MIN_SIZE).to.equal(0.001);
+  });
 
   describe('.side', function(){
     it('cannot be empty', function(done){
@@ -74,6 +69,7 @@ describe('Order Model', function(){
           done();
         });
     });
+
     it('must be the string "buy" or "sell"', function(done){
       // test with a junk string
       myOrder.side = 'someJunKValue';
@@ -143,10 +139,6 @@ describe('Order Model', function(){
         expect(err).to.equal(null);
         console.error(err);
       });
-  });
-
-  it('Has a MIN_SIZE property', function(){
-    expect(new Order().MIN_SIZE).to.equal(0.001);
   });
 
   it('references a real user', function(done){

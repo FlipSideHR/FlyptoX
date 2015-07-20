@@ -13,9 +13,6 @@ var Users = bookshelf.Collection.extend({
 
 describe('User Model', function(){
 
-  // one user for some basic tests
-  var testUser;
-
   // runs once before any of our tests start.
   before(function(done){
     utils.clean(done);

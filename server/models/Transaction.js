@@ -1,11 +1,11 @@
 var bookshelf = require('../utils/bookshelf');
 
-var Account = require("./Account");
-var Trade = require("./Trade");
-var Order = require("./Order");
+require("./Account");
+require("./Trade");
+require("./Order");
 var uuid = require("node-uuid");
 
-var Transaction = module.exports = bookshelf.model('Transaction', {
+module.exports = bookshelf.model('Transaction', {
   tableName: 'transactions',
   hasTimestamps: ['created_at', 'updated_at'],
 
@@ -14,7 +14,7 @@ var Transaction = module.exports = bookshelf.model('Transaction', {
   },
 
   // order creation event
-  onCreate: function(model, attrs, options) {
+  onCreate: function() {
     this.set('id', uuid.v1());
   },
 

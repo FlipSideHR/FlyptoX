@@ -16,6 +16,7 @@
   "asi": true,
   "debug": true,
   "globals": {
+      "Promise": true,
       "angular": false,
       "_": false,
       "window": false,

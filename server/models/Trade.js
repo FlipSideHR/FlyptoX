@@ -6,7 +6,7 @@ require("./User");
 require("./Transaction");
 require("./Order");
 
-var Trade = module.exports = bookshelf.model('Trade', {
+module.exports = bookshelf.model('Trade', {
   tableName: 'trades',
   hasTimestamps: ['created_at', 'updated_at'],
 
@@ -15,7 +15,7 @@ var Trade = module.exports = bookshelf.model('Trade', {
   },
 
   // order creation event
-  onCreate: function(model, attrs, options) {
+  onCreate: function() {
     this.set('id', uuid.v1());
   },
 

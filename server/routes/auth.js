@@ -28,7 +28,7 @@ router.post('/signin', function(req, res) {
     .then(function(token){
       res.json({token: token});
     })
-    .catch(function(err){
+    .catch(function(){
       res.send(401);
     });
 });
@@ -48,7 +48,7 @@ router.post('/signup', function(req, res) {
     .then(function(token){
       res.json({token: token});
     })
-    .catch(function(err){
+    .catch(function(){
       res.send(403);
     });
 });

@@ -1,16 +1,12 @@
 var chai = require('chai');
 var expect = chai.expect;
-var uuid = require('node-uuid');
-
 var utils = require('../helpers.js');
-
-var bookshelf = require('../../utils/bookshelf.js');
 var Trade = require('../../models/Trade');
 
 // add a collection
-var Trades = bookshelf.Collection.extend({
-  model: Trade
-});
+//var Trades = bookshelf.Collection.extend({
+//  model: Trade
+//});
 
 describe('Trade Model', function(){
 

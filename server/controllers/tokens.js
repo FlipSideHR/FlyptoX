@@ -23,7 +23,7 @@ module.exports = {
   },
 
   //store the user's id in the token
-  generateToken: function (data, callback) {
+  generateToken: function (data) {
     return jwt.encode(data, TOKEN_SECRET);
   }
 

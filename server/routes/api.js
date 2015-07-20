@@ -13,13 +13,15 @@ router.use(bodyParser.urlencoded({ extended: true }));
 //middleware to restrict access to api to authenticated users
 var privateApi = require("../controllers/tokens").decodeToken;
 var bookshelf = require("../utils/bookshelf");
+
 var Account = bookshelf.model('Account');
-var Currency = bookshelf.model('Currency');
-var CurrencyPair = bookshelf.model('CurrencyPair');
-var Order = bookshelf.model('Order');
 var Trade = bookshelf.model('Trade');
-var Transaction = bookshelf.model('Transaction');
-var User = bookshelf.model('User');
+var CurrencyPair = bookshelf.model('CurrencyPair');
+
+bookshelf.model('Currency');
+bookshelf.model('Order');
+bookshelf.model('Transaction');
+bookshelf.model('User');
 
 var OrderBook = require('../controllers/book');
 

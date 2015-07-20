@@ -24,11 +24,11 @@ OrderBook.getPriceLevelInfo = function(price, side, pair_id) {
 
 OrderBook.aggregateOrders = function(orders, MAX){
   if(!orders) return [];
-  var aggregatedOrders = [];
+  //var aggregatedOrders = [];
   var levels = {};
   var numLevels = 0, i = 0;
   var numRecords = orders.length;
-  var price, size, level;
+  var price, size; //, level;
   var levelOrder = [];
 
   while(numLevels < MAX && i < numRecords){
