@@ -5,8 +5,10 @@
   // Dependencies for module 'FlyptoX'
   var dependencies = [
     'ui.router',
+    'angular-chartist', 
     'FlyptoX.auth',
-    'FlyptoX.orderbook'
+    'FlyptoX.orderbook',
+    'FlyptoX.chart'
   ];
 
   // Create a new module named 'FlyptoX' using 'dependencies'.
@@ -18,33 +20,34 @@
 
   // ROUTING
   //---------------------------------------------------------
-  app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider', function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
-    // For any unmatched URL, redirect to /login
-    $urlRouterProvider.otherwise('/');
+  app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider',
+    function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
+      // For any unmatched URL, redirect to /login
+      $urlRouterProvider.otherwise('/chart');
 
-    // Set up states
-    $stateProvider
-      .state('home', {
-        url: '/',
-        templateUrl: 'app/app.html'
-        // this needs a controller
-        // but right now its a mishmash
-      })
-      // .state('dashboard', {
-      //   url: '/dashboard',
-      //   templateUrl: 'app/app.html'
-      //   // this needs a controller
-      //   // but right now its a mishmash
-      // })
-      .state('home.orderbook', {
-        url: '/orderbook',
-        templateUrl: 'app/orderbook/orderbook.html',
-        controller: 'OrderbookController'
-      })
-      .state('home.chart', {
-        url: '/chart',
-        templateUrl: 'app/chart/chart.html',
-        controller: 'chartCtrl'
+      // Set up states
+      $stateProvider
+        .state('home', {
+          url: '/',
+          templateUrl: 'app/app.html'
+          // this needs a controller
+          // but right now its a mishmash
+        })
+        // .state('dashboard', {
+        //   url: '/dashboard',
+        //   templateUrl: 'app/app.html'
+        //   // this needs a controller
+        //   // but right now its a mishmash
+        // })
+        .state('orderbook', {
+          url: '/orderbook',
+          templateUrl: 'app/components/orderbook/orderbook.html',
+          controller: 'OrderbookController'
+        })
+        .state('chart', {
+          url: '/chart',
+          templateUrl: 'app/components/chart/chart.html',
+          controller: 'chartCtrl as Chartist'
       });
       $httpProvider.interceptors.push('AttachTokens');
       // use the HTML5 History API
