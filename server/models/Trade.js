@@ -8,6 +8,7 @@ require("./Order");
 
 var Trade = module.exports = bookshelf.model('Trade', {
   tableName: 'trades',
+  hasTimestamps: ['created_at', 'updated_at'],
 
   initialize: function(){
     this.on('creating', this.onCreate, this);

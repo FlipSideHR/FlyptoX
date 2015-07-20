@@ -11,7 +11,7 @@ exports.up = function(knex, Promise) {
       table.float('price', 16, 8).notNullable();
       table.float('size', 16, 8).notNullable();
       table.float('filled_size',16, 8).defaultTo(0);
-      table.dateTime('created_at').notNullable().defaultTo(knex.raw('now()'));
+      table.timestamps();
       table.dateTime('done_at');
       table.string('done_reason');
       table.string('status').notNullable().defaultTo('open');

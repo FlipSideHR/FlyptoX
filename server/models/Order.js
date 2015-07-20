@@ -45,7 +45,8 @@ var validate = function(order){
 
 var Order = module.exports = bookshelf.model('Order', {
   tableName: 'orders',
-
+  hasTimestamps: ['created_at', 'updated_at'],
+  
   initialize: function(){
     this.on('creating', this.onCreate, this);
   },

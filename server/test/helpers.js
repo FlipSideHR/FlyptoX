@@ -32,6 +32,7 @@ var trade = {
   type: 'test',
   price: 200.00,
   size: 0.04,
+  currency_pair_id: 1
 };
 
 // clean the db in the proper order

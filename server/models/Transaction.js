@@ -7,6 +7,7 @@ var uuid = require("node-uuid");
 
 var Transaction = module.exports = bookshelf.model('Transaction', {
   tableName: 'transactions',
+  hasTimestamps: ['created_at', 'updated_at'],
 
   initialize: function(){
     this.on('creating', this.onCreate, this);

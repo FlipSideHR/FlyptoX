@@ -9,6 +9,7 @@ require("./Order");
 var User = module.exports = bookshelf.model('User', {
   tableName: 'users',
   hasTimestamps: ['created_at', 'updated_at'],
+
   accounts: function(){
     return this.hasMany("Account", "user_id");
   },

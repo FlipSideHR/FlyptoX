@@ -8,6 +8,7 @@ exports.up = function(knex, Promise) {
             table.integer("currency_id").notNullable().references("id").inTable("currencies");
             table.float("balance", 16, 8).defaultTo(0);
             table.float("available", 16, 8).defaultTo(0);
+            table.timestamps();
         })
     ]);
 };

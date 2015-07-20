@@ -39,13 +39,10 @@ describe('User Model', function(){
       utils.user.createUUser()
         .then(function(user){
           expect(user.get('id')).to.not.equal(null);
+          expect(user.get('created_at')).to.not.equal(undefined);
           done();
         })
-        .catch(function(err){
-          console.error('ERROR: ', err);
-          expect(err).to.equal(undefined);
-          done(err);
-        });
+        .catch(done);
     });
 
     // requires unique email
