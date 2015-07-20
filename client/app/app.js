@@ -29,6 +29,22 @@
         templateUrl: 'app/app.html'
         // this needs a controller
         // but right now its a mishmash
+      })
+      // .state('dashboard', {
+      //   url: '/dashboard',
+      //   templateUrl: 'app/app.html'
+      //   // this needs a controller
+      //   // but right now its a mishmash
+      // })
+      .state('home.orderbook', {
+        url: '/orderbook',
+        templateUrl: 'app/orderbook/orderbook.html',
+        controller: 'OrderbookController'
+      })
+      .state('home.chart', {
+        url: '/chart',
+        templateUrl: 'app/chart/chart.html',
+        controller: 'chartCtrl'
       });
       $httpProvider.interceptors.push('AttachTokens');
       // use the HTML5 History API
