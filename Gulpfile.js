@@ -145,18 +145,20 @@ gulp.task('test:client', ['lint:client'], function(done) {
 gulp.task('test:server', ['lint:server'], function() {
   process.env.NODE_ENV = 'test';
   return gulp.src(paths.server.spec.all)
-    // only run mocha tests if server files
     .pipe(plugins.mocha({
       reporter: argv.reporter || 'spec'
     }))
     .once('error', function () {
-      process.exit(1);
+      if (process.env.TESTRUNNER !== 'continuous'){
+        process.exit(1);
+      }
     })
     .once('end', function () {
-      process.exit();
+      if (process.env.TESTRUNNER !== 'continuous'){
+        process.exit();
+      }
     });
 });
-
 
 /////////////////////////////////////////
 //                  WATCH TASKS
@@ -236,12 +238,14 @@ gulp.task('build', ['sass', 'scripts', 'copy-html']);
 // a task for just running linter/tests on the server
 gulp.task('serverTestRunner', function(){
   argv.reporter = 'nyan';
+  process.env.TESTRUNNER = 'continuous';
   gulp.watch(paths.server.all, ['test:server']);
 });
 
 // our default task
 // always require a build first
 gulp.task('default', ['build'], function(){
+  process.env.TESTRUNNER = 'continuous';
   gulp.start('watch');
   gulp.start('browser-sync');
 });
