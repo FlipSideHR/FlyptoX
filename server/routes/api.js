@@ -34,7 +34,8 @@ GET /products/:id/stats (24 hour history) -- PENDING
 /*
 [
   {
-    "id": "BTC-USD",
+    "id": 1,
+    "currency_pair": "BTC-USD",
     "base_currency": "BTC",
     "quote_currency": "USD",
     "base_min_size": "0.01",
