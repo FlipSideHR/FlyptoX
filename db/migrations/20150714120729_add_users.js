@@ -9,8 +9,7 @@ exports.up = function(knex, Promise) {
       table.string('password').notNullable();
       table.string('salt');
       table.string('fullname');
-      table.dateTime('created_at').notNullable().defaultTo(knex.raw('now()'));
-      table.dateTime('updated_at').notNullable().defaultTo(knex.raw('now()'));
+      table.timestamps();
     })
   ]);
 };

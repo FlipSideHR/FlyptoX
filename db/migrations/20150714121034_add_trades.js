@@ -8,11 +8,12 @@ exports.up = function(knex, Promise) {
       table.string('type').notNullable();
       table.float('price', 16, 8).notNullable();
       table.float('size', 16, 8).notNullable();
-      table.dateTime('time').notNullable().defaultTo(knex.raw('now()'));
+      table.timestamps();
       table.uuid('maker_id').notNullable().references('id').inTable('users');
       table.uuid('taker_id').notNullable().references('id').inTable('users');
       table.uuid('maker_order_id').notNullable().references('id').inTable('orders');
       table.uuid('taker_order_id').notNullable().references('id').inTable('orders');
+      table.integer('currency_pair_id').notNullable().references('id').inTable('currency_pairs');
     })
   ]);
 };

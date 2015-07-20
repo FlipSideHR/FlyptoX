@@ -70,8 +70,6 @@ describe('Trade Model', function(){
         expect(trade).to.not.equal(null);
         done();
       })
-      .catch(function(err){
-        console.error(err);
-      });
+      .catch(done);
   });
 });

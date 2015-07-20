@@ -7,7 +7,8 @@ require("./Currency");
 
 var Account = module.exports = bookshelf.model('Account', {
   tableName: 'accounts',
-
+  hasTimestamps: ['created_at', 'updated_at'],
+  
   initialize: function(){
     this.on('creating', this.onCreate, this);
   },
