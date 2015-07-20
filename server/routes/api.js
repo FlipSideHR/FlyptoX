@@ -22,6 +22,7 @@ var Transaction = bookshelf.model('Transaction');
 var User = bookshelf.model('User');
 
 var OrderBook = require('../controllers/book');
+
 /*
 == Public (products api) ==
 GET /products
@@ -35,9 +36,12 @@ GET /products/:id/stats (24 hour history)
 //return an array of currency pairs
 //todo - include miniumum size allowed to trade (0.01) ?
 router.get("/products", function(req, res){
-  CurrencyPair.forge().fetchAll().then(function(pairs){
+  CurrencyPair.fetchAll().then(function(pairs){
     res.json(pairs);
-  });
+  }).catch(function(err){
+    console.log(err);
+    res.send(500);
+  })
 });
 
 
@@ -50,6 +54,7 @@ router.get("/products/:id/book", function(req, res){
     res.json(book);
   })
   .catch(function(err){
+    console.log(err);
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
 });
@@ -58,31 +63,32 @@ router.get("/products/:id/book", function(req, res){
 should return the latest trade
 {
   "trade_id": trade-id,
-  "price": "501.00",
-  "size": "1.5",
-  "time": "2014-11-03T23:17:30.310036Z"
+  "price": "301.00",
+  "size": "1.50000000",
+  "time": "2015-05-05T23:17:30.310036Z"
 }
 */
 router.get("/products/:id/ticker", function(req, res){
-  res.json({
-    "trade_id": uuid.v1(),
-    "price": "300.00",
-    "size": "1.7",
-    "time": new Date().toISOString()
-  });
-  return;
-  //query trades table for newest time
-  //use knex query max(time)
-  /*
-  Trade.getLatestTrade(req.params.id).then(function(trade){
-    //trade is a bookshelf model
-    //todo use underscore to pick only required fields
-    res.json(trade);
+  //query trades table for latest trade
+  Trade.where({currency_pair_id:req.params.id})
+  .query('orderBy', 'created_at', 'desc')
+  .fetch({columns:['id','price','size','created_at']})
+  .then(function(trade){
+    if(!trade){
+      res.json({});
+    } else {
+      res.json({
+        trade_id: trade.get('id'),
+        price: trade.get('price').toFixed(2),
+        size: trade.get('size').toFixed(8),
+        time: trade.get('created_at').toISOString()
+      });
+    }
   })
-  .catch(function(){
+  .catch(function(err){
+    console.log(err);
     res.status(500).json({message:'unable to retrieve ticker'});
   });
-  */
 });
 
 /*
