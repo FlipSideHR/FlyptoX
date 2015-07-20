@@ -6,15 +6,18 @@ require("./User");
 require("./CurrencyPair");
 require("./Transaction");
 
-// minimum posible order size
 // TODO: let the administrator configure this
+// MINIMUM ORDER SIZE
+// gets added as a static to the object model
 var MIN_SIZE = 0.001;
 
+// VALID ORDER TYPES
 var orderTypes = {
   'market': 'market',
   'limit': 'limit',
   'test': 'test'
 };
+
 var validate = function(order){
   // valid currency pair
   // TODO: validate that order.get('currency_pair') is real
@@ -39,9 +42,11 @@ var validate = function(order){
     throw Error('Size must be ' + MIN_SIZE + ' or more.');
   }
 
+  // TODO?
   // starts with filledSize of 0
   // starts with status of open
   // starts with done_reason of null
+
 };
 
 var Order = module.exports = bookshelf.model('Order', {
@@ -60,8 +65,6 @@ var Order = module.exports = bookshelf.model('Order', {
     this.set('id', uuid.v1());
   },
 
-  MIN_SIZE: MIN_SIZE,
-
   currency_pair: function(){
     return this.belongsTo('CurrencyPair','currency_pair_id');
   },
@@ -73,5 +76,26 @@ var Order = module.exports = bookshelf.model('Order', {
   transactions: function(){
     return this.hasMany('Transaction', 'order_id');
   },
+
+  // STATUS
+
+  // FILLED_SIZE
+
+  // DONE_REASON
+
+}, {
+
+  // STATICS
+
+  // takes an object with the order params
+  // and attempts to insert a new order to the db
+  // returns a promise with the order or an error
+  create: function(order){
+    return Order.forge(order).save({}, {method: 'insert'});
+  },
+
+  // the minimum size an order can be
+  // this should ultimately be configurable by the exchange operator
+  MIN_SIZE: MIN_SIZE
 
 });

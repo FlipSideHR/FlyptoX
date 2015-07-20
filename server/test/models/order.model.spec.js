@@ -29,11 +29,7 @@ describe('Order Model', function(){
     user_id: uid
   };
 
-  // create an array to hold on to test orders we create
-  // so they can easily be deleted later
-
   before(function(done){
-    // populate database?
 
     // clean the db first
     utils.clean(function(){
@@ -58,7 +54,9 @@ describe('Order Model', function(){
     expect(Order).to.not.equal(null);
   });
 
-
+  it('Has a MIN_SIZE property', function(){
+    expect(Order.MIN_SIZE).to.equal(0.001);
+  });
 
   describe('.side', function(){
     it('cannot be empty', function(done){
@@ -74,6 +72,7 @@ describe('Order Model', function(){
           done();
         });
     });
+
     it('must be the string "buy" or "sell"', function(done){
       // test with a junk string
       myOrder.side = 'someJunKValue';
@@ -145,10 +144,6 @@ describe('Order Model', function(){
       });
   });
 
-  it('Has a MIN_SIZE property', function(){
-    expect(new Order().MIN_SIZE).to.equal(0.001);
-  });
-
   it('references a real user', function(done){
     Order.fetchAll()
       .then(function(orders){
@@ -165,4 +160,5 @@ describe('Order Model', function(){
         done();
       });
   });
+
 });
