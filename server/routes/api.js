@@ -36,10 +36,31 @@ GET /products/:id/stats (24 hour history) -- PENDING
 */
 
 //return an array of currency pairs
-//todo - include miniumum size allowed to trade (0.01) ?
+/*
+[
+  {
+    "id": "BTC-USD",
+    "base_currency": "BTC",
+    "quote_currency": "USD",
+    "base_min_size": "0.01",
+    "base_max_size": "10000.00",
+    "quote_increment": "0.01"
+  }
+]
+*/
 router.get("/products", function(req, res){
-  CurrencyPair.fetchAll().then(function(pairs){
-    res.json(pairs);
+  CurrencyPair.fetchAll({withRelated:['base_currency','quote_currency']}).then(function(pairs){
+    res.json(pairs.map(function(pair){
+      return {
+        id: pair.get('id'),
+        currency_pair: pair.get('currency_pair'),
+        base_currency: pair.related('base_currency').get('currency'),
+        quote_currency: pair.related('quote_currency').get('currency'),
+        base_min_size: pair.get('base_min_size').toFixed(8),
+        base_max_size: pair.get('base_max_size').toFixed(8),
+        quote_increment: pair.get('quote_increment').toFixed(8)
+      }
+    }));
   }).catch(function(err){
     console.log(err);
     res.send(500);
