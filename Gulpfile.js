@@ -233,6 +233,12 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
 // always clean dist dir first
 gulp.task('build', ['sass', 'scripts', 'copy-html']);
 
+// a task for just running linter/tests on the server
+gulp.task('serverTestRunner', function(){
+  argv.reporter = 'nyan';
+  gulp.watch(paths.server.all, ['test:server']);
+});
+
 // our default task
 // always require a build first
 gulp.task('default', ['build'], function(){

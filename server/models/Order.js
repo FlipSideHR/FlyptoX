@@ -1,6 +1,7 @@
 var bookshelf = require('../utils/bookshelf');
 var uuid = require('node-uuid');
 
+
 require("./User");
 require("./CurrencyPair");
 require("./Transaction");
