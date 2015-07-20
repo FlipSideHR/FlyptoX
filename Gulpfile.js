@@ -26,9 +26,9 @@ var paths = {
       // bower components
       'client/lib/angular/angular.js',
       'client/lib/angular-ui-router/release/angular-ui-router.js',
-      'client/lib/angular-chartist.js/dist/angular-chartist.js',
       'client/lib/angular-mocks/angular-mocks.js',
       'client/lib/chartist/dist/chartist.js',
+      'client/lib/angular-chartist.js/dist/angular-chartist.js',
 
       // get all modules
       'client/app/components/**/*.js',
@@ -45,7 +45,9 @@ var paths = {
     html: ['client/app/**/*.html'],
     sass: [
       'client/app/components/*.scss',
-      'client/app/*.scss'
+      'client/app/*.scss', 
+
+      'client/lib/chartist/dist/chartist.min.css'
     ],
     dist: 'client/dist/'
   },
