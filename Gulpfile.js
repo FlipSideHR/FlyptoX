@@ -239,6 +239,7 @@ gulp.task('build', ['sass', 'scripts', 'copy-html']);
 gulp.task('serverTestRunner', function(){
   argv.reporter = 'nyan';
   process.env.TESTRUNNER = 'continuous';
+  gulp.start('test:server');
   gulp.watch(paths.server.all, ['test:server']);
 });
 
