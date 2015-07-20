@@ -1,11 +1,11 @@
-// logs into an admin account on postgres 
+// logs into an admin account on postgres
 // (should be your user account)
 // configure the admin info in the knexfile
 //
 // from the admin account it drops the test db, creates it again
 // and adds proper privileges, and runs migrations and seeds
 // TODO: same thing for the development db
-"use strict"; 
+"use strict";
 
 var knexConfig = require('../../knexfile');
 
@@ -20,7 +20,7 @@ var ENV = 'test';
 
 // see if an options switch was used
 // always ignore first 2 args
-process.argv.slice(2).forEach(function(val, index, array){
+process.argv.slice(2).forEach(function(val){
   if (val[0] === '-'){
     // option switch used -check flag
     console.log(val);

@@ -22,7 +22,7 @@ var User = module.exports = bookshelf.model('User', {
     this.on('creating', this.onCreate, this);
   },
 
-  onCreate: function(model, attrs, options) {
+  onCreate: function() {
     var self = this;
 
     // self.get('password') returns undefined if password doesnt exist

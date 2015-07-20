@@ -1,9 +1,7 @@
 var path = require('path');
-var url = require('url');
 var express = require('express');
 
 // import our configed bookshelf object
-var bookshelf = require('./utils/bookshelf.js');
 
 var app = module.exports = express();
 

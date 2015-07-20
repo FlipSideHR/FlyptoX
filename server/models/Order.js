@@ -52,13 +52,13 @@ var validate = function(order){
 var Order = module.exports = bookshelf.model('Order', {
   tableName: 'orders',
   hasTimestamps: ['created_at', 'updated_at'],
-  
+
   initialize: function(){
     this.on('creating', this.onCreate, this);
   },
 
   // order creation event
-  onCreate: function(model, attrs, options) {
+  onCreate: function() {
     // validate this order data before creating
     validate(this);
 

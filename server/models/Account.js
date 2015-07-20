@@ -5,7 +5,7 @@ require("./User");
 require("./Transaction");
 require("./Currency");
 
-var Account = module.exports = bookshelf.model('Account', {
+module.exports = bookshelf.model('Account', {
   tableName: 'accounts',
   hasTimestamps: ['created_at', 'updated_at'],
 
@@ -13,7 +13,8 @@ var Account = module.exports = bookshelf.model('Account', {
     this.on('creating', this.onCreate, this);
   },
 
-  onCreate: function(model, attrs, options) {
+  //onCreate: function(model, attrs, options) {
+  onCreate: function() {
     var self = this;
     self.set('id', uuid.v4());
   },

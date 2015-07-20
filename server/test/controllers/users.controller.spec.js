@@ -1,10 +1,8 @@
 var chai = require('chai');
 var expect = chai.expect;
-var should = chai.should();
 
 var bookshelf = require("../../utils/bookshelf");
 var users = require("../../../server/controllers/users.js");
-var helpers = require("../helpers");
 var User = require("../../../server/models/User");
 
 function clearTables(done){
@@ -73,7 +71,7 @@ describe('Users Controller', function(){
     });
 
     it("should throw error for invalid username", function(done){
-      users.signin("wrongusername","password").then(function(token){
+      users.signin("wrongusername","password").then(function(){
         done(new Error("token returned for invalid account!"));
       }).catch(function(){
         done();
@@ -81,7 +79,7 @@ describe('Users Controller', function(){
     });
 
     it("should throw error for invalid password", function(done){
-      users.signin("test@email.com","wrongpassword").then(function(token){
+      users.signin("test@email.com","wrongpassword").then(function(){
         done(new Error("token returned for invalid account!"));
       }).catch(function(){
         done();
