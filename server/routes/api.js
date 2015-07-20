@@ -2,7 +2,6 @@ var express = require('express');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var router = module.exports = express.Router();
-var uuid = require("node-uuid");
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -17,11 +16,7 @@ var bookshelf = require("../utils/bookshelf");
 var Account = bookshelf.model('Account');
 var Trade = bookshelf.model('Trade');
 var CurrencyPair = bookshelf.model('CurrencyPair');
-
-bookshelf.model('Currency');
-bookshelf.model('Order');
-bookshelf.model('Transaction');
-bookshelf.model('User');
+var Order = bookshelf.model('Order');
 
 var OrderBook = require('../controllers/book');
 
@@ -284,7 +279,7 @@ router.delete("/orders/:id", privateApi, function(req, res){
         return order.save();
       }
     })
-    .then(function(order){
+    .then(function(){
       res.send(200);
     })
     .catch(function(err){
@@ -314,7 +309,7 @@ router.get("/trades", privateApi, function(req, res){
       return trades.map(function(trade){
         return {
           id: trade.id,
-          currency_pair: tade.related('currency').get('currency'),
+          currency_pair: trade.related('currency').get('currency'),
           price: trade.get('price').toFixed(8),
           size: trade.get('size').toFixed(8),
           liquidity: trade.get('maker_id') === req.userId ? "M" : "T",
