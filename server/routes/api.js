@@ -183,6 +183,8 @@ GET /orders
 GET /orders/:id
 GET /trades
 */
+
+//get list of open orders
 router.get("/orders", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId})
     .fetchAll({withRelated:['currency_pair']})
@@ -192,12 +194,12 @@ router.get("/orders", privateApi, function(req, res){
           "id": order.id,
           "size": order.get('size').toFixed(8),
           "price": order.get('price').toFixed(8),
-          "currency_pair": order.related('currency').get('currency'),
+          "currency_pair": order.related('currency_pair').get('currency_pair'),
           "status": order.get('status'),
           "filled_size": order.get('filled_size').toFixed(8),
           "side": order.get('side'),
           "created_at": order.get('created_at').toISOString(),
-          "done_at": order.get('done_at').toISOString(),
+          "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
           "done_reason": order.get('done_reason')
         };
       });
@@ -205,11 +207,13 @@ router.get("/orders", privateApi, function(req, res){
     .then(function(data){
       res.json(data);
     })
-    .catch(function(){
+    .catch(function(err){
+      console.log(err);
       res.status(500).json({message:'unable to retrieve orders'});
     });
 });
 
+//get open order details
 router.get("/orders/:id", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId, id:req.params.id})
     .fetch({withRelated:['currency_pair']})
@@ -219,12 +223,12 @@ router.get("/orders/:id", privateApi, function(req, res){
         "id": order.id,
         "size": order.get('size').toFixed(8),
         "price": order.get('price').toFixed(8),
-        "currency_pair": order.related('currency').get('currency'),
+        "currency_pair": order.related('currency_pair').get('currency_pair'),
         "status": order.get('status'),
         "filled_size": order.get('filled_size').toFixed(8),
         "side": order.get('side'),
         "created_at": order.get('created_at').toISOString(),
-        "done_at": order.get('done_at').toISOString(),
+        "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
         "done_reason": order.get('done_reason')
       };
     })
@@ -237,18 +241,56 @@ router.get("/orders/:id", privateApi, function(req, res){
     });
 });
 
+/*
+  {
+    id: order-id
+  }
+*/
+//place a new order
 router.post("/orders", privateApi, function(req, res){
-  res.status(201).json({
-    order_id: uuid.v1()
+  Order.forge({
+    user_id: req.userId,
+    currency_pair_id: req.body.currency_pair_id,
+    type: req.body.type,
+    price: parseFloat(req.body.price),
+    side: req.body.side,
+    size: parseFloat(req.body.size)
+  })
+  .save()
+  .then(function(order){
+    if(!order) {
+      res.json({});
+    } else {
+      res.json({
+        id: order.id
+      });
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+    res.status(500).json({message:'order not accepted'});
   });
-  return;
-  //OrderBook.placeOrder();
 });
 
+//cancel an order
 router.delete("/orders/:id", privateApi, function(req, res){
-  res.send(200);
-  return;
-  //OrderBook.cancelOrder(req.params.id);
+  Order.where({user_id:req.userId, id:req.params.id, status:'open'})
+    .fetch()
+    .then(function(order){
+      if(order){
+        order.set('status', 'done');
+        order.set('done_reason', 'canceled');
+        order.set('done_at', new Date());
+        return order.save();
+      }
+    })
+    .then(function(order){
+      res.send(200);
+    })
+    .catch(function(err){
+      console.log(err);
+      res.status(500).json({message:'unable to cancel order'});
+    });
 });
 
 /*
@@ -294,7 +336,7 @@ router.get("/trades", privateApi, function(req, res){
 GET /accounts
 GET /accounts/:id
 GET /accounts/:id/ledger
-GET /accounts/:id/holds
+GET /accounts/:id/holds -- PENDING
 */
 router.get('/accounts', privateApi, function(req, res){
   Account.where({user_id:req.userId})
