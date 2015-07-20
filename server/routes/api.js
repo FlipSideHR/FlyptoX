@@ -64,7 +64,7 @@ router.get("/products/:id/book", function(req, res){
 /*
 should return the latest trade
 {
-  "trade_id": trade-id,
+  "id": trade-id,
   "price": "301.00",
   "size": "1.50000000",
   "time": "2015-05-05T23:17:30.310036Z"
@@ -80,7 +80,7 @@ router.get("/products/:id/ticker", function(req, res){
       res.json({});
     } else {
       res.json({
-        trade_id: trade.get('id'),
+        id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
         time: trade.get('created_at').toISOString()
@@ -97,7 +97,7 @@ router.get("/products/:id/ticker", function(req, res){
 /*
 [
   {
-    "trade_id": trade-id,
+    "id": trade-id,
     "price": "301.00",
     "size": "1.50000000",
     "time": "2015-05-05T23:17:30.310036Z",
@@ -116,7 +116,7 @@ router.get("/products/:id/trades", function(req, res){
   .then(function(trades){
     res.json(trades.map(function(trade){
       return {
-        trade_id: trade.get('id'),
+        id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
         time: trade.get('created_at').toISOString(),
