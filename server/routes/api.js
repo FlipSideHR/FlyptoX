@@ -104,7 +104,7 @@ router.get("/products/:id/ticker", function(req, res){
         id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
-        time: trade.get('created_at').toISOString()
+        time: trade.get('created_at') //.toISOString()
       });
     }
   })
@@ -140,7 +140,7 @@ router.get("/products/:id/trades", function(req, res){
         id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
-        time: trade.get('created_at').toISOString(),
+        time: trade.get('created_at'),//.toISOString()
         side: trade.get('side')
       };
     }));
@@ -272,29 +272,37 @@ GET /accounts/:id/ledger
 GET /accounts/:id/holds
 */
 router.get('/accounts', privateApi, function(req, res){
-  Account.forge({user_id:req.userId}).fetchAll().then(function(accounts){
-    res.json(accounts);
-  });
-  /*
-  User.getAccounts(req.userId).then(function(accounts){
-    res.json(accounts);
+  Account.where({user_id:req.userId})
+  .fetchAll({withRelated:['currency'], columns:['id','balance','available','currency_id']})
+  .then(function(accounts){
+    res.json(accounts.map(function(account){
+      return {
+        id: account.id,
+        balance: account.get('balance'),
+        available: account.get('available'),
+        currency: account.related('currency').get('currency')
+      }
+    }));
   })
-  .catch(function(){
+  .catch(function(err){
+    console.log(err);
     res.status(500).json({message:"unable to retrieve accounts"});
   });
-  */
 });
 
 router.get('/accounts/:id', privateApi, function(req, res){
-  Account.forge({user_id:req.userId, id:req.params.id}).fetch().then(function(account){
-    res.json(account);
-  });
-  /*
-  User.getAccount(req.userId, req.params.id).then(function(account){
-    res.json(account);
+  Account.where({user_id:req.userId, id:req.params.id})
+  .fetch({withRelated:['currency'], columns:['id','balance','available','currency_id']})
+  .then(function(account){
+    res.json({
+      id: account.id,
+      balance: account.get('balance'),
+      available: account.get('available'),
+      currency: account.related('currency').get('currency')
+    });
   })
-  .catch(function(){
+  .catch(function(err){
+    console.log(err);
     res.status(500).json({message:"unable to retrieve account"});
   });
-  */
 });
