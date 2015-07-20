@@ -72,26 +72,26 @@
 
     }]);
 
-   FlyptoX.controller('walletCtrl', ['$scope','$http',
-      '$interval', function($scope, $interval, $http, AccountsService){
+   FlyptoX.controller('walletCtrl', ['$scope',
+      '$interval', '$http', function($scope, $interval, $http, AccountsService){
         console.log("got here");
         var blockApiKey = '6cc7-b07d-b22b-f6d2';
+        $scope.showWallet;
 
        $scope.getAddress = function() { 
          console.log("GOT HERE");
+         $http({
+            method: 'GET',
+            url: 'https://block.io/api/v2/get_new_address/?api_key='+blockApiKey})
+            .success(function(data) {
+              console.log(data);
+              console.log("walllet", data.data.address);
+              $scope.showWallet = data.data.address;   
+            })
+            .error(function(data, status) {
+                console.log(data);
+            });
        };
-       //  $http({
-       //      // method : 'GET',
-       //      // url : 'https://block.io/api/v2/get_new_address/?api_key='+blockApiKey,
-       //      // .success(function(data) {
-       //      //   console.log(data);
-       //      //   var walletData = JSON.parse(data.text);
-       //      //   console.log(walletData);     
-       //      // })
-       //      // .error(function(data, status) {
-       //      //     console.log(data);
-       //      });
-
 
    // $scope.serverCall = function() {
    //      $http({method : 'POST',
