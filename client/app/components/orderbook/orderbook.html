@@ -1,1 +1,16 @@
-<h1>This is the orderbook</h1>
+<div class="tx" ng-model="testData">
+  <h4>Exchange order book</h4>
+  <label class="order">Bid</label>
+  <div ng-repeat="d in testData.bids | limitTo: 20">
+    <h7> {{ d[0] }} </h7>
+    <h7> {{ d[1] }} </h7>
+    <h7> {{ d[2] }} </h7>
+  </div>
+  <label class="close"></label>
+  <label class="order">Ask</label>
+  <div ng-repeat="d in testData.asks | limitTo: 20">
+    <h7> {{ d[0] }} </h7>
+    <h7> {{ d[1] }} </h7>
+    <h7> {{ d[2] }} </h7>
+  </div>
+</div>

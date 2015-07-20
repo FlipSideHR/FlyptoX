@@ -21,16 +21,14 @@ var paths = {
     spec: {
       all: ['client/app/**/*.spec.js'],
     },
-    all: ['client/app/**/*.*'],
+    all: ['client/app/**/*.js'],
     scripts: [
       // bower components
       'client/lib/angular/angular.js',
+      'client/lib/angular-ui-router/release/angular-ui-router.js',
       'client/lib/angular-chartist.js/dist/angular-chartist.js',
       'client/lib/angular-mocks/angular-mocks.js',
       'client/lib/chartist/dist/chartist.js',
-
-      // main application file
-      'client/app/*.js',
 
       // get all modules
       'client/app/components/**/*.js',
@@ -39,7 +37,10 @@ var paths = {
       '!client/app/**/*.spec.js',
 
       // services
-      'client/app/lib/services/*.services.js'
+     'client/app/lib/services/*.service.js',
+
+      // main application file
+      'client/app/*.js'
     ],
     html: ['client/app/**/*.html'],
     sass: [
@@ -205,6 +206,15 @@ gulp.task('nodemon', function(cb) {
 gulp.task('browser-sync', ['nodemon'], function(cb) {
   // the port the server is running on
   var port = process.env.PORT || 9999;
+
+  // set browser by platform
+  var browser = '';
+  if (process.platform === 'linux'){
+    browser = ['google-chrome'];
+  } else {
+    browser = ['google chrome'];
+  }
+
   browserSync.init({
 
     // All of the following files will be watched
@@ -222,7 +232,9 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
     port: 4000,
 
     // Which browser should we launch?
-    browser: ['google chrome']
+    // (DT) Changed from 'google chrome' to 'google-chrome'
+    // Needed, on my machine at least, to avoid error during browser-sync task.
+    browser: browser
   }, cb);
 });
 
