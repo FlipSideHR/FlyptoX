@@ -104,7 +104,7 @@ router.get("/products/:id/ticker", function(req, res){
         id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
-        time: trade.get('created_at') //.toISOString()
+        time: trade.get('created_at').toISOString()
       });
     }
   })
@@ -140,7 +140,7 @@ router.get("/products/:id/trades", function(req, res){
         id: trade.get('id'),
         price: trade.get('price').toFixed(2),
         size: trade.get('size').toFixed(8),
-        time: trade.get('created_at'),//.toISOString()
+        time: trade.get('created_at').toISOString(),
         side: trade.get('side')
       };
     }));
@@ -184,57 +184,57 @@ GET /orders/:id
 GET /trades
 */
 router.get("/orders", privateApi, function(req, res){
-  res.json([{
-        "id": "d50ec984-77a8-460a-b958-66f114b0de9b",
-        "size": "3.0",
-        "price": "100.23",
-        "product_id": "BTC-USD",
-        "status": "open",
-        "filled_size": "1.23",
-        "fill_fees": "0.001",
-        "settled": false,
-        "side": "buy",
-        "created_at": "2014-11-14 06:39:55.189376+00"
-    }]);
-  return;
-  /*
-  User.getOpenOrders(req.userId).then(function(orders){
-    //orders is a collection of the user's open orders
-    //todo - use underscore, turn the collection into the expected format
-    res.json(orders);
-  })
-  .catch(function(){
-    res.status(500).json({message:'unable to retrieve orders'});
-  });
-  */
+  Order.where({status:'open', user_id:req.userId})
+    .fetchAll({withRelated:['currency_pair']})
+    .then(function(orders){
+      return orders.map(function(order){
+        return {
+          "id": order.id,
+          "size": order.get('size').toFixed(8),
+          "price": order.get('price').toFixed(2),
+          "currency_pair": order.related('currency').get('currency'),
+          "status": order.get('status'),
+          "filled_size": order.get('filled_size').toFixed(8),
+          "side": order.get('side'),
+          "created_at": order.get('created_at').toISOString(),
+          "done_at": order.get('done_at').toISOString(),
+          "done_reason": order.get('done_reason')
+        };
+      });
+    })
+    .then(function(data){
+      res.json(data);
+    })
+    .catch(function(){
+      res.status(500).json({message:'unable to retrieve orders'});
+    });
 });
 
 router.get("/orders/:id", privateApi, function(req, res){
-  res.json({
-    "id": "d50ec984-77a8-460a-b958-66f114b0de9a",
-    "size": "2.0",
-    "price": "150.23",
-    "done_reason": "canceled",
-    "status": "done",
-    "settled": true,
-    "filled_size": "1.3",
-    "product_id": "BTC-USD",
-    "fill_fees": "0.001",
-    "side": "buy",
-    "created_at": "2014-11-14 06:39:55.189376+00",
-    "done_at": "2014-11-14 06:39:57.605998+00"
-  });
-  return;
-  /*
-  User.getOrder(req.userId, req.params.id).then(function(order){
-    //orders is bookshelf model
-    //todo - use underscore, turn the collection into the expected format
-    res.json(order);
-  })
-  .catch(function(){
-    res.status(500).json({message:'unable to retrieve orders'});
-  });
-  */
+  Order.where({status:'open', user_id:req.userId, id:req.params.id})
+    .fetch({withRelated:['currency_pair']})
+    .then(function(order){
+      if(!order) return {};
+      return {
+        "id": order.id,
+        "size": order.get('size').toFixed(8),
+        "price": order.get('price').toFixed(2),
+        "currency_pair": order.related('currency').get('currency'),
+        "status": order.get('status'),
+        "filled_size": order.get('filled_size').toFixed(8),
+        "side": order.get('side'),
+        "created_at": order.get('created_at').toISOString(),
+        "done_at": order.get('done_at').toISOString(),
+        "done_reason": order.get('done_reason')
+      };
+    })
+    .then(function(data){
+      res.json(data);
+    })
+    .catch(function(err){
+      console.log(err);
+      res.status(500).json({message:'unable to retrieve order'});
+    });
 });
 
 router.post("/orders", privateApi, function(req, res){
