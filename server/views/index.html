@@ -1,20 +1,15 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <base href="/">
-        <link href="/assets/css/main.min.css" rel="stylesheet" />
+<head>
+  <meta charset="utf-8">
+  <title>FlyptoX</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/main.min.css">
+</head>
+<body ng-app="FlyptoX">
+  <div class="view-container">
+    <div ui-view></div>
+  </div>
 
-        <!-- build:js /app.js -->
-
-        <!-- bower -->
-        <!-- endbower -->
-
-        <!-- appcode -->
-        <script src="/app/main.min.js"></script>
-        <!-- endappcode -->
-
-        <!-- endbuild -->
-
-    </head>
-    <body ng-app="FlyptoX" ng-include="'/app/app.html'"></body>
+  <script src="/app/app.min.js"></script>
+</body>
 </html>

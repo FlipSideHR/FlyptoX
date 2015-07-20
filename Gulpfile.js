@@ -25,6 +25,7 @@ var paths = {
     scripts: [
       // bower components
       'client/lib/angular/angular.js',
+      'client/lib/angular-ui-router/release/angular-ui-router.js',
       'client/lib/angular-chartist.js/dist/angular-chartist.js',
       'client/lib/angular-mocks/angular-mocks.js',
       'client/lib/chartist/dist/chartist.js',
@@ -222,7 +223,9 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
     port: 4000,
 
     // Which browser should we launch?
-    browser: ['google chrome']
+    // (DT) Changed from 'google chrome' to 'google-chrome'
+    // Needed, on my machine at least, to avoid error during browser-sync task.
+    browser: ['google-chrome']
   }, cb);
 });
 
