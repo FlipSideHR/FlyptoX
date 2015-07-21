@@ -14,16 +14,23 @@ app.set('view engine', 'html');
 
 //signin and signup routes
 var authRouter = require("./routes/auth.js");
+app.use('/api/auth', authRouter);
 
 //api routes
 var apiRouter = require("./routes/api.js");
-
 app.use('/api/v1', apiRouter);
-app.use('/api/auth', authRouter);
 
+// serve all files from client/dist
 app.use('/', express.static(path.join(rootPath, 'client/dist/')));
 
 app.get('/', function(req, res) {
+  res.render('index.html');
+});
+
+// TODO: Error Handing here??
+
+// render everything that didnt get caught as index page
+app.use(function(req, res) {
   res.render('index.html');
 });
 
