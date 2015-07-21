@@ -40,13 +40,13 @@
 <div class="tx">
 		      <h4>Exchange order book</h4> 
 	        <div class="order">Bid</div>
-	        <div ng-repeat="b in bids track by $index">
+	        <div ng-repeat="b in bids track by $index | orderBy:'+price'">
 	         	<h7> {{b.price}} </h7>
 	         	<h7 style="float:right"> {{ b.size }} </h7>
 	        </div>
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
- 					<div ng-repeat="a in asks track by $index">
+ 					<div ng-repeat="a in asks track by $index | orderBy:'+price'">
 	         	<h7> {{ a.price }} </h7>
 	         	<h7 style="float:right"> {{ a.size }} </h7>
 	        </div>

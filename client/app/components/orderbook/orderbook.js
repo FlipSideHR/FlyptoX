@@ -42,7 +42,32 @@
               console.log("size", $scope.asks[i].size);
               console.log("price", $scope.asks[i].price);
             }
-          }
+          }       
+        for (var h =1; h < $scope.bids.length; h++){
+                    console.log("this is h", h);
+                    for (var g =1; g < $scope.bids.length; g++){
+                      console.log("this is h", h);
+                      console.log("this is h price", $scope.bids[h].price);
+                      console.log("this is g price", $scope.bids[g].price);
+                        if ($scope.bids[h].price === $scope.bids[g].price){
+                            $scope.bids[h].size += $scope.bids[h].size;
+                            $scope.bids.splice(h, 1);
+                        }
+                    }
+                }
+
+          for (var j =1; j < $scope.asks.length; j++){
+              console.log("this is j", j);
+              for (var l =1; l < $scope.bids.length; l++){
+                console.log("this is j price", $scope.asks[j].price);
+                console.log("this is l price", $scope.asks[l].price);
+                  if ($scope.asks[j].price === $scope.asks[l].price){
+                      $scope.asks[j].size += $scope.asks[l].size;
+                      $scope.asks.splice(l, 1);
+                  }
+              }
+          } 
+
         })
         .error(function(data, status, headers, config, statusText) {
 
