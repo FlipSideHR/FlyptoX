@@ -30,7 +30,7 @@
          
           for (var i =0; i < data.length; i++){
               console.log("indiv", data[i]);
-              if (data[i].side === 'buy'){
+              if (data[i].side === 'buy'){             
                 $scope.bids[i] = data[i];
                 console.log("does this work", $scope.bids[i]);
                 console.log("size", $scope.bids[i].size);
