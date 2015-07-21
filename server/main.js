@@ -10,6 +10,7 @@ app.set('views', __dirname + '/views/');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+require('./controllers/logger');
 
 //signin and signup routes
 var authRouter = require("./routes/auth.js");

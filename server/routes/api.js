@@ -3,6 +3,7 @@ var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var router = module.exports = express.Router();
 var debug = require("debug")("api");
+var appEvents = require("../controllers/app-events");
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -341,6 +342,7 @@ router.post("/orders", privateApi, function(req, res){
       res.status(201).json({
         id: order.id
       });
+      appEvents.emit('order:new', order);
     }
   })
   .catch(function(err){
@@ -368,8 +370,11 @@ router.delete("/orders/:id", privateApi, function(req, res){
         return order.save();
       }
     })
-    .then(function(){
+    .then(function(order){
       res.send(200);
+      if(order){
+        appEvents.emit('order:cancelled', order);
+      }
     })
     .catch(function(err){
       debug(err);
