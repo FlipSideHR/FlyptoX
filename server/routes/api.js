@@ -246,18 +246,7 @@ router.get("/orders", privateApi, function(req, res){
     .fetchAll({withRelated:['currency_pair']})
     .then(function(orders){
       return orders.map(function(order){
-        return {
-          "id": order.id,
-          "size": order.get('size').toFixed(8),
-          "price": order.get('price').toFixed(8),
-          "currency_pair": order.related('currency_pair').get('currency_pair'),
-          "status": order.get('status'),
-          "filled_size": order.get('filled_size').toFixed(8),
-          "side": order.get('side'),
-          "created_at": order.get('created_at').toISOString(),
-          "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
-          "done_reason": order.get('done_reason')
-        };
+        return orderToJSON(order);
       });
     })
     .then(function(data){
@@ -281,19 +270,7 @@ router.get("/orders/:id", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId, id:req.params.id})
     .fetch({withRelated:['currency_pair']})
     .then(function(order){
-      if(!order) return;
-      return {
-        "id": order.id,
-        "size": order.get('size').toFixed(8),
-        "price": order.get('price').toFixed(8),
-        "currency_pair": order.related('currency_pair').get('currency_pair'),
-        "status": order.get('status'),
-        "filled_size": order.get('filled_size').toFixed(8),
-        "side": order.get('side'),
-        "created_at": order.get('created_at').toISOString(),
-        "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
-        "done_reason": order.get('done_reason')
-      };
+      return orderToJSON(order);
     })
     .then(function(data){
       if(data) {
@@ -342,7 +319,7 @@ router.post("/orders", privateApi, function(req, res){
       res.status(201).json({
         id: order.id
       });
-      appEvents.emit('order:new', order);
+      appEvents.emit('order:new', orderToJSON(order));
     }
   })
   .catch(function(err){
@@ -373,7 +350,7 @@ router.delete("/orders/:id", privateApi, function(req, res){
     .then(function(order){
       res.send(200);
       if(order){
-        appEvents.emit('order:cancelled', order);
+        appEvents.emit('order:cancelled', orderToJSON(order));
       }
     })
     .catch(function(err){
@@ -530,3 +507,22 @@ router.get('/accounts/:id/ledger', privateApi, function(req, res){
     res.status(500).json({message:"unable to retrieve account history"});
   });
 });
+
+
+//some helper functions
+//might be better to override the toJSON method on the bookshelf model?
+function orderToJSON(order) {
+  if(!order) return;
+  return {
+    "id": order.id,
+    "size": order.get('size').toFixed(8),
+    "price": order.get('price').toFixed(8),
+    "currency_pair": order.related('currency_pair').get('currency_pair'),
+    "status": order.get('status'),
+    "filled_size": order.get('filled_size').toFixed(8),
+    "side": order.get('side'),
+    "created_at": order.get('created_at').toISOString(),
+    "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
+    "done_reason": order.get('done_reason')
+  };
+}
