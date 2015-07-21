@@ -25,13 +25,23 @@
         .success(function(data, status, headers, config, statusText){
 
           $scope.orders = data;
+          $scope.asks = [];
+          $scope.bids = [];
          
           for (var i =0; i < data.length; i++){
               console.log("indiv", data[i]);
+              if (data[i].side === 'buy'){
+                $scope.bids[i] = data[i];
+                console.log("does this work", $scope.bids[i]);
+                console.log("size", $scope.bids[i].size);
+                console.log("price", $scope.bids[i].price);
+            }
+            if (data[i].side === 'sell'){
               $scope.asks[i] = data[i];
               console.log("does this work", $scope.asks[i]);
               console.log("size", $scope.asks[i].size);
               console.log("price", $scope.asks[i].price);
+            }
           }
         })
         .error(function(data, status, headers, config, statusText) {
