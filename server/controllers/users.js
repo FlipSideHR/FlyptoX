@@ -32,8 +32,8 @@ users.signup = Promise.method(function(email, password){
 users.signin = function(email, password) {
   return User.verify(email, password)
     .then(function(user){
-      //store the userId in the token
-      return tokens.generateToken(user.get("id"));
+      //return a token with user-id if user verified
+      return user ? tokens.generateToken(user.get("id")) : null;
     });
 };
 

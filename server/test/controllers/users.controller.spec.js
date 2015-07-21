@@ -63,27 +63,25 @@ describe('Users Controller', function(){
   });
 
   describe("users.signin(email, password)", function(){
-    it("should return access token for valid username and password", function(done){
+    it("should return access token for valid email and password", function(done){
       users.signin("test@email.com","password").then(function(token){
         expect(token).to.be.a('string');
         done();
       }).catch(done);
     });
 
-    it("should throw error for invalid username", function(done){
-      users.signin("wrongusername","password").then(function(){
-        done(new Error("token returned for invalid account!"));
-      }).catch(function(){
+    it("should not generate a token for invalid email", function(done){
+      users.signin("wrongusername","password").then(function(token){
+        expect(token).to.equal(null);
         done();
-      });
+      }).catch(done);
     });
 
-    it("should throw error for invalid password", function(done){
-      users.signin("test@email.com","wrongpassword").then(function(){
-        done(new Error("token returned for invalid account!"));
-      }).catch(function(){
+    it("should not generate a token for invalid password", function(done){
+      users.signin("test@email.com","wrongpassword").then(function(token){
+        expect(token).to.equal(null);
         done();
-      });
+      }).catch(done);
     });
   });
 

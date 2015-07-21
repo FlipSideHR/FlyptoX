@@ -9,7 +9,8 @@ module.exports = {
     var userId;
 
     if (!token) {
-      return res.send(403); // send forbidden if a token is not provided
+      // send 401 if a token is not provided
+      return res.status(401).json({message:"missing access token"});
     }
 
     try {
@@ -20,14 +21,16 @@ module.exports = {
           req.userId = userId;
           next();
         }else{
-          res.send(401);//user not in DB
+          //user not in DB
+          res.status(401).json({message:"invalid user"});
         }
-      }).catch(function(){
-        res.send(500);
+      })
+      .catch(function(){
+        res.status(500).json({message:"internal server error"});
       });
     } catch(error) {
       //invalid token
-      res.send(401);
+      res.status(401).json({message:"malformed token"});
     }
 
   },
