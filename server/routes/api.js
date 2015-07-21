@@ -11,6 +11,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 //middleware to restrict access to api to authenticated users
 var privateApi = require("../controllers/tokens").decodeToken;
+
 var bookshelf = require("../utils/bookshelf");
 
 var Account = bookshelf.model('Account');
@@ -21,17 +22,29 @@ var Order = bookshelf.model('Order');
 var OrderBook = require('../controllers/book');
 
 /*
-== Public (products api) ==
-GET /products
-GET /products/:id/book
-GET /products/:id/ticker
-GET /products/:id/trades
-GET /products/:id/candles (historic prices) -- PENDING
-GET /products/:id/stats (24 hour history) -- PENDING
+-- Market Data API --
+GET /api/v1/products
+GET /api/v1/products/:id/book
+GET /api/v1/products/:id/ticker
+GET /api/v1/products/:id/trades
+GET /api/v1/products/:id/candles (historic prices) -- PENDING
+GET /api/v1/products/:id/stats (24 hour history) -- PENDING
+
+-- Order Management --
+POST /api/v1/orders
+DELETE /api/v1/orders/:id
+GET /api/v1/orders
+GET /api/v1/orders/:id
+GET /api/v1/trades
+
+-- Account Management --
+GET /api/v1/accounts
+GET /api/v1/accounts/:id
+GET /api/v1/accounts/:id/ledger
+GET /api/v1/accounts/:id/holds -- PENDING
 */
 
-//return an array of currency pairs
-/*
+/* sample returned json
 [
   {
     "id": 1,
@@ -43,6 +56,12 @@ GET /products/:id/stats (24 hour history) -- PENDING
     "quote_increment": "0.01"
   }
 ]
+
+performs: no side effects
+description: return array of currency pairs
+endpoint:  GET /api/v1/products
+body json: none
+query params: none
 */
 router.get("/products", function(req, res){
   CurrencyPair.fetchAll({withRelated:['base_currency','quote_currency']}).then(function(pairs){
@@ -64,8 +83,14 @@ router.get("/products", function(req, res){
 });
 
 
-
-//return open orders - order statuses could be: open | done
+/*
+performs: no side effects
+description: returns object - the order book (see /server/controller/book.js for data format)
+endpoint:  GET /api/v1/products/:id/book
+:id  currency_pair_id (number)
+body json: none
+query params: level  (1 || 2 || 3)   (2 is default if not specified)
+*/
 router.get("/products/:id/book", function(req, res){
   //level: req.query.level
   //pair: req.params.id
@@ -78,14 +103,21 @@ router.get("/products/:id/book", function(req, res){
   });
 });
 
-/*
-should return the latest trade
+
+/* sample json output
 {
   "id": trade-id,
   "price": "301.00",
   "size": "1.50000000",
   "time": "2015-05-05T23:17:30.310036Z"
 }
+
+performs: no side effects
+description: returns object - the latest trade
+endpoint:  GET /api/v1/products/:id/ticker
+:id  currency_pair_id (number)
+body json: none
+query params: none
 */
 router.get("/products/:id/ticker", function(req, res){
   //query trades table for latest trade
@@ -110,8 +142,8 @@ router.get("/products/:id/ticker", function(req, res){
   });
 });
 
-//return array of last 50 trades
-/*
+
+/* sample json output
 [
   {
     "id": trade-id,
@@ -124,6 +156,13 @@ router.get("/products/:id/ticker", function(req, res){
 
   }
 ]
+
+performs: no side effects
+description: return array of last 50 trades
+endpoint:  GET /api/v1/products/:id/trades
+:id  currency_pair_id (number)
+body json: none
+query params: none
 */
 router.get("/products/:id/trades", function(req, res){
   Trade.where({currency_pair_id:req.params.id})
@@ -147,18 +186,20 @@ router.get("/products/:id/trades", function(req, res){
   });
 });
 
-//return an array of candlesitck data for past trades
+
 /*
 [
     [1415398768, 0.32, 4.2, 0.35, 4.2, 12.3],
     ...
 ]
+
+description: return an array of candlesitck data for past trades (for charts)
 */
 router.get("/products/:id/candles", function(req, res){
   res.json([]);
 });
 
-//return open, high, low, close, size (calculated over last 24hrs)
+
 /*
   {
       open: "34.19000000",
@@ -166,21 +207,24 @@ router.get("/products/:id/candles", function(req, res){
       low: "7.06000000",
       volume: "2.41000000"
   }
+description: returns open, high, low, close, size (calculated over last 24hrs)
 */
 router.get("/products/:id/stats", function(req, res){
   res.json({});
 });
 
 /*
-== Private (orders and trades api) ==
-POST /orders
-DELETE /orders/:id
-GET /orders
-GET /orders/:id
-GET /trades
+   ===== Order Management ====
+   These methods return data relevant to the authenticated user only
 */
 
-//get list of open orders
+/*
+performs: no side effects
+description: returns array of open orders
+endpoint:  GET /api/v1/orders/
+body json: none
+query params: none
+*/
 router.get("/orders", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId})
     .fetchAll({withRelated:['currency_pair']})
@@ -209,7 +253,14 @@ router.get("/orders", privateApi, function(req, res){
     });
 });
 
-//get open order details
+/*
+performs: no side effects
+description: returns object - order details
+endpoint:  GET /api/v1/orders/:id
+:id  order-id (uuid)
+body json: none
+query params: none
+*/
 router.get("/orders/:id", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId, id:req.params.id})
     .fetch({withRelated:['currency_pair']})
@@ -241,8 +292,19 @@ router.get("/orders/:id", privateApi, function(req, res){
   {
     id: order-id
   }
+
+  performs: places a new order
+  returns: returns object - with new order id
+  endpoint:  POST /api/v1/orders/
+  body json: {
+    currency_pair_id: number,
+    type: 'market' || 'limit',
+    price: number,
+    side: 'buy' || 'sell',
+    size: number
+  }
+  query params: none
 */
-//place a new order
 router.post("/orders", privateApi, function(req, res){
   Order.forge({
     user_id: req.userId,
@@ -255,20 +317,27 @@ router.post("/orders", privateApi, function(req, res){
   .save()
   .then(function(order){
     if(!order) {
-      res.json({});
+      res.status(403).json({message:"error creating order"});
     } else {
-      res.json({
+      res.status(201).json({
         id: order.id
       });
     }
   })
   .catch(function(err){
     console.log(err);
-    res.status(500).json({message:'order not accepted'});
+    res.status(500).json({message:'error creating order'});
   });
 });
 
-//cancel an order
+/*
+performs: cancels an order
+returns:
+endpoint:  DELETE /api/v1/orders/:id
+:id  order-id (uuid)
+body json: none
+query params: none
+*/
 router.delete("/orders/:id", privateApi, function(req, res){
   Order.where({user_id:req.userId, id:req.params.id, status:'open'})
     .fetch()
@@ -292,7 +361,7 @@ router.delete("/orders/:id", privateApi, function(req, res){
 /*
 [
   {
-      "trade_id": trade-id,
+      "id": trade-id,
       "currency_pair": "BTC-USD",
       "price": "10.00",
       "size": "0.01",
@@ -302,6 +371,11 @@ router.delete("/orders/:id", privateApi, function(req, res){
       "side": "buy"
   },
 ]
+performs: no side effects
+returns: returns array - past trades (fills)
+endpoint:  GET /api/v1/trades
+body json: none
+query params: none
 */
 router.get("/trades", privateApi, function(req, res){
   Trade.query({where:{maker_id:req.userId}}, {orWhere:{taker_id:req.userId}})
@@ -327,12 +401,10 @@ router.get("/trades", privateApi, function(req, res){
       res.status(500).json({message:"unable to retrieve list of trades"});
     });
 });
+
+
 /*
-== Private (accounts api) ==
-GET /accounts
-GET /accounts/:id
-GET /accounts/:id/ledger
-GET /accounts/:id/holds -- PENDING
+   Private (accounts api)
 */
 router.get('/accounts', privateApi, function(req, res){
   Account.where({user_id:req.userId})
