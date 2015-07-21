@@ -519,7 +519,7 @@ function orderToJSON(order) {
     "price": order.get('price').toFixed(8),
     "currency_pair": order.related('currency_pair').get('currency_pair'),
     "status": order.get('status'),
-    "filled_size": order.get('filled_size').toFixed(8),
+    "filled_size": order.get('filled_size') ? order.get('filled_size').toFixed(8) : undefined,
     "side": order.get('side'),
     "created_at": order.get('created_at').toISOString(),
     "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
