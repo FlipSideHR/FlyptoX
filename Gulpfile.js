@@ -239,8 +239,6 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
     port: 4000,
 
     // Which browser should we launch?
-    // (DT) Changed from 'google chrome' to 'google-chrome'
-    // Needed, on my machine at least, to avoid error during browser-sync task.
     browser: browser
   }, cb);
 });

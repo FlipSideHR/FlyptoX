@@ -23,7 +23,9 @@ returns a json object
   }
 */
 router.post('/signin', function(req, res) {
-  if(!req.body.email || !req.body.password) return res.send(400);
+  if(!req.body.email || !req.body.password) return res.status(400).json({
+    message: "Both email and password are required."
+  });
   users.signin(req.body.email, req.body.password)
     .then(function(token){
       if(token){
@@ -47,7 +49,9 @@ returns a json object
   }
 */
 router.post('/signup', function(req, res) {
-  if(!req.body.email || !req.body.password) return res.send(400);
+  if(!req.body.email || !req.body.password) return res.status(400).json({
+    message: "Both email and password are required."
+  });
   users.signup(req.body.email, req.body.password)
     .then(function(token){
       res.json({token: token});
