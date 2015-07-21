@@ -50,6 +50,7 @@
     "node-uuid": "^1.4.3",
     "pg": "3.6.2",
     "require-directory": "2.0.0",
+    "socket.io": "^1.3.6",
     "underscore": "^1.8.3"
   }
 }
