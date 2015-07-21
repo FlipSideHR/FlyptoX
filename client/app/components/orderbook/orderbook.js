@@ -64,11 +64,11 @@
 
       };
 
-      socket.on('newOrder', function(orderData) {
+      socket.on('order:new', function(orderData) {
         $scope.orders.push(orderData);
       });
 
-      socket.on('removeOrder', function(orderData) {
+      socket.on('order:cancelled', function(orderData) {
         for (var i = 0; i < $scope.orders.length; i++) {
           if ($scope.orders[i].id === orderData.id) {
             $scope.orders.splice(i, 1);
