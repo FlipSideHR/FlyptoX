@@ -18,12 +18,12 @@ This method is used for registering a new user account in the exchange.
 
  response
 
- | Status Code      | response body | details |
- |------------------|---------------|--------------|
- | 200              | `{"token":"120938sd......"}` | signup was successful, and an authentication token is returned |
- | 400              | {"message":"error message..."} | missing email and password |
- | 403             | {"message":"error message..."} | error creating account |
- | 500             | {"message":"error message..."} | internal server error |
+| Status Code      | response body | details |
+|------------------|---------------|--------------|
+| 200              | `{"token":"120938sd......"}` | signup was successful, and an authentication token is returned |
+| 400              | {"message":"error message..."} | missing email and password |
+| 403             | {"message":"error message..."} | error creating account |
+| 500             | {"message":"error message..."} | internal server error |
 
 
  Example:
@@ -69,12 +69,12 @@ This method is to signin to the exchange with an existing account.
 
  response
 
- | Status Code      | response body | details |
- |------------------|---------------|--------------|
- | 200              | `{"token":"120938sd......"}` | signin was successful, and an authentication token is returned |
- | 400              | {"message":"error message..."} | missing email and password |
- | 401             | {"message":"error message..."} | authentication failed |
- | 500             | {"message":"error message..."} | internal server error |
+| Status Code      | response body | details |
+|------------------|---------------|--------------|
+| 200              | `{"token":"120938sd......"}` | signin was successful, and an authentication token is returned |
+| 400              | {"message":"error message..."} | missing email and password |
+| 401             | {"message":"error message..."} | authentication failed |
+| 500             | {"message":"error message..."} | internal server error |
 
 
  Example:
@@ -120,11 +120,11 @@ This method is for retrieving an authenticated user's personal information.
 
  response
 
- | Status Code      | response body | details |
- |------------------|---------------|--------------|
- | 200              | `{"email":"test@gmail.com", ...}` | contains profile information |
- | 401             | {"message":"error message..."} | access denied |
- | 500             | {"message":"error message..."} | internal server error |
+| Status Code      | response body | details |
+|------------------|---------------|--------------|
+| 200              | `{"email":"test@gmail.com", ...}` | contains profile information |
+| 401             | {"message":"error message..."} | access denied |
+| 500             | {"message":"error message..."} | internal server error |
 
 
  Example:
