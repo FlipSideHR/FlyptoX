@@ -32,5 +32,10 @@
     gulp can just write this line based on the environment or something
     -->
     <script src="/app/main.js"></script>
+    <script>
+      var socket = io({
+        reconnection: false
+      });
+    </script>
   </body>
 </html>
