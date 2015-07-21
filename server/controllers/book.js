@@ -131,13 +131,13 @@ OrderBook.level = {
       //best bid
       OrderBook.getBestOrder('buy', pair_id)
         .then(function(order){
-          return OrderBook.getPriceLevelInfo(order.get('price'), 'buy', pair_id);
+          return order ? OrderBook.getPriceLevelInfo(order.get('price'), 'buy', pair_id) : [];
         }),
 
       //best ask
       OrderBook.getBestOrder('sell', pair_id)
         .then(function(order){
-          return OrderBook.getPriceLevelInfo(order.get('price'), 'sell', pair_id);
+          return order ? OrderBook.getPriceLevelInfo(order.get('price'), 'sell', pair_id) : [];
         }),
     ]).then(function(best){
       return {
