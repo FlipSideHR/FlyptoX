@@ -10,6 +10,10 @@ app.set('views', __dirname + '/views/');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+// Configure the socket.io object with our Express app
+require('./controllers/web-market-streamer.js')(app);
+
+// Set up the event logger
 require('./controllers/logger');
 
 //signin and signup routes
