@@ -23,16 +23,16 @@
   app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider',
     function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
       // For any unmatched URL, redirect to /login
-      $urlRouterProvider.otherwise('/chart');
+      $urlRouterProvider.otherwise('/signup');
 
       // Set up states
       $stateProvider
-        .state('home', {
-          url: '/',
-          templateUrl: 'app/app.html'
-          // this needs a controller
-          // but right now its a mishmash
-        })
+        // .state('home', {
+        //   url: '/',
+        //   templateUrl: 'app/app.html'
+        //   // this needs a controller
+        //   // but right now its a mishmash
+        // })
         // .state('dashboard', {
         //   url: '/dashboard',
         //   templateUrl: 'app/app.html'
@@ -42,7 +42,17 @@
         .state('orderbook', {
           url: '/orderbook',
           templateUrl: 'app/components/orderbook/orderbook.html',
-          controller: 'OrderbookController'
+          controller: 'OrderbookCtrl as orderbook'
+        })
+        .state('login', {
+          url: '/login',
+          templateUrl: 'app/components/login/login.html',
+          controller: 'AuthController as auth'
+        })
+        .state('signup', {
+          url: '/signup',
+          templateUrl: 'app/components/signup/signup.html',
+          controller: 'AuthController as auth'
         })
         .state('chart', {
           url: '/chart',
