@@ -155,8 +155,7 @@
     }])
   //---------------------------------------------------------
 
-<<<<<<< HEAD
-   FlyptoX.controller('walletCtrl', ['$scope',
+   app.controller('walletCtrl', ['$scope',
       '$interval', '$http', function($scope, $interval, $http, AccountsService){
         console.log("got here");
         var blockApiKey = '6cc7-b07d-b22b-f6d2';
@@ -199,7 +198,7 @@
 
   }]);
 
-  FlyptoX.controller('signUpCtrl', ['$scope',
+  app.controller('signUpCtrl', ['$scope',
       '$interval', function($scope, $interval, AccountsService){
       $scope.visible = false;
       $scope.toggle = function() {
@@ -207,6 +206,4 @@
           };
       $scope.authData = {};
   }]);
-=======
->>>>>>> 47af61e70e187f409c29ee2060d4730cf28db748
 })();
