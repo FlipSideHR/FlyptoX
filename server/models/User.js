@@ -53,13 +53,15 @@ var User = module.exports = bookshelf.model('User', {
   }
 });
 
+//return user model if email and password are valid, null otherwise
 User.verify = Promise.method(function(email, password){
-  // thow an error here???
-  if (!email || !password) throw new Error('Email and password are both required');
+  if (!email || !password) return null;
   return new User({email: email.toLowerCase().trim()})
-    .fetch({require: true}).tap(function(user) {
+    .fetch().then(function(user) {
+      if(!user) return null;
       return bcrypt.compareAsync(password, user.get('password')).then(function(match){
-        if(!match) throw new Error("Wrong Password");
+        if(!match) return null;
+        return user;
       });
     });
 });
