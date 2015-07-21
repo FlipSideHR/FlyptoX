@@ -1,5 +1,5 @@
 <div data-ng-init="getBook()"></div>
-<button ng-click='getOrders() | getBook()'>Get Orders</button>
+<button ng-click='getOrders()'>Get Orders</button>
 <button ng-click='getOrderBook(1)'>Level 1</button>
 <button ng-click='getOrderBook(2)'>Level 2</button>
 <button ng-click='getOrderBook(3)'>Level 3</button>
@@ -30,7 +30,7 @@
 
   <label>Size:<input ng-model="orderData.size" type="number" required></label>
 
-  <button ng-click="getBook" type="submit">Submit</button>
+  <button type="submit">Submit</button>
 
 </form>
 
@@ -47,7 +47,7 @@
 	        </div>
 	        <div class="close"></div>
 	        <div class="order">Ask</div>
- 					<div ng-repeat="a in data.bids">
+ 					<div ng-repeat="a in data.bids.reverse().reverse()">
 	         	<h7> {{ a[0] }} </h7>
 	         	<h7 style="float:right"> {{ a[1] }} </h7>
 	        </div>
