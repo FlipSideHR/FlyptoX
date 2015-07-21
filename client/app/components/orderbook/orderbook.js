@@ -23,7 +23,16 @@
           url: '/api/v1/orders'
         })
         .success(function(data, status, headers, config, statusText){
+
           $scope.orders = data;
+         
+          for (var i =0; i < data.length; i++){
+              console.log("indiv", data[i]);
+              $scope.asks[i] = data[i];
+              console.log("does this work", $scope.asks[i]);
+              console.log("size", $scope.asks[i].size);
+              console.log("price", $scope.asks[i].price);
+          }
         })
         .error(function(data, status, headers, config, statusText) {
 
