@@ -15,7 +15,7 @@
         size: 0
       };
 
-      $scope.orders = {};
+      $scope.orders = [];
 
       $scope.getOrders = function() {
         $http({
@@ -63,5 +63,19 @@
         });
 
       };
+
+      socket.on('order:new', function(orderData) {
+        $scope.orders.push(orderData);
+      });
+
+      socket.on('order:cancelled', function(orderData) {
+        for (var i = 0; i < $scope.orders.length; i++) {
+          if ($scope.orders[i].id === orderData.id) {
+            $scope.orders.splice(i, 1);
+            break;
+          }
+        }
+      });
+
     }]);
 })();
