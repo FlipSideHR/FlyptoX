@@ -80,7 +80,8 @@ gulp.task('clean-html', function(cb){
 //////////////////////////////////////////
 //                  BUILD TASKS
 
-// concats sourcemaps
+// concats all js starting with the library (bower installed)
+// and then onto the application code
 gulp.task('scripts-concat', ['clean-scripts'], function() {
   return gulp.src(paths.client.scripts.lib.concat(paths.client.scripts.all))
     .pipe(plugins.concat('main.js'))
@@ -107,9 +108,10 @@ gulp.task('copy-html', ['clean-html'], function() {
     .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
-// MINIFY
+// MINIFY the concatted js
+// output as client/dist/app/main.min.js
 gulp.task('scripts-minify', ['clean-minified-scripts'], function() {
-  return gulp.src([paths.client.lib, paths.client.dist + '**/*.js'])
+  return gulp.src([paths.client.dist + 'main.js'])
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.uglify())
     .pipe(plugins.rename('main.min.js'))
@@ -149,17 +151,20 @@ gulp.task('test:client', ['lint:client'], function(done) {
 
 // test server files
 gulp.task('test:server', ['lint:server'], function() {
+  var startEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = 'test';
   return gulp.src(paths.server.spec.all)
     .pipe(plugins.mocha({
-      reporter: argv.reporter || 'spec'
+      reporter: argv.reporter || 'nyan'
     }))
     .once('error', function () {
+      process.env.NODE_ENV = startEnv;
       if (process.env.TESTRUNNER !== 'continuous'){
         process.exit(1);
       }
     })
     .once('end', function () {
+      process.env.NODE_ENV = startEnv;
       if (process.env.TESTRUNNER !== 'continuous'){
         process.exit();
       }
