@@ -40,6 +40,7 @@
     "bookshelf": "0.7.7",
     "browser-sync": "^2.7.13",
     "coinbase-exchange": "^0.2.0",
+    "debug": "^2.2.0",
     "ejs": "^2.3.3",
     "express": "4.4.4",
     "express-partials": "^0.3.0",

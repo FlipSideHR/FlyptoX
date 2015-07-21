@@ -1,8 +1,6 @@
 var path = require('path');
 var express = require('express');
 
-// import our configed bookshelf object
-
 var app = module.exports = express();
 
 var rootPath = path.dirname(__dirname);
@@ -11,6 +9,7 @@ var port = Number(process.env.PORT || 9999);
 app.set('views', __dirname + '/views/');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
+
 
 //signin and signup routes
 var authRouter = require("./routes/auth.js");
@@ -30,6 +29,7 @@ app.get('/', function(req, res) {
 // TODO: Error Handing here??
 
 // render everything that didnt get caught as index page
+// It might be a better idea to return a status 404 ??
 app.use(function(req, res) {
   res.render('index.html');
 });

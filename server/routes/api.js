@@ -2,6 +2,7 @@ var express = require('express');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var router = module.exports = express.Router();
+var debug = require("debug")("api");
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -22,7 +23,7 @@ var Order = bookshelf.model('Order');
 var OrderBook = require('../controllers/book');
 
 /*
--- Market Data API --
+-- Market Data --
 GET /api/v1/products
 GET /api/v1/products/:id/book
 GET /api/v1/products/:id/ticker
@@ -42,6 +43,10 @@ GET /api/v1/accounts
 GET /api/v1/accounts/:id
 GET /api/v1/accounts/:id/ledger
 GET /api/v1/accounts/:id/holds -- PENDING
+*/
+
+/*
+   ===== Market Data =====
 */
 
 /* sample returned json
@@ -65,7 +70,7 @@ query params: none
 */
 router.get("/products", function(req, res){
   CurrencyPair.fetchAll({withRelated:['base_currency','quote_currency']}).then(function(pairs){
-    res.json(pairs.map(function(pair){
+    return pairs.map(function(pair){
       return {
         id: pair.get('id'),
         currency_pair: pair.get('currency_pair'),
@@ -75,10 +80,14 @@ router.get("/products", function(req, res){
         base_max_size: pair.get('base_max_size').toFixed(8),
         quote_increment: pair.get('quote_increment').toFixed(8)
       }
-    }));
-  }).catch(function(err){
-    console.log(err);
-    res.send(500);
+    });
+  })
+  .then(function(data){
+    res.json(data);
+  })
+  .catch(function(err){
+    debug(err);
+    res.status(500).json({message:'error getting currency pairs'});
   })
 });
 
@@ -98,7 +107,7 @@ router.get("/products/:id/book", function(req, res){
     res.json(book);
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:'unable to retrieve orderbook'});
   });
 });
@@ -125,19 +134,23 @@ router.get("/products/:id/ticker", function(req, res){
   .query('orderBy', 'created_at', 'desc')
   .fetch({columns:['id','price','size','created_at']})
   .then(function(trade){
-    if(!trade){
-      res.json({});
-    } else {
-      res.json({
-        id: trade.get('id'),
-        price: trade.get('price').toFixed(8),
-        size: trade.get('size').toFixed(8),
-        time: trade.get('created_at').toISOString()
-      });
+    if(!trade) return;
+    return {
+      id: trade.get('id'),
+      price: trade.get('price').toFixed(8),
+      size: trade.get('size').toFixed(8),
+      time: trade.get('created_at').toISOString()
+    };
+  })
+  .then(function(data){
+    if(data) {
+      res.json(data);
+    } else{
+      res.status(404).json({message:'currency pair not found'});
     }
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:'unable to retrieve ticker'});
   });
 });
@@ -170,7 +183,7 @@ router.get("/products/:id/trades", function(req, res){
   .query('limit', 50)
   .fetchAll({columns:['id','price','size','created_at']})
   .then(function(trades){
-    res.json(trades.map(function(trade){
+    return trades.map(function(trade){
       return {
         id: trade.get('id'),
         price: trade.get('price').toFixed(8),
@@ -178,10 +191,13 @@ router.get("/products/:id/trades", function(req, res){
         time: trade.get('created_at').toISOString(),
         side: trade.get('side')
       };
-    }));
+    });
+  })
+  .then(function(data){
+    res.json(data);
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:'unable to retrieve trades'});
   });
 });
@@ -215,7 +231,6 @@ router.get("/products/:id/stats", function(req, res){
 
 /*
    ===== Order Management ====
-   These methods return data relevant to the authenticated user only
 */
 
 /*
@@ -248,7 +263,7 @@ router.get("/orders", privateApi, function(req, res){
       res.json(data);
     })
     .catch(function(err){
-      console.log(err);
+      debug(err);
       res.status(500).json({message:'unable to retrieve orders'});
     });
 });
@@ -265,7 +280,7 @@ router.get("/orders/:id", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId, id:req.params.id})
     .fetch({withRelated:['currency_pair']})
     .then(function(order){
-      if(!order) return {};
+      if(!order) return;
       return {
         "id": order.id,
         "size": order.get('size').toFixed(8),
@@ -280,30 +295,34 @@ router.get("/orders/:id", privateApi, function(req, res){
       };
     })
     .then(function(data){
-      res.json(data);
+      if(data) {
+        res.json(data);
+      } else{
+        res.status(404).json({message:'order not found'});
+      }
     })
     .catch(function(err){
-      console.log(err);
+      debug(err);
       res.status(500).json({message:'unable to retrieve order'});
     });
 });
 
 /*
-  {
-    id: order-id
-  }
+{
+  id: order-id
+}
 
-  performs: places a new order
-  returns: returns object - with new order id
-  endpoint:  POST /api/v1/orders/
-  body json: {
-    currency_pair_id: number,
-    type: 'market' || 'limit',
-    price: number,
-    side: 'buy' || 'sell',
-    size: number
-  }
-  query params: none
+performs: places a new order
+returns: returns object - with new order id
+endpoint:  POST /api/v1/orders/
+body json: {
+  currency_pair_id: number,
+  type: 'market' || 'limit',
+  price: number,
+  side: 'buy' || 'sell',
+  size: number
+}
+query params: none
 */
 router.post("/orders", privateApi, function(req, res){
   Order.forge({
@@ -325,7 +344,7 @@ router.post("/orders", privateApi, function(req, res){
     }
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:'error creating order'});
   });
 });
@@ -353,7 +372,7 @@ router.delete("/orders/:id", privateApi, function(req, res){
       res.send(200);
     })
     .catch(function(err){
-      console.log(err);
+      debug(err);
       res.status(500).json({message:'unable to cancel order'});
     });
 });
@@ -404,49 +423,84 @@ router.get("/trades", privateApi, function(req, res){
 
 
 /*
-   Private (accounts api)
+   ===== Account Information =====
+*/
+
+/*
+performs: no side effects
+returns: returns array - currency accounts
+endpoint:  GET /api/v1/accounts
+body json: none
+query params: none
 */
 router.get('/accounts', privateApi, function(req, res){
   Account.where({user_id:req.userId})
   .fetchAll({withRelated:['currency'], columns:['id','balance','available','currency_id']})
   .then(function(accounts){
-    res.json(accounts.map(function(account){
+    return accounts.map(function(account){
       return {
         id: account.id,
         balance: account.get('balance'),
         available: account.get('available'),
         currency: account.related('currency').get('currency')
       }
-    }));
+    });
+  })
+  .then(function(data){
+    res.json(data);
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:"unable to retrieve accounts"});
   });
 });
 
+/*
+performs: no side effects
+returns: returns object - account details
+endpoint:  GET /api/v1/accounts/:id
+:id  account-id (uuid)
+body json: none
+query params: none
+*/
 router.get('/accounts/:id', privateApi, function(req, res){
   Account.where({user_id:req.userId, id:req.params.id})
   .fetch({withRelated:['currency'], columns:['id','balance','available','currency_id']})
   .then(function(account){
-    res.json({
+    if(!account) return;
+    return {
       id: account.id,
       balance: account.get('balance'),
       available: account.get('available'),
       currency: account.related('currency').get('currency')
-    });
+    };
+  })
+  .then(function(data){
+    if(data){
+      res.json(data);
+    } else {
+      res.status(404).json({message:'account not found'});
+    }
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:"unable to retrieve account"});
   });
 });
 
+/*
+performs: no side effects
+returns: returns array - account transaction history
+endpoint:  GET /api/v1/accounts/:id/ledger
+body json: none
+query params: none
+*/
 router.get('/accounts/:id/ledger', privateApi, function(req, res){
   Account.where({user_id:req.userId, id:req.params.id})
   .fetch({withRelated:['transactions']})
   .then(function(account){
-    res.json(account.related('transactions').map(function(transaction){
+    if(!account) return;
+    return account.related('transactions').map(function(transaction){
       return {
         id: transaction.id,
         created_at: transaction.get('created_at'),
@@ -457,10 +511,17 @@ router.get('/accounts/:id/ledger', privateApi, function(req, res){
         trade_id: transaction.get('trade_id')
         //transfer_id: transaction.get('transfer_id'),
       }
-    }));
+    });
+  })
+  .then(function(data){
+    if(data){
+      res.json(data);
+    } else{
+      res.status(404).json({message:'account not found'});
+    }
   })
   .catch(function(err){
-    console.log(err);
+    debug(err);
     res.status(500).json({message:"unable to retrieve account history"});
   });
 });
