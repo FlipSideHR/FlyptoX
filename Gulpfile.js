@@ -25,8 +25,8 @@ var paths = {
     // these are generally loaded in the order they appear
     scripts: {
       // all client js except spec files
-      // TODO: find a way to not include tests?
-      all: ['client/app/**/*.js'],
+      // make sure app.js gets concatted last
+      all: ['!client/app.js', '!client/**/*.spec.js', 'client/app/**/*.js', 'client/app.js'],
 
       // specific bower components
       lib: [
@@ -122,7 +122,7 @@ gulp.task('scripts-minify', ['clean-minified-scripts'], function() {
 
 // run jshint against client files
 gulp.task('lint:client', function(){
-  return gulp.src(paths.client.all)
+  return gulp.src(paths.client.scripts.all)
     .pipe(plugins.jshint({}))
     .pipe(plugins.jshint.reporter(stylish))
 });
