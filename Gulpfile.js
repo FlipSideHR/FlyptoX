@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync');
+var browserSync = require('browser-sync').create();
 var karmaServer = require('karma').Server
 var del = require('del');
 var argv = require('yargs').argv;
@@ -21,30 +21,29 @@ var paths = {
     spec: {
       all: ['client/app/**/*.spec.js'],
     },
-    all: ['client/app/**/*.*'],
-    scripts: [
-      // bower components
-      'client/lib/angular/angular.js',
-      'client/lib/angular-chartist.js/dist/angular-chartist.js',
-      'client/lib/angular-mocks/angular-mocks.js',
-      'client/lib/chartist/dist/chartist.js',
 
-      // main application file
-      'client/app/*.js',
+    // these are generally loaded in the order they appear
+    scripts: {
+      // all client js except spec files
+      // make sure app.js gets concatted last
+      all: ['!client/app.js', '!client/**/*.spec.js', 'client/app/**/*.js', 'client/app.js'],
 
-      // get all modules
-      'client/app/components/**/*.js',
+      // specific bower components
+      lib: [
+        'client/lib/angular/angular.js',
+        'client/lib/angular-ui-router/release/angular-ui-router.js',
+        'client/lib/angular-mocks/angular-mocks.js',
+        'client/lib/chartist/dist/chartist.js',
+        'client/lib/angular-chartist.js/dist/angular-chartist.js',
+      ],
 
-      // dont include specs
-      '!client/app/**/*.spec.js',
+    },
 
-      // services
-      'client/app/lib/services/*.services.js'
-    ],
     html: ['client/app/**/*.html'],
     sass: [
-      'client/app/components/*.scss',
-      'client/app/*.scss'
+      'client/app/**/*.scss',
+
+      'client/lib/chartist/dist/chartist.min.css'
     ],
     dist: 'client/dist/'
   },
@@ -55,12 +54,17 @@ var paths = {
 
 // clean the entire dist dir
 gulp.task('clean-dist', function(cb){
-  del([paths.client.dist + '**/*.*'], cb);
+  del([paths.client.dist + '/*'], cb);
 });
 
-// clean just js
+// clean just js - no minified js
 gulp.task('clean-scripts', function(cb){
-  del([paths.client.dist + '**/*.js'], cb);
+  del([paths.client.dist + '**/*.js', !paths.client.dist + '**/*min.js'], cb);
+});
+
+// clean minified js
+gulp.task('clean-minified-scripts', function(cb){
+  del([paths.client.dist + '**/*.min.js'], cb);
 });
 
 // clean sass
@@ -76,14 +80,11 @@ gulp.task('clean-html', function(cb){
 //////////////////////////////////////////
 //                  BUILD TASKS
 
-// concats sourcemaps and minifies all js
-gulp.task('scripts', ['clean-scripts'], function() {
-  return gulp.src(paths.client.scripts)
-    .pipe(plugins.sourcemaps.init())
+// concats all js starting with the library (bower installed)
+// and then onto the application code
+gulp.task('scripts-concat', ['clean-scripts'], function() {
+  return gulp.src(paths.client.scripts.lib.concat(paths.client.scripts.all))
     .pipe(plugins.concat('main.js'))
-    .pipe(plugins.uglify())
-    .pipe(plugins.rename('main.min.js'))
-    .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
@@ -102,18 +103,28 @@ gulp.task('sass', ['clean-sass'], function() {
 // this copies html from our app components
 // into the dist dir.
 gulp.task('copy-html', ['clean-html'], function() {
-    return gulp.src(paths.client.html)
-      // Perform minification tasks, etc here
-      .pipe(gulp.dest(paths.client.dist + 'app'));
+  return gulp.src(paths.client.html)
+    // Perform minification tasks, etc here
+    .pipe(gulp.dest(paths.client.dist + 'app'));
 });
 
+// MINIFY the concatted js
+// output as client/dist/app/main.min.js
+gulp.task('scripts-minify', ['clean-minified-scripts'], function() {
+  return gulp.src([paths.client.dist + 'main.js'])
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.uglify())
+    .pipe(plugins.rename('main.min.js'))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(paths.client.dist + 'app'));
+});
 
 /////////////////////////////////////////
 //                  LINT TASKS
 
 // run jshint against client files
 gulp.task('lint:client', function(){
-  return gulp.src(paths.client.all)
+  return gulp.src(paths.client.scripts.all)
     .pipe(plugins.jshint({}))
     .pipe(plugins.jshint.reporter(stylish))
 });
@@ -140,17 +151,20 @@ gulp.task('test:client', ['lint:client'], function(done) {
 
 // test server files
 gulp.task('test:server', ['lint:server'], function() {
+  var startEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = 'test';
   return gulp.src(paths.server.spec.all)
     .pipe(plugins.mocha({
-      reporter: argv.reporter || 'spec'
+      reporter: argv.reporter || 'nyan'
     }))
     .once('error', function () {
+      process.env.NODE_ENV = startEnv;
       if (process.env.TESTRUNNER !== 'continuous'){
         process.exit(1);
       }
     })
     .once('end', function () {
+      process.env.NODE_ENV = startEnv;
       if (process.env.TESTRUNNER !== 'continuous'){
         process.exit();
       }
@@ -163,11 +177,10 @@ gulp.task('test:server', ['lint:server'], function() {
 // watch scripts, sass, and html
 // and run build tasks when they change
 gulp.task('watch', function() {
-  gulp.watch(paths.client.scripts, ['scripts']);
+  gulp.watch(paths.client.scripts.all.concat(paths.client.spec.all), ['scripts-concat']);
   gulp.watch(paths.client.sass, ['sass']);
   gulp.watch(paths.client.html, ['copy-html']);
-  gulp.watch(paths.client.scripts, ['test:client']);
-  gulp.watch(paths.client.spec.all, ['test:client']);
+  gulp.watch(paths.client.scripts.all.concat(paths.client.spec.all), ['test:client']);
   gulp.watch(paths.server.all, ['test:server']);
 });
 
@@ -205,6 +218,15 @@ gulp.task('nodemon', function(cb) {
 gulp.task('browser-sync', ['nodemon'], function(cb) {
   // the port the server is running on
   var port = process.env.PORT || 9999;
+
+  // set browser by platform
+  var browser = '';
+  if (process.platform === 'linux'){
+    browser = ['google-chrome'];
+  } else {
+    browser = ['google chrome'];
+  }
+
   browserSync.init({
 
     // All of the following files will be watched
@@ -222,7 +244,7 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
     port: 4000,
 
     // Which browser should we launch?
-    browser: ['google chrome']
+    browser: browser
   }, cb);
 });
 
@@ -230,7 +252,13 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
 // concats and minifies all .js out to dist
 // and copys all html out to dist
 // always clean dist dir first
-gulp.task('build', ['sass', 'scripts', 'copy-html']);
+gulp.task('build', ['sass', 'scripts-concat', 'copy-html']);
+
+// use this when building for production.
+gulp.task('build-dist', ['sass', 'scripts-concat', 'copy-html'], function(){
+  gulp.start('scripts-minify');
+  //TODO: make gulp use minified files
+});
 
 // a task for just running linter/tests on the server
 gulp.task('serverTestRunner', function(){

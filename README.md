@@ -61,6 +61,14 @@ bower install
 
 ### Database setup
 
+Linex users:
+
+In pg_hba.conf, ensure you have entries for your user and database set to 'trust'.
+In this example, we use flyptox for both user role and database name.
+
+local	flyptox 	flyptox 					trust
+host	flyptox 	flyptox 	127.0.0.1/32 	trust
+
 ##### Edit the knexfile.js
  - The knexfile has 4 configs: test, development, travis, and admin.
  - Test and development should always stay as they are.

@@ -1,0 +1,38 @@
+<button ng-click='getOrders()'>Get Orders</button>
+<button ng-click='getOrderBook(1)'>Level 1</button>
+<button ng-click='getOrderBook(2)'>Level 2</button>
+<button ng-click='getOrderBook(3)'>Level 3</button>
+
+<pre>
+  Orders: {{orders}}
+</pre>
+
+<pre>
+  OrderBook: {{orderbook}}
+</pre>
+
+<form ng-submit="placeOrder()">
+
+  <label>Currency pair:
+    <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select>
+  </label>
+
+  <label>Type:
+    <select ng-model="orderData.type" ng-options="type for type in types" required></select>
+  </label>
+
+  <label>Price:<input ng-model="orderData.price" type="number" required></label>
+
+  <label>Side:
+    <select ng-model="orderData.side" ng-options="side for side in sides" required></select>
+  </label>
+
+  <label>Size:<input ng-model="orderData.size" type="number" required></label>
+
+  <button type="submit">Submit</button>
+
+</form>
+
+<pre>
+  Order Data: {{orderData}}
+</pre>

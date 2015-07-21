@@ -23,13 +23,19 @@ returns a json object
   }
 */
 router.post('/signin', function(req, res) {
-  if(!req.body.email || !req.body.password) return res.send(400);
+  if(!req.body.email || !req.body.password) return res.status(400).json({
+    message: "Both email and password are required."
+  });
   users.signin(req.body.email, req.body.password)
     .then(function(token){
-      res.json({token: token});
+      if(token){
+        res.json({token: token});
+      } else{
+        res.status(401).json({message:'invalid email and password'});
+      }
     })
     .catch(function(){
-      res.send(401);
+      res.status(500).json({message:"internal server error"});
     });
 });
 
@@ -43,13 +49,15 @@ returns a json object
   }
 */
 router.post('/signup', function(req, res) {
-  if(!req.body.email || !req.body.password) return res.send(400);
+  if(!req.body.email || !req.body.password) return res.status(400).json({
+    message: "Both email and password are required."
+  });
   users.signup(req.body.email, req.body.password)
     .then(function(token){
       res.json({token: token});
     })
     .catch(function(){
-      res.send(403);
+      res.status(403).json({message:'error creating account'});
     });
 });
 
@@ -62,7 +70,7 @@ details (email, fullname) and serves as a check to verify if the held token is v
     "fullname": "Full Name"
   }
 */
-router.post('/whoami', privateApi, function(req, res) {
+router.get('/whoami', privateApi, function(req, res) {
   //if the token was valid a userId property is attached to the request
   users.info(req.userId)
     .then(function(userInfo){
@@ -72,6 +80,12 @@ router.post('/whoami', privateApi, function(req, res) {
       //user no longer exists in the database
       res.send(401);
     });
+});
+
+//TODO - use this method to update user's details
+router.post('/whoami', privateApi, function(req, res) {
+  //if the token was valid a userId property is attached to the request
+  res.send(200);
 });
 
 module.exports = router;

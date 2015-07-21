@@ -1,23 +1,36 @@
 var jwt  = require('jwt-simple');
 var TOKEN_SECRET = process.env.TOKEN_SECRET || "secret";
+var bookshelf = require('../utils/bookshelf');
 
 module.exports = {
   //use this as middleware for routes that need to be authenticated
   decodeToken: function (req, res, next) {
     var token = req.headers['x-access-token'];
+    var userId;
 
     if (!token) {
-      return res.send(403); // send forbidden if a token is not provided
+      // send 401 if a token is not provided
+      return res.status(401).json({message:"missing access token"});
     }
 
     try {
       // decode token and attach userId to the request
-      //TODO: should verify that the user still exists in db and return 403?
-      req.userId = jwt.decode(token, TOKEN_SECRET);
-      next();
+      userId = jwt.decode(token, TOKEN_SECRET);
+      bookshelf.model('User').where({id:userId}).fetch().then(function(user){
+        if(user){
+          req.userId = userId;
+          next();
+        }else{
+          //user not in DB
+          res.status(401).json({message:"invalid user"});
+        }
+      })
+      .catch(function(){
+        res.status(500).json({message:"internal server error"});
+      });
     } catch(error) {
       //invalid token
-      res.send(401);
+      res.status(401).json({message:"malformed token"});
     }
 
   },

@@ -1,77 +1,161 @@
-(function(){
+(function() {
 
-  /* exported FlyptoX */
-  var FlyptoX = angular.module('FlyptoX', []);
-  //
-  // var FlyptoX = angular.module('FlyptoX', ['angular-chartist']);
+  // INITIALIZATION
+  //---------------------------------------------------------
+  // Dependencies for module 'FlyptoX'
+  var dependencies = [
+    'ui.router',
+    'angular-chartist', 
+    'FlyptoX.auth',
+    'FlyptoX.orderbook',
+    'FlyptoX.chart'
+  ];
 
-  FlyptoX.controller('orderbookCtrl', ['$scope', function($scope) {
-    $scope.data = {
-        orderSize: 10,
-        price: 50,
-        filled: "yes"
-      };
+  // Create a new module named 'FlyptoX' using 'dependencies'.
+  // This is the main module for the app, and is expected by
+  // the ng-app directive in index.html. Assigned to 'app'
+  // for convenience when defining controllers, services, etc.
+  var app = angular.module('FlyptoX', dependencies);
+  //---------------------------------------------------------
 
-      /*jshint multistr: true */
-      var holdData = JSON.parse('{"sequence":151031658,"bids":[["294.16","0.25",1], \
-        ["294.14","0.06775937",1],["294.13","0.07391931",1], \
-        ["294.03","0.08623626",1],["294.02","0.108",1],["293.99","0.1108752",1],["293.98","0.544",1], \
-        ["293.85","1",1],["293.84","5.78809904",1],["293.83","0.16017484",1], \
-        ["293.82","1.108",2],["293.81","0.53396365",1],["293.8","0.02",2],["293.79","0.551",1], \
-        ["293.78","0.523",2],["293.77","4.74",1],["293.76","1.89413893",1],["293.75","0.77774397",2], \
-        ["293.71","0.01",1],["293.7","0.129",1],["293.69","0.523",2], \
-        ["293.67","0.01",1],["293.65","0.01",1],["293.64" \
-        ,"0.548",1],["293.63","0.561",1],["293.62","0.01",1],["293.61","0.01",1], \
-        ["293.59","0.01",1],["293.58","0.01",1],["293.57","0.576",2],["293.56","0.02",2], \
-        ["293.55","0.01",1],["293.53","1.6943",2],["293.52","0.567",1],["293.51","0.01",1], \
-        ["293.49","0.593",1],["293.48","0.01",1],["293.47","0.02",2], \
-        ["293.46","0.035",2],["293.45","3.07848426",1],["293.44","0.01",1],["293.43","0.01",1], \
-        ["293.42","0.01",1],["293.39","3.35165",1],["293.38","0.02",2],["293.36","0.02",2], \
-        ["293.35","0.03",3],["293.33","0.01",1],["293.32","5.80298089",2],["293.31","0.45067201",2]], \
-        "asks":[["294.17","4",1],["294.18","5.4107",1], \
-        ["294.19","6.06996",3],["294.21","0.06377891",1],["294.22","2.12057699",2], \
-        ["294.24","0.08117316",1],["294.25","2.043",1],["294.26","0.10436549",1], \
-        ["294.27","0.01",1],["294.28","2.028",1],["294.3","0.01",1],["294.31","1.946",1], \
-        ["294.32","0.01",1],["294.34","1.86851947",3],["294.35","6.591",1], \
-        ["294.36","0.01",1],["294.37","1.9",1],["294.39","0.01",1],["294.4","2.039",1], \
-        ["294.42","0.01",1],["294.43","2.05",1],["294.44","0.02",2],["294.45","0.44620962",2], \
-        ["294.46","0.01",1],["294.47","0.02",2],["294.48","3.86228181",2],["294.49","0.01",1], \
-        ["294.5","0.01",1],["294.51","0.01",1],["294.52","6.846",1], \
-        ["294.53","0.02",2],["294.57","0.03",3],["294.6","0.03",3],["294.61","0.1863",3], \
-        ["294.62","0.0567",5],["294.63","0.01",1],["294.64","0.01",1],["294.66","0.02",2],["294.67","0.01",1] \
-        ,["294.68","0.02",2],["294.69","6.975",4],["294.7","0.05",5],["294.71","0.02",2], \
-        ["294.72","0.02",2],["294.73","0.03",3],["294.74","0.91",2], \
-        ["294.75","11.1859",1],["294.76","10.2159",1],["294.78","0.01",1],["294.8","0.04",4]]}');
-      $scope.testData = holdData;
-      console.log(holdData);
-      console.log($scope.testData);
+  // ROUTING
+  //---------------------------------------------------------
+  app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider',
+    function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
+      // For any unmatched URL, redirect to /login
+      $urlRouterProvider.otherwise('/signup');
+
+      // Set up states
+      $stateProvider
+        // .state('home', {
+        //   url: '/',
+        //   templateUrl: 'app/app.html'
+        //   // this needs a controller
+        //   // but right now its a mishmash
+        // })
+        // .state('dashboard', {
+        //   url: '/dashboard',
+        //   templateUrl: 'app/app.html'
+        //   // this needs a controller
+        //   // but right now its a mishmash
+        // })
+        .state('orderbook', {
+          url: '/orderbook',
+          templateUrl: 'app/components/orderbook/orderbook.html',
+          controller: 'OrderbookCtrl as orderbook'
+        })
+        .state('login', {
+          url: '/login',
+          templateUrl: 'app/components/login/login.html',
+          controller: 'AuthController as auth'
+        })
+        .state('signup', {
+          url: '/signup',
+          templateUrl: 'app/components/signup/signup.html',
+          controller: 'AuthController as auth'
+        })
+        .state('chart', {
+          url: '/chart',
+          templateUrl: 'app/components/chart/chart.html',
+          controller: 'chartCtrl as Chartist'
+      });
+
+      $httpProvider.interceptors.push('AttachTokens');
+      // use the HTML5 History API
+      $locationProvider.html5Mode(true);
   }]);
+  //---------------------------------------------------------
 
-  FlyptoX.controller('executionCtrl', ['$scope',
-    '$interval', function($scope, $interval, AccountsService){
-      // hold order data
-      $scope.order = {};
+  // SIGNUP
+  //---------------------------------------------------------
+  // app.controller('SignupCtrl', ['$scope', 
+  //   function($scope){
+  //     $scope.visible = false;
+  //     $scope.toggle = function() {
+  //         $scope.visible = !$scope.visible;
+  //     };
+  //     $scope.authData = {};
+  // }]);
+  //---------------------------------------------------------
 
-      $scope.wallets = [];
-      $scope.ordersList = [];
+  // AUTHENTICATION
+  //---------------------------------------------------------
 
-      $scope.cancel = function(id){
-        console.log('canceling order: ', id);
-        AccountsService.cancel(id, function(result){
-          console.log(result);
+  app.factory('AttachTokens', ['$window', function ($window) {
+      // this is an $httpInterceptor
+      // its job is to stop all out going request
+      // then look in local storage and find the user's token
+      // then add it to the header so the server can validate the request
+      var attach = {
+        request: function (object) {
+          var jwt = $window.localStorage.getItem('com.flyptox');
+          if (jwt) {
+            object.headers['x-access-token'] = jwt;
+          }
+          object.headers['Allow-Control-Allow-Origin'] = '*';
+          return object;
+        }
+      };
+      return attach;
+    }])
+
+    .factory('Auth', ['$http', '$location', '$window', function ($http, $location, $window) {
+      // This service responsible for authenticating our user
+      // by exchanging the user's email and password
+      // for a JWT from the server
+      // that JWT is then stored in localStorage as 'com.flyptox'
+
+      // user: {email:string, password:string}
+      var signin = function (user) {
+        return $http({
+          method: 'POST',
+          url: '/api/auth/signin',
+          data: user
+        })
+        .then(function (resp) {
+          return resp.data.token;
         });
       };
 
-      $scope.buy = function(){
-        AccountsService.buy($scope.order.price, $scope.order.size);
+      // user: {email:string, password:string}
+      var signup = function (user) {
+        return $http({
+          method: 'POST',
+          url: '/api/auth/signup',
+          data: user
+        })
+        .then(function (resp) {
+          return resp.data.token;
+        });
       };
 
-      $scope.sell = function(){
-        AccountsService.sell($scope.order.price, $scope.order.size);
+      var isAuth = function () {
+        return !!$window.localStorage.getItem('com.flyptox');
       };
 
-    }]);
+      var signout = function () {
+        $window.localStorage.removeItem('com.flyptox');
+        $location.path('/');
+      };
 
+      var verifyToken = function () {
+        //TODO
+      };
+
+      var whoami = function () {
+        //TODO
+      };
+
+      return {
+        signin: signin,
+        signup: signup,
+        isAuth: isAuth,
+        signout: signout
+      };
+    }])
+  //---------------------------------------------------------
+
+<<<<<<< HEAD
    FlyptoX.controller('walletCtrl', ['$scope',
       '$interval', '$http', function($scope, $interval, $http, AccountsService){
         console.log("got here");
@@ -123,4 +207,6 @@
           };
       $scope.authData = {};
   }]);
+=======
+>>>>>>> 47af61e70e187f409c29ee2060d4730cf28db748
 })();

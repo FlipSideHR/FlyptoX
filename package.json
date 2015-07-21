@@ -26,9 +26,11 @@
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "karma-sinon": "^1.0.4",
+    "karma-sinon-chai": "^1.0.0",
     "mocha": "^2.2.5",
     "phantomjs": "^1.9.17",
     "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0",
     "yargs": "^3.15.0"
   },
   "dependencies": {
@@ -38,6 +40,7 @@
     "bookshelf": "0.7.7",
     "browser-sync": "^2.7.13",
     "coinbase-exchange": "^0.2.0",
+    "debug": "^2.2.0",
     "ejs": "^2.3.3",
     "express": "4.4.4",
     "express-partials": "^0.3.0",
