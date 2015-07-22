@@ -17,6 +17,10 @@ svg {
   margin-top: -30px;
 }
 
+.orderitems {
+  float: right;
+}
+
 .ordergrid {
   height:20px;
 }
@@ -25,6 +29,13 @@ h1 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 3.5em;
   color: gray;
+  text-align: center;
+}
+
+h2 {
+  font-family: 'open sans', Helvetica, Arial, sans-serif;
+  font-size: 3.5em;
+  color: #ffffff;
   text-align: center;
 }
 
