@@ -45,13 +45,17 @@
   <div ng-repeat="a in asks">
     <h7> {{ a[0] }} </h7>
     <h7 style="float:right"> {{ a[1] }} </h7>
+         <svg height="1" width="500">
+            <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width;position:relative" />
+    </svg>
   </div>
-
   <div class="close"></div>
-
   <div class="order">Bid</div>
   <div ng-repeat="b in bids">
     <h7> {{ b[0] }} </h7>
     <h7 style="float:right"> {{ b[1] }} </h7>
+     <svg height="1" width="500">
+        <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width;position:relative" />
+</svg>
   </div>
 </div>

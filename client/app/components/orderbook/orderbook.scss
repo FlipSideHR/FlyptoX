@@ -3,6 +3,15 @@ body {
   background: #eeeeee;
 }
 
+svg {
+ display:block;
+ max-height: 100%;
+}
+
+.ordergrid {
+  height:20px;
+}
+
 h1 {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 3.5em;
