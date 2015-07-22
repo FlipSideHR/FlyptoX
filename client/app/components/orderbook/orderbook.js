@@ -96,10 +96,12 @@
       };
 
       socket.on('order:new', function(orderData) {
+        console.log('Server says there is a new order. Add it!');
         $scope.orders.push(orderData);
       });
 
       socket.on('order:cancelled', function(orderData) {
+        console.log('Server says an order has been cancelled. Remove it!');
         for (var i = 0; i < $scope.orders.length; i++) {
           if ($scope.orders[i].id === orderData.id) {
             $scope.orders.splice(i, 1);
