@@ -42,7 +42,7 @@
   <h4>Exchange order book</h4>
 
   <div class="order">Ask</div>
-  <div ng-repeat="a in data.asks">
+  <div ng-repeat="a in asks">
     <h7> {{ a[0] }} </h7>
     <h7 style="float:right"> {{ a[1] }} </h7>
   </div>
@@ -50,7 +50,7 @@
   <div class="close"></div>
 
   <div class="order">Bid</div>
-  <div ng-repeat="b in data.bids">
+  <div ng-repeat="b in bids">
     <h7> {{ b[0] }} </h7>
     <h7 style="float:right"> {{ b[1] }} </h7>
   </div>
