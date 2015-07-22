@@ -1,8 +1,20 @@
 body {
   font-family: arial, sans-serif;
-  background: #eeeeee;
+  background: #1e2b34;
 }
 
+.nav {
+  background: #FFFFFF;
+  height: 30px;
+  width: 100%;
+  margin-bottom: 5px;
+  margin-left:-35px;
+  margin-top:-25px;
+}
+
+#title {
+  margin-left:25px;
+}
 svg {
  display:block;
  max-height: 100%;
@@ -30,21 +42,36 @@ h2, h3, h4, h5, h6 {
   margin-top: 5px;
 }
 
+bid {
+  color:#467c48;
+}
+
+ask {
+  color:#834635;
+}
+
 .order {
   background: #ff7b81;
   height: 30px;
   width: 100px;
 }
 
+.wideorder {
+  background: #ff7b81;
+  height: 20px;
+  width: 150px;
+}
+
 .tx {
-  background: #ffffff;
+  margin-top: 10px;
+  background: #6a91aa;
   height: 870px;
   width: 300px;
   position: absolute;
 }
 
 .execution {
-  background: #ffffff;
+  background: #6a91aa;
   height: 200px;
   width: 300px;
 }

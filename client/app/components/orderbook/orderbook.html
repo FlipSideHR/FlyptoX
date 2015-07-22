@@ -1,5 +1,56 @@
 <div data-ng-init="getBook()"></div>
-<button ng-click='getOrders()'>Get Orders</button>
+<div class="nav"><p id="title"><h1>FlyptoX</h1></p></div>
+<div class="execution">
+  <form ng-submit="placeOrder()">
+    <div class="wideorder">Currency pair:</div>
+      <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select>
+
+    <div class="wideorder">Type</div>
+      <select ng-model="orderData.type" ng-options="type for type in types" required></select>
+
+    <div class="wideorder">Price:</div>
+    <input ng-model="orderData.price" type="number" required></label>
+
+   <div class="wideorder">Side:</div>
+      <select ng-model="orderData.side" ng-options="side for side in sides" required></select>
+    </label>
+
+    <label>Size:<input ng-model="orderData.size" type="number" required></label>
+
+    <button type="submit">Submit</button>
+
+  </form>
+</div>
+
+
+<div class="tx">
+  <h4>Exchange order book</h4>
+
+  <div class="order">Ask</div>
+  <div ng-repeat="a in asks">
+    <h7 class="ask"> {{ a[0] }} </h7>
+    <h7 class="ask" style="float:right"> {{ a[1] }} </h7>
+         <svg height="1" width="500">
+            <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
+    </svg>
+  </div>
+  <div class="close"></div>
+  <div class="order">Bid</div>
+  <div ng-repeat="b in bids">
+    <h7 class="bid"> {{ b[0] }} </h7>
+    <h7 class"bid" style="float:right"> {{ b[1] }} </h7>
+     <svg height="1" width="500">
+        <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
+</svg>
+  </div>
+</div>
+
+<!-- 
+<pre>
+  Order Data: {{orderData}}
+</pre> -->
+
+<!-- <button ng-click='getOrders()'>Get Orders</button>
 <button ng-click='getOrderBook(1)'>Level 1</button>
 <button ng-click='getOrderBook(2)'>Level 2</button>
 <button ng-click='getOrderBook(3)'>Level 3</button>
@@ -11,51 +62,4 @@
 <pre>
   OrderBook: {{orderbook}}
 </pre>
-
-<form ng-submit="placeOrder()">
-
-  <label>Currency pair:
-    <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select>
-  </label>
-
-  <label>Type:
-    <select ng-model="orderData.type" ng-options="type for type in types" required></select>
-  </label>
-
-  <label>Price:<input ng-model="orderData.price" type="number" required></label>
-
-  <label>Side:
-    <select ng-model="orderData.side" ng-options="side for side in sides" required></select>
-  </label>
-
-  <label>Size:<input ng-model="orderData.size" type="number" required></label>
-
-  <button type="submit">Submit</button>
-
-</form>
-
-<pre>
-  Order Data: {{orderData}}
-</pre>
-
-<div class="tx">
-  <h4>Exchange order book</h4>
-
-  <div class="order">Ask</div>
-  <div ng-repeat="a in asks">
-    <h7> {{ a[0] }} </h7>
-    <h7 style="float:right"> {{ a[1] }} </h7>
-         <svg height="1" width="500">
-            <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width;position:relative" />
-    </svg>
-  </div>
-  <div class="close"></div>
-  <div class="order">Bid</div>
-  <div ng-repeat="b in bids">
-    <h7> {{ b[0] }} </h7>
-    <h7 style="float:right"> {{ b[1] }} </h7>
-     <svg height="1" width="500">
-        <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width;position:relative" />
-</svg>
-  </div>
-</div>
+ -->
