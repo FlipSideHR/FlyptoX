@@ -1,34 +1,34 @@
 <div data-ng-init="getBook()"></div>
-<div class="nav"><p id="title"><h2>FlyptoX</h2></p></div>
+<div class="nav"><p id="title"><h2></h></p></div>
 <div class="execution">
   <form ng-submit="placeOrder()">
-    <div class="wideorder">Currency pair:</div>
-      <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select>
+    <div class="wideorder"><h3>CURRENCY</h3></div>
+     <div style="float:right"> <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select></div>
 
-    <div class="wideorder">Type</div>
-      <select ng-model="orderData.type" ng-options="type for type in types" required></select>
+    <div class="wideorder"><h3>TYPE</h3></div>
+     <div style="float:right"> <select ng-model="orderData.type" ng-options="type for type in types" required></select></div>
 
-    <div class="wideorder">Price:</div>
-    <input ng-model="orderData.price" type="number" required></label>
+    <div class="wideorder"><h3>PRICE</h3></div>
+    <div style="float:right"><input ng-model="orderData.price" type="number" required></label></div>
 
-   <div class="wideorder">Side:</div>
-      <select ng-model="orderData.side" ng-options="side for side in sides" required></select>
-    </label>
+   <div class="wideorder"><h3>LONG/SHORT</h3></div>
+      <div style="float:right"><select ng-model="orderData.side" ng-options="side for side in sides" required></select>
+    </label></div>
 
-    <label>Size:<input ng-model="orderData.size" type="number" required></label>
+   <div class="wideorder"> <h3>SIZE</h3> <div class="wideorder"><input ng-model="orderData.size" type="number" required></label></div>
 
     <button type="submit">Submit</button>
-
   </form>
 </div>
 
 
 <div class="tx">
-  <h3>Exchange order book</h3>
+  <h4>Exchange order book</h4>
+
   <div class="order">Ask</div>
   <div ng-repeat="a in asks">
-    <h4> {{ a[0] }} </h4>
-    <h4 style="float:right"> {{ a[1] }} </h4>
+    <h7 class="ask"> {{ a[0] }} </h7>
+    <h7 class="ask" style="float:right"> {{ a[1] }} </h7>
          <svg height="1" width="500">
             <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
     </svg>
@@ -36,8 +36,8 @@
   <div class="close"></div>
   <div class="order">Bid</div>
   <div ng-repeat="b in bids">
-    <h5> {{ b[0] }} </h5>
-    <h5 style="float:right"> {{ b[1] }} </h5>
+    <h7 class="bid"> {{ b[0] }} </h6>
+    <h7 class"bid" style="float:right"> {{ b[1] }} </h7>
      <svg height="1" width="500">
         <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
 </svg>

@@ -3,21 +3,18 @@ body {
   background: #1e2b34;
 }
 
-.nav {
-  background: #FFFFFF;
-  height: 30px;
-  width: 100%;
-  margin-bottom: 5px;
-  margin-left:-35px;
-  margin-top:-25px;
-}
-
-#title {
-  margin-left:25px;
-}
 svg {
  display:block;
  max-height: 100%;
+}
+
+.nav {
+  background: #FFFFFF;
+  height: 50px;
+  width: 120%;
+  margin-bottom: 20px;
+  margin-left: -10px;
+  margin-top: -30px;
 }
 
 .ordergrid {
@@ -31,18 +28,7 @@ h1 {
   text-align: center;
 }
 
-h3 {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 500;
-  color: #ffffff;
-  line-height: 15.3999996185303px;
-  margin-top: 5px;  
-}
-
-h2, h3, h4, h5, h6 {
+h2, h3, h4, h5  {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-family: Helvetica Neue;
   font-size: 14px;
@@ -53,28 +39,25 @@ h2, h3, h4, h5, h6 {
   margin-top: 5px;
 }
 
-bid {
-  color:#467c48;
+h6 {
+  font-size: 10px;
 }
 
-ask {
-  color:#834635;
-}
 
 .order {
-  background: #ff7b81;
+  background: #2f3d45;
   height: 30px;
   width: 100px;
 }
 
 .wideorder {
-  background: #ff7b81;
+  background: #2f3d45;
   height: 20px;
   width: 150px;
 }
 
 .tx {
-  margin-top: 10px;
+  margin-top: 60px;
   background: #6a91aa;
   height: 870px;
   width: 300px;
@@ -83,7 +66,7 @@ ask {
 
 .execution {
   background: #6a91aa;
-  height: 200px;
+  height: 175px;
   width: 300px;
 }
 
