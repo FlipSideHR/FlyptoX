@@ -330,6 +330,7 @@ router.post("/orders", privateApi, function(req, res){
     debug(err);
     res.status(500).json({message:'error creating order'});
   });
+  marketEngine.orderDesk.placeOrder(orderIntent);
 });
 
 /*

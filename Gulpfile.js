@@ -87,11 +87,8 @@ gulp.task('clean-html', function(cb){
 // this only cleans part of it currently
 gulp.task('clean-db', function(done){
   // make sure we are always test env when doing this
-  var startEnv = process.env.NODE_ENV;
-  process.env.NODE_ENV = 'test';
 
   dbTools.clean(function(){
-    process.env.NODE_ENV = startEnv;
     done();
   });
 
@@ -176,6 +173,11 @@ gulp.task('test:client', ['lint:client'], function(done) {
 gulp.task('test:server', ['lint:server'], function() {
   var startEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = 'test';
+
+  if (argv.travis){
+    process.env.TRAVIS = true;
+  }
+
   return gulp.src(paths.server.spec.all)
     .pipe(plugins.mocha({
       reporter: argv.reporter || 'nyan'
