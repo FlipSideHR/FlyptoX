@@ -28,22 +28,16 @@ describe('Order Model', function(){
 
   before(function(done){
 
-    // clean the db first
-    utils.clean(function(){
-      // create a user and get his id
-      utils.user.createUser()
-        .then(function(user){
-          uid = user.get('id');
-          done();
-        })
-        .catch(function(err){
-          console.error(err);
-        });
-    });
-  });
+    // create a user and get his id
+    utils.user.createUser()
+      .then(function(user){
+        uid = user.get('id');
+        done();
+      })
+      .catch(function(err){
+        console.error(err);
+      });
 
-  after(function(done){
-    utils.clean(done);
   });
 
   // make sure we have a Trade model object

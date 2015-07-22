@@ -6,6 +6,7 @@ var argv = require('yargs').argv;
 var stylish = require('jshint-stylish');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var plugins = gulpLoadPlugins();
+var dbTools = require('./utils/dbTools');
 
 var paths = {
   server: {
@@ -50,6 +51,10 @@ var paths = {
   },
 };
 
+
+
+
+
 /////////////////////////////////////////
 //                  CLEAN TASKS
 
@@ -77,6 +82,22 @@ gulp.task('clean-sass', function(cb){
 gulp.task('clean-html', function(cb){
   del([paths.client.dist + '**/*.html'], cb);
 });
+
+// Clean the database
+// this only cleans part of it currently
+gulp.task('clean-db', function(done){
+  // make sure we are always test env when doing this
+  var startEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'test';
+
+  dbTools.clean(function(){
+    process.env.NODE_ENV = startEnv;
+    done();
+  });
+
+});
+
+
 
 //////////////////////////////////////////
 //                  BUILD TASKS
@@ -150,6 +171,7 @@ gulp.task('test:client', ['lint:client'], function(done) {
   }).start();
 });
 
+
 // test server files
 gulp.task('test:server', ['lint:server'], function() {
   var startEnv = process.env.NODE_ENV;
@@ -160,15 +182,20 @@ gulp.task('test:server', ['lint:server'], function() {
     }))
     .once('error', function () {
       process.env.NODE_ENV = startEnv;
-      if (process.env.TESTRUNNER !== 'continuous'){
-        process.exit(1);
-      }
+      gulp.start('clean-db', function(){
+        if (process.env.TESTRUNNER !== 'continuous'){
+          process.exit(1);
+        }
+      });
     })
     .once('end', function () {
       process.env.NODE_ENV = startEnv;
-      if (process.env.TESTRUNNER !== 'continuous'){
-        process.exit();
-      }
+      gulp.start('clean-db', function(){
+        if (process.env.TESTRUNNER !== 'continuous'){
+          process.exit();
+        }
+      });
+
     });
 });
 
