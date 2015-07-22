@@ -1,5 +1,5 @@
 <div data-ng-init="getBook()"></div>
-<div class="nav"><p id="title"><h1>FlyptoX</h1></p></div>
+<div class="nav"><p id="title"><h2>FlyptoX</h2></p></div>
 <div class="execution">
   <form ng-submit="placeOrder()">
     <div class="wideorder">Currency pair:</div>
@@ -24,12 +24,11 @@
 
 
 <div class="tx">
-  <h4>Exchange order book</h4>
-
+  <h3>Exchange order book</h3>
   <div class="order">Ask</div>
   <div ng-repeat="a in asks">
-    <h7 class="ask"> {{ a[0] }} </h7>
-    <h7 class="ask" style="float:right"> {{ a[1] }} </h7>
+    <h4> {{ a[0] }} </h4>
+    <h4 style="float:right"> {{ a[1] }} </h4>
          <svg height="1" width="500">
             <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
     </svg>
@@ -37,8 +36,8 @@
   <div class="close"></div>
   <div class="order">Bid</div>
   <div ng-repeat="b in bids">
-    <h7 class="bid"> {{ b[0] }} </h7>
-    <h7 class"bid" style="float:right"> {{ b[1] }} </h7>
+    <h5> {{ b[0] }} </h5>
+    <h5 style="float:right"> {{ b[1] }} </h5>
      <svg height="1" width="500">
         <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
 </svg>
