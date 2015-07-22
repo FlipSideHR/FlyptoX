@@ -25,6 +25,7 @@
         .success(function(data, status, headers, config, statusText){
           $scope.asks = data.asks.reverse();
           $scope.bids = data.bids.reverse();
+        })
         .error(function(data, status, headers, config, statusText) {
           
         });
