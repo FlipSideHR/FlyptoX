@@ -319,7 +319,11 @@ router.post("/orders", privateApi, function(req, res){
       res.status(201).json({
         id: order.id
       });
-      appEvents.emit('order:new', orderToJSON(order));
+      order.load(['currency_pair']).then(function(order){
+        //just a hack for now (new order event should be emitted by orderbook controller
+        order.set('status', 'open');
+        appEvents.emit('order:new', orderToJSON(order));
+      });
     }
   })
   .catch(function(err){
@@ -338,7 +342,7 @@ query params: none
 */
 router.delete("/orders/:id", privateApi, function(req, res){
   Order.where({user_id:req.userId, id:req.params.id, status:'open'})
-    .fetch()
+    .fetch({withRelated:'currency_pair'})
     .then(function(order){
       if(order){
         order.set('status', 'done');
