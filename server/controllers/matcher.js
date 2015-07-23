@@ -123,7 +123,7 @@ function create_trade(T, order, offer, size){
   // Create a new trade describing the results of matching the order with the offer:
   return bookshelf.model('Trade').forge({
     "type": order.get('side'),
-    "price": order.get('price'), 	// should this be offer.price ?
+    "price": offer.get('price'),
     "size": size,
     "maker_id": offer.get('user_id'),
     "taker_id": order.get('user_id'),
