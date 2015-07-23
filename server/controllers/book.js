@@ -16,7 +16,7 @@ OrderBook.getPriceLevelInfo = function(price, side, pair_id) {
     .then(function(orders){
       if(!orders || !orders.length) return [];
       var size = orders.reduce(function(size, order){
-        return size + order.get('size');//or size - filled_size ?
+        return size + order.get('size') - order.get('filled_size');
       },0);
       return [price.toFixed(2), size.toFixed(8), orders.length];
     });
@@ -33,7 +33,7 @@ OrderBook.aggregateOrders = function(orders, MAX){
 
   while(numLevels < MAX && i < numRecords){
     price = orders.at(i).get('price');
-    size = orders.at(i).get('size');
+    size = orders.at(i).get('size') - orders.at(i).get('filled_size');
     if(levels[price]){
       levels[price].size += size;
       levels[price].total++;
@@ -80,7 +80,9 @@ OrderBook.level = {
         .fetchAll()
         .then(function(orders){
           return orders.map(function(order){
-            return [order.get('price').toFixed(2), order.get('size').toFixed(8), order.get('id')];
+            return [order.get('price').toFixed(2),
+                    (order.get('size') - order.get('filled_size')).toFixed(8),
+                    order.get('id')];
           });
         }),
 
@@ -90,7 +92,9 @@ OrderBook.level = {
         .fetchAll()
         .then(function(orders){
           return orders.map(function(order){
-            return [order.get('price').toFixed(2), order.get('size').toFixed(8), order.get('id')];
+            return [order.get('price').toFixed(2),
+                    (order.get('size') - order.get('filled_size')).toFixed(8),
+                    order.get('id')];
           });
         })
     ]).then(function(book){
