@@ -1,6 +1,56 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 body {
   font-family: arial, sans-serif;
-  background: #eeeeee;
+  background: #1e2b34;
+  margin: 0;
+  padding: 0;
 }
 
 svg {
@@ -8,8 +58,59 @@ svg {
  max-height: 100%;
 }
 
-.ordergrid {
-  height:20px;
+nav {
+  overflow: auto;
+}
+
+header > h1 {
+  margin: 0;
+  background-color: darkgrey;
+}
+
+.navAuth {
+  float: right;
+  padding: 2px;
+  margin: 2px;
+  font-size: .6em;
+}
+
+.mainContentBlock{
+  margin: 0 auto;
+  margin-top: 50px;
+  padding: 15px;
+  background-color: darkgrey;
+  border: 3px solid black;
+  border-radius: 25px;
+  color: white;
+  height: 200px;
+  width: 400px;
+  text-shadow: 1px 1px 1px black;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;  text-align: center;
+  font-size: .75em;
+  color: white;
+  letter-spacing: 3px;
+}
+
+nav {
+  background-color: black;
+  text-align: center;
+}
+
+nav > a {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 2px 10px;
+  color: white;
+  text-decoration: none;
+}
+
+nav > a:hover {
+  color: red;
 }
 
 h1 {
@@ -28,38 +129,4 @@ h2, h3, h4, h5, h6 {
   font-weight: 500;
   line-height: 15.3999996185303px;
   margin-top: 5px;
-}
-
-.order {
-  background: #ff7b81;
-  height: 30px;
-  width: 100px;
-}
-
-.tx {
-  background: #ffffff;
-  height: 870px;
-  width: 300px;
-  position: absolute;
-}
-
-.execution {
-  background: #ffffff;
-  height: 200px;
-  width: 300px;
-}
-
-.wallet {
-  background: #ffffff;
-  height: 200px;
-  width: 300px;
-  margin-top:210px; 
-  position: absolute;
-  margin-left: 78%;
-}
-
-.close {
-  background: #4b6e84;
-  height: 30px;
-  width: 300px;
 }

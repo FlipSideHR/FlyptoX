@@ -13,12 +13,15 @@
             $scope.error = ''; // Clear any previous error messages.
 
             //redirect user after successful login
-            $state.go('orderbook');
+            $state.go('landing.marketview');
           })
           .catch(function (error) {
             // error is an HTTP response with a 'data' property. Within 'data',
             // the 'message' property describes the reason for the error.
-            $scope.error = error.data.message;
+            console.error(error);
+            if (error.data.message){
+              $scope.error = error.data.message;
+            }
           });
       };
 
@@ -28,19 +31,22 @@
             $window.localStorage.setItem('com.flyptox', token);
             $scope.error = ''; // Clear any previous error messages.
             //redirect user after successful login
-            $state.go('orderbook');
+            $state.go('landing.marketview');
           })
           .catch(function (error) {
             // error is an HTTP response with a 'data' property. Within 'data',
             // the 'message' property describes the reason for the error.
-            $scope.error = error.data.message;
+            console.error(error);
+            if (error.data.message){
+              $scope.error = error.data.message;
+            }
           });
       };
 
       $scope.signout = function() {
         Auth.signout();
         //redirect after logout
-        $state.go('login');
+        $state.go('landing.login');
       };
 
       $scope.toggle = function() {
