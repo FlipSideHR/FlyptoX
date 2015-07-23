@@ -274,5 +274,10 @@ gulp.task('serverTestRunner', function(){
 gulp.task('default', ['build'], function(){
   process.env.TESTRUNNER = 'continuous';
   gulp.start('watch');
-  gulp.start('browser-sync');
+
+  if (argv.bs){
+    gulp.start('browser-sync');
+  } else {
+    gulp.start('nodemon');
+  }
 });
