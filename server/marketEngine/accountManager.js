@@ -32,19 +32,21 @@ var transfer = accountManager.transfer = function(account1, account2){
 };
 
 // object map for calculating withholding requirements
-var calculateRequirements = accountManager.calculateRequirements = {
-
-  // calculate withholding requirements for a buy order
-  'buy': function(orderRequest){
+var calculateRequirements = accountManager.calculateRequirements = function(orderRequest){
 
     // TODO: determine withhold rules for a market orderRequest?
     // -> just hold all funds until order is resolved!
 
     // account to place the hold against
-    var account = 1;
+    var account = 1; // SHOULD NOT BE SET TO 1
     // currency should be 1 since we need to withhold dollars
     //console.log('Calculating buy requirements for: ', orderRequest);
     return new Promise(function(resolve, reject){
+      // use currency pair and order.side to determine account to use
+
+      // calculate withholding
+
+      // buy order
       // Base Currency vs. Quote Currency
       // buy orderRequest of XBT/USD = hold USD
       //
@@ -54,6 +56,15 @@ var calculateRequirements = accountManager.calculateRequirements = {
       //   ------------------------
       //   = withHoldAmount
 
+      // sell order
+      // sell orderRequest of XBT/USD = withhold XBT
+
+      //     orderRequest.size from account of currency_pair_id type
+      //   * withHoldingRequirement
+      //   ---------------------
+      //   = holdAmount
+
+
       // hardcoded until calcs above are implemented
       var amountToWithHold = 500;
       resolve({account: account, requirements: amountToWithHold});
@@ -62,39 +73,7 @@ var calculateRequirements = accountManager.calculateRequirements = {
       if(1 === 2){
         reject();
       }
-
     });
-
-  },
-  // calculate withholding requirements for a sell order
-  'sell': function(orderRequest){
-
-    // the proper account to make the hold against
-    var account = 1;
-    // currency should be 2 since we need to withhold btc
-    //console.log('Calculating buy requirements for: ', orderRequest);
-    return new Promise(function(resolve, reject){
-
-      // sell orderRequest of XBT/USD = withhold XBT
-
-      //     orderRequest.size from account of currency_pair_id type
-      //   * withHoldingRequirement
-      //   ---------------------
-      //   = holdAmount
-
-      // move withholdAmount to holding account
-        // if successful
-          // resolve();
-        // else reject();
-      var amountToWithHold = 500;
-      resolve({account: account, requirements: amountToWithHold});
-
-      // fake reject condition
-      if(1 === 2){
-        reject();
-      }
-    });
-  }
 };
 
 // main export function
@@ -120,7 +99,7 @@ accountManager.withhold = function(orderRequest){
           // calculate withholding requirements of this order
           // returns an object with the account(id) and requirements to withhold
           // {account: <account_id>, requirements: <amountToWithHold>}
-          calculateRequirements[orderRequest.side](orderRequest)
+          calculateRequirements(orderRequest)
 
             .then(function(requirements){
               // in the account in play for this transaction
