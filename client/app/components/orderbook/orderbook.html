@@ -3,19 +3,20 @@
 <div class="execution">
   <form ng-submit="placeOrder()">
     <div class="wideorder"><h3>CURRENCY</h3></div>
-     <div style="float:right"> <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select></div>
+     <div class="orderitems"> <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select></div>
 
     <div class="wideorder"><h3>TYPE</h3></div>
-     <div style="float:right"> <select ng-model="orderData.type" ng-options="type for type in types" required></select></div>
+     <div class="orderitems"> <select ng-model="orderData.type" ng-options="type for type in types" required></select></div>
 
     <div class="wideorder"><h3>PRICE</h3></div>
-    <div style="float:right"><input ng-model="orderData.price" type="number" required></label></div>
+    <div class="orderitems"><input ng-model="orderData.price" type="number" required></label></div>
 
    <div class="wideorder"><h3>LONG/SHORT</h3></div>
-      <div style="float:right"><select ng-model="orderData.side" ng-options="side for side in sides" required></select>
+      <div class="orderitems"><select ng-model="orderData.side" ng-options="side for side in sides" required></select>
     </label></div>
 
-   <div class="wideorder"> <h3>SIZE</h3> <div class="wideorder"><input ng-model="orderData.size" type="number" required></label></div>
+   <div class="wideorder"> <h3>SIZE</h3> </div>
+   <div class="orderitems"><input ng-model="orderData.size" type="number" required></label></div>
 
     <button type="submit">Submit</button>
   </form>
@@ -23,7 +24,7 @@
 
 
 <div class="tx">
-  <h4>Exchange order book</h4>
+  <h2>Exchange order book</h2>
 
   <div class="order">Ask</div>
   <div ng-repeat="a in asks">
