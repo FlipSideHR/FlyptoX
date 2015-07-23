@@ -53,6 +53,7 @@ function loopOverOrders(info) {
       if(index >= offers.length) return resolve();
 
       var offer = offers.at(index);
+
       var order_remaining_size = order.get('size') - order.get('filled_size');
       var offer_remaining_size = offer.get('size') - offer.get('filled_size');
       var diff = order_remaining_size - offer_remaining_size;
@@ -60,38 +61,39 @@ function loopOverOrders(info) {
       bookshelf.transaction(function(T){
         if (diff === 0) {
           //perfect match
-          //order matters ?
           return Promise.all([
             complete_fill(T, order),
             complete_fill(T, offer),
-            create_trade(T, order, offer)
+            create_trade(T, order, offer, order_remaining_size)
           ]);
 
         } else if (diff > 0){
           //partial fill of order
           //complete fill of the offer
           return Promise.all([
-            partial_fill(T, order),
+            partial_fill(T, order, offer_remaining_size),
             complete_fill(T, offer),
-            create_trade(T, order, offer)
+            create_trade(T, order, offer, offer_remaining_size)
           ]);
 
         } else {
           //partial fill of offer
           //complete fill of the order
           return Promise.all([
-            partial_fill(T, offer),
+            partial_fill(T, offer, order_remaining_size),
             complete_fill(T, order),
-            create_trade(T, order, offer)
+            create_trade(T, order, offer, order_remaining_size)
           ]);
         }
       })
-      .then(function(){
+      .then(function(results){
+        appEvents.emit('trade', results[2]);
+
         if (order.get('status') === 'done') {
           resolve();
         } else{
           //the order has not been completely filled, try next offer
-          matchOrder(index+1);
+          matchOrder(index + 1);
         }
       })
       .catch(function(err){
@@ -117,16 +119,16 @@ function partial_fill(T, order, size) {
   return order.save(null, {transacting: T});
 }
 
-function create_trade(T, order, offer ){
+function create_trade(T, order, offer, size){
   // Create a new trade describing the results of matching the order with the offer:
   return bookshelf.model('Trade').forge({
-    "type": order.get('side'), 		// set type  order.side
-    "price": order.get('price'), 	// set price order.price
-    "size": order.get('size'), 		// set size  A
-    "maker_id": offer.get('user_id'), 	// set maker_id = offer.user_id
-    "taker_id": order.get('user_id'), 	// set taker_id = order.user_id
-    "maker_order_id": offer.get('id'), 	// set maker_order_id = offer.id
-    "taker_order_id": order.get('id'), 	// set taker_order_id = order.id
-    "currency_pair_id": order.get('currency_pair_id')	// set currency_pair_id = order.currency_pair_id
+    "type": order.get('side'),
+    "price": order.get('price'), 	// should this be offer.price ?
+    "size": size,
+    "maker_id": offer.get('user_id'),
+    "taker_id": order.get('user_id'),
+    "maker_order_id": offer.get('id'),
+    "taker_order_id": order.get('id'),
+    "currency_pair_id": order.get('currency_pair_id')
   }).save(null, {transacting: T});
 }

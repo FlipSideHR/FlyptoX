@@ -12,6 +12,11 @@ appEvents.on('order:cancelled', function(order) {
   io.emit('order:cancelled', order);
 });
 
+appEvents.on('trade', function(trade){
+  console.log('Trade occured', trade.get('price'));
+  io.emit('trade', trade);
+});
+
 module.exports = function(server) {
   io = socketio(server);
 };

@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       table.string('side').notNullable();
       table.float('price', 16, 8).notNullable();
       table.float('size', 16, 8).notNullable();
-      table.float('filled_size',16, 8).defaultTo(0);
+      table.float('filled_size',16, 8).notNullable().defaultTo(0);
       table.timestamps();
       table.dateTime('done_at');
       table.string('done_reason');
