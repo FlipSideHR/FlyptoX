@@ -13,7 +13,7 @@ function processOrder(newOrder) {
   var orderId = newOrder.id;
 
 	// Select the order specified by orderID
-	return Order.where({id:orderId})
+	return bookshelf.model('Order').where({id:orderId})
     .fetch({required:true}) // required:true throws an error if the desired order is not found
     .then(function(order){
       var matchPrice = order.get('price');
@@ -21,9 +21,9 @@ function processOrder(newOrder) {
       var condition = side === 'buy' ? '<=' : '>=';
       var counterSide = side === 'buy' ? 'sell' : 'buy';
 
-      return Order.where({status:'open', side:counterSide})
+      return bookshelf.model('Order').where({status:'open', side:counterSide})
         .query('where', 'price', condition, matchPrice)
-        .query('where', 'user_id', '!=', order.get('user_id')) //avoid self trading! :)
+        .query('where', 'user_id', '!=', order.get('user_id')) //avoid self trading!
         .query('orderBy', 'created_at', 'asc')//process oldest orders first
         .fetchAll()
         .then(function(offers){
@@ -91,7 +91,7 @@ function loopOverOrders(info) {
           resolve();
         } else{
           //the order has not been completely filled, try next offer
-          matchOrder(index++);
+          matchOrder(index+1);
         }
       })
       .catch(function(err){
@@ -119,7 +119,7 @@ function partial_fill(T, order, size) {
 
 function create_trade(T, order, offer ){
   // Create a new trade describing the results of matching the order with the offer:
-  return Trade.forge({
+  return bookshelf.model('Trade').forge({
     "type": order.get('side'), 		// set type  order.side
     "price": order.get('price'), 	// set price order.price
     "size": order.get('size'), 		// set size  A
