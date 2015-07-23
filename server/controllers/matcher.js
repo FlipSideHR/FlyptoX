@@ -7,35 +7,36 @@ var Trade = bookshelf.model('Trade');
 
 appEvents.on('order:new', processOrder);
 
-module.exports = processOrder;
+module.exports.processOrder = processOrder;
 
-function processOrder(orderId) {
+function processOrder(newOrder) {
+  var orderId = newOrder.id;
+
 	// Select the order specified by orderID
-	Order.where({id:orderId})
-  // required:true throws an error if the desired order is not found
-  .fetch({required:true})
-  .then(function(order){
-    var matchPrice = order.get('price');
-    var side = order.get('side');
-    var condition = side === 'buy' ? '<=' : '>=';
-    var counterSide = side === 'buy' ? 'sell' : 'buy';
+	return Order.where({id:orderId})
+    .fetch({required:true}) // required:true throws an error if the desired order is not found
+    .then(function(order){
+      var matchPrice = order.get('price');
+      var side = order.get('side');
+      var condition = side === 'buy' ? '<=' : '>=';
+      var counterSide = side === 'buy' ? 'sell' : 'buy';
 
-    Order.where({status:'open', side:counterSide})
-    .query('price', condition, matchPrice)
-    .query('user_id', '!=', order.get('user_id')) //avoid self trading! :)
-    .query('sortBy', 'created_at', 'asc')//process oldest orders first
-    .fetchAll()
-    .then(function(offers){
-      return {
-        order: order,
-        offers: offers
-      };
+      return Order.where({status:'open', side:counterSide})
+        .query('where', 'price', condition, matchPrice)
+        .query('where', 'user_id', '!=', order.get('user_id')) //avoid self trading! :)
+        .query('orderBy', 'created_at', 'asc')//process oldest orders first
+        .fetchAll()
+        .then(function(offers){
+          return {
+            order: order,
+            offers: offers
+          };
+        });
     })
-    .then(loopOverOrders);
-  })
-  .catch(function(err){
-    console.log(err);
-  });
+    .then(loopOverOrders)
+    .catch(function(err){
+      console.log(err);
+    });
 }
 
 
@@ -56,9 +57,6 @@ function loopOverOrders(info) {
       var offer_remaining_size = offer.get('size') - offer.get('filled_size');
       var diff = order_remaining_size - offer_remaining_size;
 
-      console.assert(order_remaining_size > 0);
-
-			//start transaction here ?
       bookshelf.transaction(function(T){
         if (diff === 0) {
           //perfect match
@@ -102,7 +100,7 @@ function loopOverOrders(info) {
     }
 
   });//new promise
-    
+
 }
 
 
