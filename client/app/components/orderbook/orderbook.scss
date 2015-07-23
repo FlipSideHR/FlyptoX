@@ -50,19 +50,25 @@ h2, h3, h4, h5  {
   margin-top: 5px;
 }
 
+h2, h3 {
+  text-transform: uppercase;
+}
+
 h6 {
   font-size: 10px;
 }
 
 
 .order {
-  background: #2f3d45;
+  background: inherit;
+/*  background: #2f3d45;*/
   height: 30px;
   width: 100px;
 }
 
 .wideorder {
-  background: #2f3d45;
+  background: inherit;
+/*  background: #2f3d45;*/
   height: 20px;
   width: 150px;
 }
@@ -94,4 +100,56 @@ h6 {
   background: #4b6e84;
   height: 30px;
   width: 300px;
+}
+
+.orderForm {
+  margin-top: 10px;
+}
+
+.ask-price {
+  color: orange;
+  float: right;
+}
+
+/*.bid-price {
+  color: yellow;
+  float: right;
+}*/
+
+button {
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  flex: 1 1 auto;
+  margin: 10px;
+  padding: 8px 15px;
+  border: 2px solid #f7f7f7;
+  text-align: center;
+  text-transform: uppercase;
+  position: relative;
+  overflow:hidden;
+  background: transparent;
+  transition: .3s;
+  &:after {
+    position: absolute;
+    transition: .3s;
+    content: '';
+    width: 0;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: #f7f7f7;
+  }
+  &:hover {
+    cursor: pointer;
+    &:after {
+      width: 100%;
+      left: 0;
+    }
+  }
 }

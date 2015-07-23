@@ -1,21 +1,21 @@
 <div data-ng-init="getBook()"></div>
-<div class="nav"><p id="title"><h2></h></p></div>
+<div class="nav"><p id="title"><h2></h2></p></div>
 <div class="execution">
-  <form ng-submit="placeOrder()">
-    <div class="wideorder"><h3>CURRENCY</h3></div>
+  <form class="orderForm" ng-submit="placeOrder()">
+    <div class="wideorder"><h3>Currency</h3></div>
      <div class="orderitems"> <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select></div>
 
-    <div class="wideorder"><h3>TYPE</h3></div>
+    <div class="wideorder"><h3>Type</h3></div>
      <div class="orderitems"> <select ng-model="orderData.type" ng-options="type for type in types" required></select></div>
 
-    <div class="wideorder"><h3>PRICE</h3></div>
+    <div class="wideorder"><h3>Price</h3></div>
     <div class="orderitems"><input ng-model="orderData.price" type="number" required></label></div>
 
-   <div class="wideorder"><h3>LONG/SHORT</h3></div>
+   <div class="wideorder"><h3>Long/Short</h3></div>
       <div class="orderitems"><select ng-model="orderData.side" ng-options="side for side in sides" required></select>
     </label></div>
 
-   <div class="wideorder"> <h3>SIZE</h3> </div>
+   <div class="wideorder"> <h3>Size</h3> </div>
    <div class="orderitems"><input ng-model="orderData.size" type="number" required></label></div>
 
     <button type="submit">Submit</button>
@@ -24,24 +24,26 @@
 
 
 <div class="tx">
-  <h2>Exchange order book</h2>
+  <h2>Order Book</h2>
 
   <div class="order">Ask</div>
   <div ng-repeat="a in asks">
     <h7 class="ask"> {{ a[0] }} </h7>
-    <h7 class="ask" style="float:right"> {{ a[1] }} </h7>
-         <svg height="1" width="500">
-            <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
-    </svg>
+    <h7 class="ask ask-price"> {{ a[1] }} </h7>
+      <svg height="1" width="500">
+          <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
+      </svg>
   </div>
+
   <div class="close"></div>
+
   <div class="order">Bid</div>
   <div ng-repeat="b in bids">
-    <h7 class="bid"> {{ b[0] }} </h6>
-    <h7 class"bid" style="float:right"> {{ b[1] }} </h7>
-     <svg height="1" width="500">
-        <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
-</svg>
+    <h7 class="bid"> {{ b[0] }} </h7>
+    <h7 class="bid bid-price"> {{ b[1] }} </h7>
+      <svg height="1" width="500">
+          <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
+      </svg>
   </div>
 </div>
 
