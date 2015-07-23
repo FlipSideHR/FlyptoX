@@ -13,7 +13,7 @@ appEvents.on('order:cancelled', function(order) {
 });
 
 appEvents.on('trade', function(trade){
-  console.log('Trade occured', trade.get('price'));
+  console.log('Trade occured @', trade.price);
   io.emit('trade', trade);
 });
 

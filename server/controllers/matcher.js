@@ -2,9 +2,6 @@ var bookshelf = require('../utils/bookshelf');
 var Promise = require('bluebird');
 var appEvents = require('./app-events');
 
-var Order = bookshelf.model('Order');
-var Trade = bookshelf.model('Trade');
-
 appEvents.on('order:new', processOrder);
 
 module.exports.processOrder = processOrder;
@@ -87,7 +84,7 @@ function loopOverOrders(info) {
         }
       })
       .then(function(results){
-        appEvents.emit('trade', results[2]);
+        appEvents.emit('trade', results[2].toJSON());
 
         if (order.get('status') === 'done') {
           resolve();
