@@ -1,15 +1,29 @@
-.loginBox > h3 {
+.log > h3 {
   text-align: center;
   margin: 0 auto;
 }
 
 .loginBox {
   margin: 100px auto;
-  padding: 5px;
+  padding: 10px;
   border: 2px solid black;
-  border-radius: 15px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
   width: 20%;
   background-color: darkgrey;
   color: white;
-  text-shadow: 1px 1px 1px black;
+}
+
+.log > input {
+  -webkit-appearance: textfield;
+}
+
+.log > a {
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.log > a:hover {
+  font-weight: bold;
 }

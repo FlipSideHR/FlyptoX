@@ -1,11 +1,11 @@
 <!-- Using AuthController as auth -->
 <div class="loginBox">
-  <h3 class="auth">Sign Up</h3>
-  <h2>Email</h2>
-  <input type="text" ng-model='user.email' value="email" placeholder="satoshi@btc.com">
-  <h2>Password</h2>
-  <input type="password" ng-model='user.password' value="password" placeholder="******">
-  <button ng-click="signup()">Signup</button>
-  <label>{{error}}</label>
-  <button ui-sref="landing.login">Already have an account?</button>
+  <form class="log">
+    <h3 class="auth">Create Account</h3>
+    <input type="text" ng-model='user.email' value="email" placeholder="Email">
+    <input type="password" ng-model='user.password' value="password" placeholder="Password">
+    <button ng-click="signup()">Get started</button>
+    <label>{{error}}</label>
+    <a ui-sref="landing.login">Already have an account?</a>
+  </form>
 </div>
