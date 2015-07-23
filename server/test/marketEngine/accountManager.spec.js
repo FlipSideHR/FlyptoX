@@ -37,7 +37,7 @@ describe('accountManager', function(){
           .then(function(account){
             return new Account({id: account.id}).fetch({withRelated: 'currency'})
           })
-          .then(function(account){
+          .then(function(){
             //console.log(account.related('currency').get('currency'));
             //console.log(account.get('balance'));
             return;
@@ -55,7 +55,7 @@ describe('accountManager', function(){
             .then(function(account){
               return new Account({id: account.id}).fetch({withRelated: 'currency'})
             })
-            .then(function(account){
+            .then(function(){
               //console.log(JSON.stringify(account));
               //console.log(account.get('balance'));
               //console.log(account.related('currency').get('currency'));
@@ -111,10 +111,10 @@ describe('accountManager', function(){
         available: 10000
       })
       .save()
-      .then(function(account){
+      .then(function(){
         return new User({id: user_id}).fetch({withRelated: ['accounts']});
       })
-      .then(function(user){
+      .then(function(){
       })
       .catch(function(err){
         console.log(err);
