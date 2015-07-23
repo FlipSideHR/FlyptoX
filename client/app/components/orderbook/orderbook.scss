@@ -1,109 +1,88 @@
-body {
-  font-family: arial, sans-serif;
-  background: #1e2b34;
-}
-
 svg {
  display:block;
  max-height: 100%;
 }
 
-.nav {
-  background: #FFFFFF;
-  height: 50px;
-  width: 120%;
-  margin-bottom: 20px;
-  margin-left: -10px;
-  margin-top: -30px;
+.tx {
+  padding: 4px;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: inline-block;
+  background: #6a91aa;
+  width: 300px;
+  height: 100%;
 }
 
-.orderitems {
+.execution > h5 {
+  margin: 0;
+  padding: 2px;
+  background-color: black;
+  color: darkgrey;
+}
+
+.execDetails {
+  margin: 0 auto;
+  padding: 5px;
+  display: block;
+  width: 80%;
+}
+
+.execDetails > label {
+}
+
+.execDetails > input, .execDetails > select{
   float: right;
 }
 
-.ordergrid {
-  height:20px;
-}
-
-h1 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 3.5em;
-  color: gray;
-  text-align: center;
-}
-
-h2 {
-  font-family: 'open sans', Helvetica, Arial, sans-serif;
-  font-size: 3.5em;
-  color: #ffffff;
-  text-align: center;
-}
-
-h2, h3, h4, h5  {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-family: Helvetica Neue;
-  font-size: 14px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 500;
-  line-height: 15.3999996185303px;
-  margin-top: 5px;
-}
-
-h2, h3 {
-  text-transform: uppercase;
-}
-
-h6 {
-  font-size: 10px;
-}
-
-
-.order {
-  background: inherit;
-/*  background: #2f3d45;*/
-  height: 30px;
-  width: 100px;
-}
-
-.wideorder {
-  background: inherit;
-/*  background: #2f3d45;*/
-  height: 20px;
-  width: 150px;
-}
-
-.tx {
-  margin-top: 60px;
-  background: #6a91aa;
-  height: 870px;
-  width: 300px;
-  position: absolute;
-}
-
 .execution {
+  margin: 0 auto;
+  display: inline-block;
+  border: 1px solid black;
+  border-radius: 5px;
+  float: right;
+  padding: 4px;
   background: #6a91aa;
-  height: 175px;
   width: 300px;
-}
-
-.wallet {
-  background: #ffffff;
-  height: 200px;
-  width: 300px;
-  margin-top:210px; 
-  position: absolute;
-  margin-left: 78%;
 }
 
 .close {
   background: #4b6e84;
   height: 30px;
   width: 300px;
+  position: relative;
+  font-size: .55em;
 }
 
-.orderForm {
-  margin-top: 10px;
+.askLabel {
+  margin: 0 auto;
+  position: absolute;
+  left: 45%;
+  color: red;
+}
+
+.bidLabel {
+  position: absolute;
+  top: 15px;
+  left: 45%;
+  color: white;
+}
+
+.priceLabel {
+  float: left;
+  font-size: 2em;
+}
+
+.volumeLabel {
+  float: right;
+  font-size: 2em;
+}
+.wallet {
+  background: #ffffff;
+  height: 200px;
+  width: 300px;
+  margin-top:210px;
+  position: absolute;
+  margin-left: 78%;
 }
 
 .ask-price {
@@ -111,10 +90,10 @@ h6 {
   float: right;
 }
 
-/*.bid-price {
+.bid-price {
   color: yellow;
   float: right;
-}*/
+}
 
 button {
   color: #fff;

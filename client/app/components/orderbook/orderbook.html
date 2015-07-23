@@ -1,53 +1,75 @@
-<div data-ng-init="getBook()"></div>
-<div class="nav"><p id="title"><h2></h2></p></div>
-<div class="execution">
+<div class="tx">
+
+  <div class="offerList" ng-repeat="a in asks">
+    <h7 class="ask"> {{ a[0] }} </h7>
+    <h7 class="ask ask-price"> {{ a[1] }} </h7>
+      <svg height="1" width="500">
+          <line x1="0" y1="0" x2="300" y2="0"/>
+      </svg>
+  </div>
+
+  <div class="close">
+    <span class="askLabel">Ask</span>
+    <span class="bidLabel">Bid</span>
+    <span class="priceLabel">Price</span>
+    <span class="volumeLabel">Volume</span>
+  </div>
+
+  <div class="bidList" ng-repeat="b in bids">
+    <h7 class="bid"> {{ b[0] }} </h7>
+    <h7 class="bid bid-price"> {{ b[1] }} </h7>
+      <svg height="1" width="500">
+          <line x1="0" y1="0" x2="300" y2="0"/>
+      </svg>
+  </div>
+</div>
+
+<div class="execution" data-ng-init="getBook()">
+  <h5>Order Entry</h5>
   <form class="orderForm" ng-submit="placeOrder()">
-    <div class="wideorder"><h3>Currency</h3></div>
-     <div class="orderitems"> <select ng-model="orderData.currency_pair_id" ng-options="pair.value as pair.label for pair in pairs" required></select></div>
 
-    <div class="wideorder"><h3>Type</h3></div>
-     <div class="orderitems"> <select ng-model="orderData.type" ng-options="type for type in types" required></select></div>
+    <div class="execDetails">
+      <label>Currency</label>
+      <select ng-model="orderData.currency_pair_id"
+              ng-options="pair.value as pair.label for pair in pairs"
+              required>
+      </select>
+    </div>
 
-    <div class="wideorder"><h3>Price</h3></div>
-    <div class="orderitems"><input ng-model="orderData.price" type="number" required></label></div>
+    <div class="execDetails">
+      <label>Type</label>
+      <select ng-model="orderData.type"
+              ng-options="type for type in types"
+              required>
+      </select>
+    </div>
 
-   <div class="wideorder"><h3>Long/Short</h3></div>
-      <div class="orderitems"><select ng-model="orderData.side" ng-options="side for side in sides" required></select>
-    </label></div>
+    <div class="execDetails">
+      <label>Price</label>
+      <input ng-model="orderData.price" type="number" required>
+    </div>
 
-   <div class="wideorder"> <h3>Size</h3> </div>
-   <div class="orderitems"><input ng-model="orderData.size" type="number" required></label></div>
+    <div class="execDetails">
+      <label>Type</label>
+      <select ng-model="orderData.side"
+              ng-options="side for side in sides" required>
+      </select>
+    </div>
+
+    <div class="execDetails">
+      <label>Size</label>
+      <input ng-model="orderData.size" type="number" required>
+    </div>
 
     <button type="submit">Submit</button>
+  </div>
+
   </form>
 </div>
 
 
-<div class="tx">
-  <h2>Order Book</h2>
 
-  <div class="order">Ask</div>
-  <div ng-repeat="a in asks">
-    <h7 class="ask"> {{ a[0] }} </h7>
-    <h7 class="ask ask-price"> {{ a[1] }} </h7>
-      <svg height="1" width="500">
-          <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
-      </svg>
-  </div>
-
-  <div class="close"></div>
-
-  <div class="order">Bid</div>
-  <div ng-repeat="b in bids">
-    <h7 class="bid"> {{ b[0] }} </h7>
-    <h7 class="bid bid-price"> {{ b[1] }} </h7>
-      <svg height="1" width="500">
-          <line x1="0" y1="0" x2="300" y2="0" style="stroke:gray;stroke-width:1;position:relative" />
-      </svg>
-  </div>
-</div>
-
-<!-- 
+<!--
 <pre>
   Order Data: {{orderData}}
 </pre> -->

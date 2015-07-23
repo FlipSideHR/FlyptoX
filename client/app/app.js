@@ -5,7 +5,7 @@
   // Dependencies for module 'FlyptoX'
   var dependencies = [
     'ui.router',
-    'angular-chartist', 
+    'angular-chartist',
     'FlyptoX.auth',
     'FlyptoX.orderbook',
     'FlyptoX.chart'
@@ -16,23 +16,46 @@
   // the ng-app directive in index.html. Assigned to 'app'
   // for convenience when defining controllers, services, etc.
   var app = angular.module('FlyptoX', dependencies);
-  //---------------------------------------------------------
+
 
   // ROUTING
   //---------------------------------------------------------
   app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider',
     function($locationProvider, $httpProvider, $stateProvider, $urlRouterProvider) {
       // For any unmatched URL, redirect to /login
-      $urlRouterProvider.otherwise('/signup');
+      $urlRouterProvider.otherwise('/');
 
       // Set up states
       $stateProvider
-        // .state('home', {
-        //   url: '/',
-        //   templateUrl: 'app/app.html'
-        //   // this needs a controller
-        //   // but right now its a mishmash
-        // })
+        .state('landing', {
+          url: '/',
+          views: {
+            '': {
+              templateUrl: 'app/app.html',
+              controller: 'LandingController'
+            }
+          }
+        })
+        .state('landing.home', {
+          url: 'home',
+          templateUrl: 'app/landing.html',
+          controller: ''
+        })
+        .state('landing.marketview', {
+          url: 'marketview',
+          templateUrl: 'app/components/orderbook/orderbook.html',
+          controller: 'OrderbookCtrl as orderbook'
+        })
+        .state('landing.signup', {
+          url: 'signup',
+          templateUrl: 'app/components/auth/signup.html',
+          controller: 'AuthController as auth'
+        })
+        .state('landing.login', {
+          url: 'login',
+          templateUrl: 'app/components/auth/login.html',
+          controller: 'AuthController as auth'
+        })
         // .state('dashboard', {
         //   url: '/dashboard',
         //   templateUrl: 'app/app.html'
@@ -64,19 +87,19 @@
       // use the HTML5 History API
       $locationProvider.html5Mode(true);
   }]);
-  //---------------------------------------------------------
 
-  // SIGNUP
+
+
   //---------------------------------------------------------
-  // app.controller('SignupCtrl', ['$scope', 
-  //   function($scope){
-  //     $scope.visible = false;
-  //     $scope.toggle = function() {
-  //         $scope.visible = !$scope.visible;
-  //     };
-  //     $scope.authData = {};
-  // }]);
-  //---------------------------------------------------------
+  // controller for our root level page
+  app.controller('LandingController', ['$scope', '$state', function($scope, $state){
+
+      $scope.data = {};
+      $state.transitionTo('landing.home');
+
+  }]);
+
+
 
   // AUTHENTICATION
   //---------------------------------------------------------
@@ -161,7 +184,7 @@
         var blockApiKey = '6cc7-b07d-b22b-f6d2';
         $scope.showWallet;
 
-       $scope.getAddress = function() { 
+       $scope.getAddress = function() {
          console.log("GOT HERE");
          $http({
             method: 'GET',
@@ -169,7 +192,7 @@
             .success(function(data) {
               console.log(data);
               console.log("walllet", data.data.address);
-              $scope.showWallet = data.data.address;   
+              $scope.showWallet = data.data.address;
             })
             .error(function(data, status) {
                 console.log(data);
@@ -180,7 +203,7 @@
    //      $http({method : 'POST',
    //          url : 'https://api.parse.com/1/classes/formData',
    //          data: $scope.formData,
-   //          headers: { 'X-Parse-Application-Id':'SwuUqXIiEBCTe0CZ4MdpHY5ehTgFjstgtyaPlQuY', 
+   //          headers: { 'X-Parse-Application-Id':'SwuUqXIiEBCTe0CZ4MdpHY5ehTgFjstgtyaPlQuY',
    //          'X-Parse-REST-API-Key':'raPMJmJxlZvFhx2xGlqkWIKCS5Unuapy2NAQfmr1'}})
    //          .success(function(data) {
    //              console.log("Working!");
