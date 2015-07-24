@@ -82,6 +82,7 @@
           url: '/chart',
           templateUrl: 'app/components/chart/chart.html',
           controller: 'chartCtrl'
+        })
         .state('account', {
           url: '/account',
           templateUrl: 'app/components/account/account.html',
