@@ -1,6 +1,15 @@
+.log {
+/*  background: red;*/
+  width: 80%;
+  margin: auto;
+}
+
 .log > h3 {
+  font-size: 24px;
   text-align: center;
   margin: 0 auto;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .loginBox {
@@ -10,13 +19,20 @@
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  width: 20%;
-  background-color: darkgrey;
+  width: 40%;
+  background-color: #fff;
   color: white;
 }
 
 .log > input {
   -webkit-appearance: textfield;
+  display: block;
+  margin: auto;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #dfdfdf;
+  background: #f7f7f7;
 }
 
 .log > a {
@@ -26,4 +42,38 @@
 
 .log > a:hover {
   font-weight: bold;
+}
+
+.log > button {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  background: #4a90e2;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 5px;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  margin-bottom: 4px;
+}
+
+.log > button:hover {
+  background: #2d7fdd;
+  -webkit-transition-property: all;
+  -webkit-transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-in-out;
+  -webkit-transition-delay: 0.01s;
+  -moz-transition-property: all;
+  -moz-transition-duration: 0.25s;
+  -moz-transition-timing-function: ease-in-out;
+  -moz-transition-delay: 0.01s;
+  -o-transition-property: all;
+  -o-transition-duration: 0.25s;
+  -o-transition-timing-function: ease-in-out;
+  -o-transition-delay: 0.01s;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0.01s;
+  cursor: pointer;
 }
