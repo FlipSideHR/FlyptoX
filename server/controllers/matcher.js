@@ -32,9 +32,12 @@ function matchingWorker(newOrder, doneMatching) {
       var counterSide = side === 'buy' ? 'sell' : 'buy';
 
       return bookshelf.model('Order').where({status:'open', side:counterSide})
+        //
         .query('where', 'price', condition, matchPrice)
-        .query('where', 'user_id', '!=', order.get('user_id')) //avoid self trading!
-        .query('orderBy', 'created_at', 'asc')//process oldest orders first
+        //avoid self trading!
+        .query('where', 'user_id', '!=', order.get('user_id'))
+        //process best and oldest orders first
+        .query('orderBy', 'price', side === 'buy' ? 'asc' : 'desc', 'created_at', 'asc')
         .fetchAll()
         .then(function(offers){
           return {

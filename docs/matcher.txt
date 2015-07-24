@@ -17,7 +17,8 @@ fetch the "order" from the database (model)
 fetch "counter offers" from db (collection)
     If order side is a 'buy', load the asks where price <= order.price  and status = 'open'
     If order side is a 'sell', load the bids where price >= order.price and status = 'open'
-    * sorted by 'created_at' ascending (oldest orders get matched first)
+      sorted by best price (descending for asks, ascending for bids)
+      sorted by 'created_at' ascending (oldest orders get matched first)
 
 Incoming order is considered the taker_order
   because they would removed an order from the market if there is a match
@@ -40,7 +41,7 @@ loop over offers in counter offers collection
        same as above
      create trade    (size: A)
        set type  order.side
-       set price order.price
+       set price offer.price
        set size  A
        set maker_id = offer.user_id
        set taker_id = order.user_id
@@ -53,8 +54,8 @@ loop over offers in counter offers collection
        currency_pair.quote_currency: decrease by price
      create transaction on buyer base currency account
        set amount = A
-       set balance = new balance ()
-     create transaction on buyer quote currency account  
+       set balance = new balance
+     create transaction on buyer quote currency account
 
      update seller account balances
       currency_pair.base_currency:decrease by A
