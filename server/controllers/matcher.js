@@ -1,12 +1,25 @@
 var bookshelf = require('../utils/bookshelf');
 var Promise = require('bluebird');
 var appEvents = require('./app-events');
+var async = require('async');
 
-appEvents.on('order:new', processOrder);
+var orderQueue = async.queue(matchingWorker);
 
-module.exports.processOrder = processOrder;
+//new orders can be queued by bit emitting the 'order:new' event
+//new orders may also be queued by invoking the
 
-function processOrder(newOrder) {
+appEvents.on('order:new', orderQueue.push);
+
+module.exports.queueOrder = function(order){
+  orderQueue.push(order);
+};
+
+//this should only be used for unit testing
+module.exports._processOrder = function(order){
+  return matchingWorker(order);
+};
+
+function matchingWorker(newOrder, doneMatching) {
   var orderId = newOrder.id;
 
 	// Select the order specified by orderID
@@ -30,14 +43,15 @@ function processOrder(newOrder) {
           };
         });
     })
-    .then(loopOverOrders)
+    .then(processOffers)
     .catch(function(err){
       console.log(err);
-    });
+    })
+    .finally(doneMatching);
 }
 
 
-function loopOverOrders(info) {
+function processOffers(info) {
 
   return new Promise(function(resolve, reject){
     var offers = info.offers;

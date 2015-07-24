@@ -9,7 +9,7 @@
   to run controllers on separate nodes, making the application scale horizontally
   when required.
 */
-var EventEmitter = require('events').EventEmitter;
+var AsyncEventEmitter = require('async-eventemitter');
 
 
-module.exports = new EventEmitter();
+module.exports = new AsyncEventEmitter();
