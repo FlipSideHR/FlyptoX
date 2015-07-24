@@ -101,3 +101,32 @@ loop over offers in counter offers collection
     exit loop
 
 loop
+
+
+
+Handling Market Orders
+----------------------------------------------------
+http://www.investopedia.com/terms/m/marketorder.asp
+
+We can look ahead and add up the volumes of all counter offers to determine
+which case we will result in (complete or partial fill)
+
+Generally risky to do market orders on low volume exchanges..
+
+case 1: enough counter offers to fill the order
+   order is filled... > status done (done_reason = match)
+
+case 2: current offers do not fill the market order
+   What should happen?
+        // FlyptoX implements this option //
+        option 1.  accept doing a partial fill
+                set order status done (done_reason = market_exhausted)
+
+        option 2.  do not execute the order at all
+
+        option 3. Do partial fill, (queue market order for processing again,
+             when more limit counter offers come in)
+              this would mean we have to update our logic
+              on incoming limit order, try and fill market orders in queue first
+
+        option 4. turn it into limit order ?
