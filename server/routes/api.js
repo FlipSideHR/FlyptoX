@@ -383,26 +383,27 @@ body json: none
 query params: none
 */
 router.get("/trades", privateApi, function(req, res){
-  Trade.query({where:{maker_id:req.userId}}, {orWhere:{taker_id:req.userId}})
+  Trade.query( { where: {maker_id: req.userId }, orWhere: {taker_id: req.userId} } )
     .fetchAll({withRelated:['currency_pair']})
     .then(function(trades){
       return trades.map(function(trade){
         return {
           id: trade.id,
-          currency_pair: trade.related('currency').get('currency'),
+          currency_pair: trade.related('currency_pair').get('currency_pair'),
           price: trade.get('price').toFixed(8),
           size: trade.get('size').toFixed(8),
           liquidity: trade.get('maker_id') === req.userId ? "M" : "T",
           order_id: trade.get('maker_id') === req.userId ? trade.get('maker_order_id') : trade.get('taker_order_id'),
           side: trade.get('side'),
-          created_at: trade.get('create_at').toISOString()
+          created_at: trade.get('created_at').toISOString()
         };
       });
     })
     .then(function(data){
       res.json(data);
     })
-    .catch(function(){
+    .catch(function(error){
+      console.log(error);
       res.status(500).json({message:"unable to retrieve list of trades"});
     });
 });

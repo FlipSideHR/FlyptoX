@@ -5,6 +5,7 @@ var bookshelf = require('../utils/bookshelf');
 require("./User");
 require("./Transaction");
 require("./Order");
+require("./CurrencyPair");
 
 module.exports = bookshelf.model('Trade', {
   tableName: 'trades',
@@ -38,5 +39,9 @@ module.exports = bookshelf.model('Trade', {
 
   transactions: function() {
     return this.hasMany('Transaction', 'trade_id');
+  },
+
+  currency_pair: function() {
+    return this.belongsTo('CurrencyPair', 'currency_pair_id');
   }
 });
