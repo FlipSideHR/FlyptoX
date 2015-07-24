@@ -80,7 +80,7 @@
         .state('chart', {
           url: '/chart',
           templateUrl: 'app/components/chart/chart.html',
-          controller: 'chartCtrl as Chartist'
+          controller: 'chartCtrl'
       });
 
       $httpProvider.interceptors.push('AttachTokens');
