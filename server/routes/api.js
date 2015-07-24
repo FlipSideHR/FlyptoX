@@ -246,7 +246,7 @@ router.get("/orders", privateApi, function(req, res){
     .fetchAll({withRelated:['currency_pair']})
     .then(function(orders){
       return orders.map(function(order){
-        return order.toJSON()();
+        return order.toJSON();
       });
     })
     .then(function(data){
@@ -322,7 +322,6 @@ router.post("/orders", privateApi, function(req, res){
       order.load(['currency_pair']).then(function(order){
         //just a hack for now (new order event should be emitted by orderbook controller
         order.set('status', 'open');
-        console.log(order.toJSON());
         appEvents.emit('order:new', order.toJSON());
       });
     }
