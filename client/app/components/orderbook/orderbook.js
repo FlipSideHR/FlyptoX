@@ -119,6 +119,7 @@
       socket.on('trade', function(order) {
         console.log('Trade occurred!');
         $scope.getBook();
+        $scope.getOrders();
       });
 
     }]);
