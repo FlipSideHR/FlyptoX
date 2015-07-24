@@ -67,6 +67,20 @@
   </form>
 </div>
 
+<div class="myOrders" ng-init="getOrders()">
+  <table>
+    <tr>
+      <th>Price</th>
+      <th>Size</th>
+      <th>Cancel</th>
+    </tr>
+    <tr ng-repeat="order in myOrders track by $index">
+      <td>{{order.price}}</td>
+      <td>{{order.size}}</td>
+      <td><button ng-click="cancelOrder($index)">X</button></td>
+    </tr>
+  </table>
+</div>
 
 
 <!--
