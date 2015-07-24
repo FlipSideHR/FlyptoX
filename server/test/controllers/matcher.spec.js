@@ -80,7 +80,7 @@ describe('Order Matcher', function(){
       return order.save()
     })
     .then(function(orders) {
-      return matcher.processOrder(orders[0])
+      return matcher._processOrder(orders[0])
     })
     .then(function(){
       Trade.fetchAll().then(function(trades){
@@ -100,7 +100,7 @@ describe('Order Matcher', function(){
       return order.save()
     })
     .then(function(orders) {
-      return matcher.processOrder(orders[0])
+      return matcher._processOrder(orders[0])
     })
     .then(function(){
       Trade.fetchAll().then(function(trades){
