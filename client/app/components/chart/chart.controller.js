@@ -25,8 +25,13 @@ app.controller('chartCtrl', ['$scope', '$interval', '$http', function($scope, $i
           })
         .success(function(data, status, headers, config, statusText){
           console.log("success", data);
-          $scope.priceData = data;
-          console.log("saved data", $scope.priceData);
+          for (var i =0; i < data.length; i++){
+             $scope.priceData[i] = data[i];
+            $scope.priceData[i]['y'] = parseFloat(data[i].price);
+            $scope.priceData[i]['x'] = Date.parse(data[i].time);
+            console.log("saved data of: ", $scope.priceData[i]);
+            console.log("final data", $scope.priceData);
+          }
         })
         .error(function(data, status, headers, config, statusText) {
           console.log("error", data);
