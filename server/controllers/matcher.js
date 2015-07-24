@@ -26,15 +26,30 @@ function matchingWorker(newOrder, doneMatching) {
 	return bookshelf.model('Order').where({id:orderId})
     .fetch({required:true}) // required:true throws an error if the desired order is not found
     .then(function(order){
-      var matchPrice = order.get('price');
+      var startPrice = order.get('price');
       var side = order.get('side');
-      var condition = side === 'buy' ? '<=' : '>=';
+      var range = side === 'buy' ? '<=' : '>=';
       var counterSide = side === 'buy' ? 'sell' : 'buy';
 
-      return bookshelf.model('Order').where({status:'open', side:counterSide})
-        .query('where', 'price', condition, matchPrice)
-        .query('where', 'user_id', '!=', order.get('user_id')) //avoid self trading!
-        .query('orderBy', 'created_at', 'asc')//process oldest orders first
+      var qb = bookshelf.model('Order')
+                .where({status:'open', side:counterSide, type:'limit'});
+
+      if(order.get('type') === 'limit') {
+        //limit orders
+        //the starting price level is the price set in the order
+        qb = qb.query('where', 'price', range, startPrice);
+        console.log('processing limit order');
+      } else {
+        //market orders
+        //starting price level is the best offer price in the orderbook
+        console.log('processing market order');
+      }
+
+      return qb
+        //avoid self trading!
+        .query('where', 'user_id', '!=', order.get('user_id'))
+        //process best and oldest orders first
+        .query('orderBy', 'price', side === 'buy' ? 'asc' : 'desc', 'created_at', 'asc')
         .fetchAll()
         .then(function(offers){
           return {
@@ -61,7 +76,17 @@ function processOffers(info) {
 
     function matchOrder(index) {
       index = index || 0;
-      if(index >= offers.length) return resolve();
+      if(index >= offers.length) {
+        //if a market order is only partially filled and there are no more counter offers,
+        //we must remove it from the orderbook.
+        if(order.get('type') === 'market' && order.get('status') === 'open') {
+          order.set('status', 'done');
+          order.set('done_reason', 'market_exhausted');
+          return order.save().then(resolve).catch(reject);
+        } else {
+          return resolve();
+        }
+      }
 
       var offer = offers.at(index);
 
