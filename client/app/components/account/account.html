@@ -1,0 +1,49 @@
+<pre ng-init="getTrades()">
+  {{trades}}
+</pre>
+
+<pre ng-init="getOrders()">
+  {{myOrders}}
+</pre>
+
+<!-- <div class="orderbook-right-col">
+  <div class="execution" data-ng-init="getBook()">
+    <h5>Order Entry</h5>
+    <form class="orderForm" ng-submit="placeOrder()">
+
+      <div class="execDetails">
+        <label>Currency</label>
+        <select ng-model="orderData.currency_pair_id"
+                ng-options="pair.value as pair.label for pair in pairs"
+                required>
+        </select>
+      </div>
+
+      <div class="execDetails">
+        <label>Type</label>
+        <select ng-model="orderData.type"
+                ng-options="type for type in types"
+                required>
+        </select>
+      </div>
+
+      <button type="submit">Submit</button>
+
+    </form>
+  </div>
+
+  <div class="myOrders" ng-init="getOrders()">
+    <table>
+      <tr>
+        <th>Price</th>
+        <th>Size</th>
+        <th>Cancel</th>
+      </tr>
+      <tr ng-repeat="order in myOrders track by $index">
+        <td>{{order.price}}</td>
+        <td>{{order.size}}</td>
+        <td><button ng-click="cancelOrder($index)">X</button></td>
+      </tr>
+    </table>
+  </div>
+</div> -->

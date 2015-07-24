@@ -8,7 +8,8 @@
     'angular-chartist',
     'FlyptoX.auth',
     'FlyptoX.orderbook',
-    'FlyptoX.chart'
+    'FlyptoX.chart',
+    'FlyptoX.account'
   ];
 
   // Create a new module named 'FlyptoX' using 'dependencies'.
@@ -81,7 +82,11 @@
           url: '/chart',
           templateUrl: 'app/components/chart/chart.html',
           controller: 'chartCtrl'
-      });
+        .state('account', {
+          url: '/account',
+          templateUrl: 'app/components/account/account.html',
+          controller: 'AccountCtrl as account'
+        });
 
       $httpProvider.interceptors.push('AttachTokens');
       // use the HTML5 History API
