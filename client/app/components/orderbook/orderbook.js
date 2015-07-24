@@ -48,7 +48,7 @@
           $scope.bids = data.bids.reverse();
         })
         .error(function(data, status, headers, config, statusText) {
-          
+
         });
       };
 

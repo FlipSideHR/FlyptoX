@@ -246,7 +246,7 @@ router.get("/orders", privateApi, function(req, res){
     .fetchAll({withRelated:['currency_pair']})
     .then(function(orders){
       return orders.map(function(order){
-        return orderToJSON(order);
+        return order.toJSON();
       });
     })
     .then(function(data){
@@ -270,7 +270,7 @@ router.get("/orders/:id", privateApi, function(req, res){
   Order.where({status:'open', user_id:req.userId, id:req.params.id})
     .fetch({withRelated:['currency_pair']})
     .then(function(order){
-      return orderToJSON(order);
+      return order.toJSON();
     })
     .then(function(data){
       if(data) {
@@ -322,7 +322,7 @@ router.post("/orders", privateApi, function(req, res){
       order.load(['currency_pair']).then(function(order){
         //just a hack for now (new order event should be emitted by orderbook controller
         order.set('status', 'open');
-        appEvents.emit('order:new', orderToJSON(order));
+        appEvents.emit('order:new', order.toJSON());
       });
     }
   })
@@ -354,7 +354,7 @@ router.delete("/orders/:id", privateApi, function(req, res){
     .then(function(order){
       res.send(200);
       if(order){
-        appEvents.emit('order:cancelled', orderToJSON(order));
+        appEvents.emit('order:cancelled', order.toJSON());
       }
     })
     .catch(function(err){
@@ -515,18 +515,18 @@ router.get('/accounts/:id/ledger', privateApi, function(req, res){
 
 //some helper functions
 //might be better to override the toJSON method on the bookshelf model?
-function orderToJSON(order) {
-  if(!order) return;
-  return {
-    "id": order.id,
-    "size": order.get('size').toFixed(8),
-    "price": order.get('price').toFixed(8),
-    "currency_pair": order.related('currency_pair').get('currency_pair'),
-    "status": order.get('status'),
-    "filled_size": order.get('filled_size') ? order.get('filled_size').toFixed(8) : undefined,
-    "side": order.get('side'),
-    "created_at": order.get('created_at').toISOString(),
-    "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
-    "done_reason": order.get('done_reason')
-  };
-}
+//function order.toJSON() {
+//  if(!order) return;
+//  return {
+//    "id": order.id,
+//    "size": order.get('size').toFixed(8),
+//    "price": order.get('price').toFixed(8),
+//    "currency_pair": order.related('currency_pair').get('currency_pair'),
+//    "status": order.get('status'),
+//    "filled_size": order.get('filled_size') ? order.get('filled_size').toFixed(8) : undefined,
+//    "side": order.get('side'),
+//    "created_at": order.get('created_at').toISOString(),
+//    "done_at": order.get('done_at') ? order.get('done_at').toISOString() : undefined,
+//    "done_reason": order.get('done_reason')
+//  };
+//}
