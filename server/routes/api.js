@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var router = module.exports = express.Router();
 var debug = require("debug")("api");
 var appEvents = require("../controllers/app-events");
+var marketEngine = require('../marketEngine');
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -303,34 +304,32 @@ body json: {
 query params: none
 */
 router.post("/orders", privateApi, function(req, res){
-  Order.forge({
+  var order = {
     user_id: req.userId,
     currency_pair_id: req.body.currency_pair_id,
     type: req.body.type,
     price: parseFloat(req.body.price),
     side: req.body.side,
     size: parseFloat(req.body.size)
-  })
-  .save()
-  .then(function(order){
-    if(!order) {
-      res.status(403).json({message:"error creating order"});
-    } else {
+  };
+
+  // give the order to our the marketEngines order desk
+  marketEngine.placeOrder(order)
+    // when order desk resolves,
+    // it gives us an order id
+    .then(function(order){
       res.status(201).json({
         id: order.id
       });
-      order.load(['currency_pair']).then(function(order){
-        //just a hack for now (new order event should be emitted by orderbook controller
-        order.set('status', 'open');
-        appEvents.emit('order:new', order.toJSON());
-      });
-    }
-  })
-  .catch(function(err){
-    debug(err);
-    res.status(500).json({message:'error creating order'});
-  });
-  marketEngine.orderDesk.placeOrder(orderIntent);
+    })
+    // TODO - checkout .error();
+    .catch(function(err){
+      debug(err);
+      // TODO send status based on error
+      // return an error that we can use to
+      // decide what type of status we want to send
+      res.status(500).json(err);
+    });
 });
 
 /*

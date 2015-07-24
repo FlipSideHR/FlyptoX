@@ -1,8 +1,7 @@
 var Promise = require("bluebird");
 var Order = require("../models/Order");
 var accountManager = require('./accountManager.js');
-//var matcherMaker = require('./matchMaker.js');
-
+var appEvents = require("../controllers/app-events");
 
 // take an order
 // return a promise of an order
@@ -32,37 +31,40 @@ module.exports = function(order){
             console.log('WHY!!');
             // why would we get a resolved promise
             // if no order was created?
-            reject('order not accepted');
+            var err = new Error('This might be the dumbest error in the world. TODO: Customer errors ftw');
+            reject({error: err, message: 'order not accepted'});
+
           } else {
-            // return the order matcher promise
-            // order matcher will match any of the order it can
-            // sending promises in a promise resolution? am I doing this right? :)
-            //resolve(matcherMaker.match(order));
+            order.load(['currency_pair']).then(function(order){
 
-            // for now send the user id and the order id
-            // TODO: send the matchMaker.match(order) in the resolve
-            resolve({
-              id: order.get('id'),
-              user: order.get('user_id')
+              // set status to open
+              order.set('status', 'open');
+
+              // create a json object
+              var orderJSON = order.toJSON();
+
+              // tell the world!
+              appEvents.emit('order:new', orderJSON);
+
+              // resolve our promise with the order id
+              resolve({
+                id: order.get('id'),
+              });
+
             });
-
-            //TODO: We need to guarantee that orders going to
-            // matchmaker are being executed in FIFO order
-            // It is possible we could put these in a queue
-            // and let matchmaker consume it?
           }
         })
         .catch(function(err){
           console.error(err);
           // what would be best to send with rejection here?
-          reject('order not accepted');
+          reject({error: err, message: 'order not accepted'});
         });
       })
       // accountManager rejects the order....
       .catch(function(err){
         // ermagherd! FAILCAKE!
         console.error(err);
-        reject(err);
+        reject({error: err, message: 'Withholding requirements not met.'});
       });
   });
 };

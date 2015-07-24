@@ -84,14 +84,10 @@ gulp.task('clean-html', function(cb){
 });
 
 // Clean the database
-// this only cleans part of it currently
 gulp.task('clean-db', function(done){
-  // make sure we are always test env when doing this
-
   dbTools.clean(function(){
     done();
   });
-
 });
 
 

@@ -1,6 +1,6 @@
 var bookshelf = require('../utils/bookshelf');
 var Promise = require('bluebird');
-var appEvents = require('./app-events');
+var appEvents = require('../controllers/app-events');
 var async = require('async');
 
 var orderQueue = async.queue(matchingWorker);

@@ -58,22 +58,8 @@ function makeOrderBook(done){
     });
 }
 
-function clearTables(done){
-  bookshelf.knex('accounts').del()
-  .then(function(){
-      return bookshelf.knex('orders').del();
-  })
-  .then(function(){
-      return bookshelf.knex('users').del();
-  }).then(function(){
-    done();
-  })
-  .catch(done);
-}
 
 describe('Order Book', function(){
-  before(clearTables);
-  after(clearTables);
   before(makeUser);
   before(makeOrderBook);
 

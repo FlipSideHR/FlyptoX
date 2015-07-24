@@ -8,9 +8,7 @@ var Order = require('../../models/Order');
 //var Orders = bookshelf.Collection.extend({
 //  model: Order
 //});
-
 describe('Order Model', function(){
-
   // this is for certain tests that require a valid user id
   var uid;
 

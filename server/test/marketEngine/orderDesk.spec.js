@@ -45,7 +45,7 @@ describe('orderDesk', function(){
     // send the order to order desk
     orderDesk(myOrder)
       .then(function(order){
-        expect(order.user).to.equal(uid);
+        expect(order.id).to.not.equal(null);
       })
       .catch(function(err){
         expect(err).to.equal(null);
