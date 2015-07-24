@@ -2,7 +2,8 @@
 <html lang="en" ng-app="FlyptoX">
   <head>
     <base href="/">
-    <link href="/assets/css/main.min.css" rel="stylesheet" />
+    <link href="/assets/css/main.min.css" rel="stylesheet" />   
+    <link rel="stylesheet" href="https://rawgit.com/novus/nvd3/v1.1.15-beta/nv.d3.min.css"/>
   </head>
   <body>
     <!-- this should be some sort of template that the operater can config -->
@@ -10,7 +11,6 @@
 
     <!-- the whole app runs in here -->
     <div class="container" ui-view></div>
-
     <!--
     load our js
 
@@ -19,6 +19,10 @@
     gulp can just write this line based on the environment or something
     -->
     <script src="/app/main.js"></script>
+    <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.16/angular.js" data-semver="1.2.16"></script>
+    <script src="https://rawgit.com/mbostock/d3/master/d3.min.js"></script>
+    <script src="https://rawgit.com/novus/nvd3/v1.1.15-beta/nv.d3.min.js"></script>
+    <script src="https://rawgit.com/krispo/angular-nvd3/v0.1.1/dist/angular-nvd3.js"></script>
     <script>
       var socket = io({
         reconnection: false
