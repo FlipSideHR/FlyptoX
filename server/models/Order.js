@@ -77,6 +77,22 @@ var Order = module.exports = bookshelf.model('Order', {
     return this.hasMany('Transaction', 'order_id');
   },
 
+  // override the toJSON method with one of our own
+  // that returns our model jsut the way we want
+  toJSON: function() {
+    return {
+      "id": this.id,
+      "size": this.get('size').toFixed(8),
+      "price": this.get('price').toFixed(8),
+      "currency_pair": this.related('currency_pair').get('currency_pair'),
+      "status": this.get('status'),
+      "filled_size": this.get('filled_size') ? this.get('filled_size').toFixed(8) : undefined,
+      "side": this.get('side'),
+      "created_at": this.get('created_at').toISOString(),
+      "done_at": this.get('done_at') ? this.get('done_at').toISOString() : undefined,
+      "done_reason": this.get('done_reason')
+    };
+  }
   // STATUS
 
   // FILLED_SIZE
