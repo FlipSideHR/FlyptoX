@@ -1,7 +1,7 @@
 (function(){
 var app = angular.module('FlyptoX.chart', ['nvd3']);
 
-app.controller('chartCtrl', ['$scope', '$interval', function($scope, $interval){
+app.controller('chartCtrl', ['$scope', '$interval', '$http', function($scope, $interval, $http){
   $scope.options = {
             chart: {
                 type: 'sparklinePlus',
@@ -14,8 +14,30 @@ app.controller('chartCtrl', ['$scope', '$interval', function($scope, $interval){
             }
         };
 
+
+// time.getTime();
+  $scope.priceData = [];
+
+  $scope.getTrades = function () {
+        $http({
+          method: 'GET',
+          url: '/api/v1/products/1/trades'
+          })
+        .success(function(data, status, headers, config, statusText){
+          console.log("success", data);
+          $scope.priceData = data;
+          console.log("saved data", $scope.priceData);
+        })
+        .error(function(data, status, headers, config, statusText) {
+          console.log("error", data);
+        });
+      };
+
+  $scope.getTrades();
+
         //$scope.data = sine();
         $scope.data = volatileChart(130.0, 0.02);
+        console.log("nvd3 data", $scope.data);
         //$scope.data = volatileChart(25.0, 0.09,30);
 
         /* Random Data Generator (took from nvd3.org) */
