@@ -7,6 +7,13 @@ svg {
   margin-top: 20px;
 }
 
+.chart {
+  background-color:#FFFFFF;
+  height: 500px;
+  width: 35%;
+  display: inline-block;
+}
+
 .tx {
   padding: 10px;
   border-left: 1px solid #dfdfdf;
@@ -49,9 +56,9 @@ svg {
 }
 
 .close {
-  background: #4b6e84;
+  background: black;
   height: 30px;
-  width: 300px;
+  width: 100%;
   position: relative;
   font-size: .55em;
 }
