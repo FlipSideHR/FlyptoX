@@ -65,6 +65,8 @@ body {
   background: #fff;
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
 svg {
@@ -74,24 +76,45 @@ svg {
 
 .main {
   margin: 0 auto;
-  margin-top: 50px;
-  padding: 15px;
-  background-color: darkgrey;
-  border: 3px solid black;
-  border-radius: 25px;
-  height: 200px;
+  padding: 50px 5px 18% 5px;
+  background-color: #000;
+  height: 60%;
   width: 100%;
   text-align: center;
 }
 
 .main > h3 {
-  font-size: 28px;
-  line-height: 30px;
+  margin-top: 40px;
+  font-size: 36px;
+  line-height: 40px;
+  color: #fff;
+}
+
+.main > h3:before, .main > h3:after, .main > p:after {
+  clear: both;
+  content: "\00a0";
+  display: table;
 }
 
 .main > p {
   font-size: 16px;
   line-height: 20px;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+.main > a {
+  color: #000;
+  background: #fff;
+  padding: 15px 30px;
+  text-decoration: none;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.main > a:hover {
+  background: rgba(255,255,255,0.8);
 }
 
 footer {
@@ -100,11 +123,12 @@ footer {
   width: 100%;  text-align: center;
   font-size: .75em;
   letter-spacing: 3px;
+  padding-bottom: 2px;
 }
 
 nav {
   overflow: auto;
-  padding: 10px 20px;
+  padding: 30px 10px 10px 20px;
   background-color: black;
   text-align: center;
 }
@@ -148,7 +172,6 @@ nav > .nav-rest {
 }
 
 nav > a:hover, .nav-rest > a:hover {
-/*  opacity: 0.5;*/
   color: #666;
   -webkit-transition-property: all;
   -webkit-transition-duration: 0.35s;
