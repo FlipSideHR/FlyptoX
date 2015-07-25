@@ -115,6 +115,7 @@ svg {
 
 .main > a:hover {
   background: rgba(255,255,255,0.8);
+  color: #c50000;
 }
 
 footer {
@@ -128,7 +129,7 @@ footer {
 
 nav {
   overflow: auto;
-  padding: 30px 10px 10px 20px;
+  padding: 20px 10px 20px 20px;
   background-color: black;
   text-align: center;
 }
@@ -173,6 +174,9 @@ nav > .nav-rest {
 
 nav > a:hover, .nav-rest > a:hover {
   color: #666;
+}
+
+.main > a:hover, nav > a:hover, .nav-rest > a:hover {
   -webkit-transition-property: all;
   -webkit-transition-duration: 0.35s;
   -webkit-transition-timing-function: ease-in-out;

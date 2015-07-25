@@ -1,84 +1,86 @@
-<div class="tx">
-  <div class="offerList" ng-repeat="a in asks">
-    <h7 class="ask"> {{ a[0] }} </h7>
-    <h7 class="ask ask-price"> {{ a[1] }} </h7>
-      <svg height="1" width="500">
-          <line x1="0" y1="0" x2="300" y2="0"/>
-      </svg>
+<div class="ob-wrap">
+  <div class="tx">
+    <div class="offerList" ng-repeat="a in asks">
+      <h7 class="ask"> {{ a[0] }} </h7>
+      <h7 class="ask ask-price"> {{ a[1] }} </h7>
+        <svg height="1" width="500">
+            <line x1="0" y1="0" x2="300" y2="0"/>
+        </svg>
+    </div>
+
+    <div class="close">
+      <span class="askLabel">Ask</span>
+      <span class="bidLabel">Bid</span>
+      <span class="priceLabel">Price</span>
+      <span class="volumeLabel">Volume</span>
+    </div>
+
+    <div class="bidList" ng-repeat="b in bids">
+      <h7 class="bid"> {{ b[0] }} </h7>
+      <h7 class="bid bid-price"> {{ b[1] }} </h7>
+        <svg height="1" width="500">
+            <line x1="0" y1="0" x2="300" y2="0"/>
+        </svg>
+    </div>
   </div>
 
-  <div class="close">
-    <span class="askLabel">Ask</span>
-    <span class="bidLabel">Bid</span>
-    <span class="priceLabel">Price</span>
-    <span class="volumeLabel">Volume</span>
-  </div>
+  <div class="orderbook-right-col">
+    <div class="execution" data-ng-init="getBook()">
+      <h5>Order Entry</h5>
+      <form class="orderForm" ng-submit="placeOrder()">
 
-  <div class="bidList" ng-repeat="b in bids">
-    <h7 class="bid"> {{ b[0] }} </h7>
-    <h7 class="bid bid-price"> {{ b[1] }} </h7>
-      <svg height="1" width="500">
-          <line x1="0" y1="0" x2="300" y2="0"/>
-      </svg>
-  </div>
-</div>
+        <div class="execDetails">
+          <label>Currency</label>
+          <select ng-model="orderData.currency_pair_id"
+                  ng-options="pair.value as pair.label for pair in pairs"
+                  required>
+          </select>
+        </div>
 
-<div class="orderbook-right-col">
-  <div class="execution" data-ng-init="getBook()">
-    <h5>Order Entry</h5>
-    <form class="orderForm" ng-submit="placeOrder()">
+        <div class="execDetails">
+          <label>Type</label>
+          <select ng-model="orderData.type"
+                  ng-options="type for type in types"
+                  required>
+          </select>
+        </div>
 
-      <div class="execDetails">
-        <label>Currency</label>
-        <select ng-model="orderData.currency_pair_id"
-                ng-options="pair.value as pair.label for pair in pairs"
-                required>
-        </select>
-      </div>
+        <div class="execDetails">
+          <label>Price</label>
+          <input ng-model="orderData.price" type="number" step="any" required>
+        </div>
 
-      <div class="execDetails">
-        <label>Type</label>
-        <select ng-model="orderData.type"
-                ng-options="type for type in types"
-                required>
-        </select>
-      </div>
+        <div class="execDetails">
+          <label>Type</label>
+          <select ng-model="orderData.side"
+                  ng-options="side for side in sides" required>
+          </select>
+        </div>
 
-      <div class="execDetails">
-        <label>Price</label>
-        <input ng-model="orderData.price" type="number" step="any" required>
-      </div>
+        <div class="execDetails">
+          <label>Size</label>
+          <input ng-model="orderData.size" type="number" step="any" required>
+        </div>
 
-      <div class="execDetails">
-        <label>Type</label>
-        <select ng-model="orderData.side"
-                ng-options="side for side in sides" required>
-        </select>
-      </div>
+        <button type="submit">Submit</button>
 
-      <div class="execDetails">
-        <label>Size</label>
-        <input ng-model="orderData.size" type="number" step="any" required>
-      </div>
+      </form>
+    </div>
 
-      <button type="submit">Submit</button>
-
-    </form>
-  </div>
-
-  <div class="myOrders" ng-init="getOrders()">
-    <table>
-      <tr>
-        <th>Price</th>
-        <th>Size</th>
-        <th>Cancel</th>
-      </tr>
-      <tr ng-repeat="order in myOrders track by $index">
-        <td>{{order.price}}</td>
-        <td>{{order.size}}</td>
-        <td><button ng-click="cancelOrder($index)">X</button></td>
-      </tr>
-    </table>
+    <div class="myOrders" ng-init="getOrders()">
+      <table>
+        <tr>
+          <th>Price</th>
+          <th>Size</th>
+          <th>Cancel</th>
+        </tr>
+        <tr ng-repeat="order in myOrders track by $index">
+          <td>{{order.price}}</td>
+          <td>{{order.size}}</td>
+          <td><a class="x" ng-click="cancelOrder($index)">X</a></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
 
