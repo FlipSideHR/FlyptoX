@@ -98,11 +98,32 @@
 
   //---------------------------------------------------------
   // controller for our root level page
-  app.controller('LandingController', ['$scope', '$state', function($scope, $state){
+  app.controller('LandingController', ['$scope', '$state', '$http', function($scope, $state, $http){
+    // {
+    //   "id": trade-id,
+    //   "price": "301.00",
+    //   "size": "1.50000000",
+    //   "time": "2015-05-05T23:17:30.310036Z"
+    // }
 
-      $scope.data = {};
-      $state.transitionTo('landing.home');
+    $http({
+      method: 'GET',
+      url: '/api/v1/products/1/ticker'
+    })
+    .success(function(data, status, headers, config, statusText) {
+      $scope.lastTrade = data;
+    })
+    .error(function(data, status, headers, config, statusText) {
 
+    });
+
+    socket.on('trade', function(tradeData) {
+      console.log('TradeData:', tradeData);
+      $scope.lastTrade = tradeData;
+    });
+
+    $scope.data = {};
+    $state.transitionTo('landing.home');
   }]);
 
 
