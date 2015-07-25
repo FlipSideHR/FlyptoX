@@ -32,8 +32,8 @@ var validate = function(order){
     throw Error('Invalid Order Side: ' + order.get('side') + ' . Must be "buy" or "sell"');
   }
 
-  // valid price - must be positive number
-  if (order.get('price') <= 0 || typeof order.get('price') !== 'number'){
+  // valid price - limit orders must have a price and be a positive number
+  if (order.get('type') === 'limit' && (typeof order.get('price') !== 'number' || order.get('price') <= 0)){
     throw Error('Price must be a positive number');
   }
 
