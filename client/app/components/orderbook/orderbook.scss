@@ -3,14 +3,21 @@ svg {
  max-height: 100%;
 }
 
+.ob-wrap {
+  margin-top: 20px;
+}
+
 .tx {
-  padding: 4px;
-  border: 1px solid black;
-  border-radius: 5px;
+  padding: 10px;
+  border-left: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  border-top: 2px solid #c50000;
+  border-radius: 2px;
   display: inline-block;
-  background: #6a91aa;
-  width: 300px;
+  width: 30%;
   height: 100%;
+  margin-left: 10px;
 }
 
 .execution > h5 {
@@ -35,9 +42,9 @@ svg {
 }
 
 .execution {
-  border: 1px solid black;
-  border-radius: 5px;
-  background: #6a91aa;
+  border: 1px solid #dfdfdf;
+  border-top: 2px solid #c50000;
+  border-radius: 2px;
   width: 100%;
 }
 
@@ -82,12 +89,12 @@ svg {
 }
 
 .ask-price {
-  color: orange;
+  color: #c50000;
   float: right;
 }
 
 .bid-price {
-  color: yellow;
+  color: #FF4500;
   float: right;
 }
 
@@ -135,15 +142,15 @@ div.tx {
 
 div.myOrders {
   width: 100%;
-  background: #6a91aa;
-  border-radius: 5px;
-  border: 1px solid black;
+  border-radius: 2px;
+  border: 1px solid #dfdfdf;
 }
 
 div.orderbook-right-col {
   float: right;
   display: inline-block;
-  width: 25%;
+  width: 28%;
+  margin-right: 10px;
 }
 
 div.orderbook-right-col div{
@@ -156,4 +163,15 @@ div.orderbook-right-col div{
 
 .myOrders td {
   padding: 3px;
+}
+
+.x {
+  margin-left: 20px;
+  text-align: center;
+  background: #eee;
+}
+
+.x:hover {
+  cursor: pointer;
+  color: #c50000;
 }
