@@ -13,17 +13,6 @@ var Users = bookshelf.Collection.extend({
 
 describe('User Model', function(){
 
-  // runs once before any of our tests start.
-  before(function(done){
-    utils.clean(done);
-  });
-
-  // runs once after our tests stop running
-  after(function(done){
-    // delete all users
-    utils.clean(done);
-  });
-
   // make sure we have a User model object
   it('Exists', function(){
     expect(User).to.not.equal(null);
@@ -33,20 +22,32 @@ describe('User Model', function(){
     // we should be able to create new users with the User model object
     it('Attaches a unique id to the user', function(done){
       // create a single (unique) user
-      utils.user.createUUser()
+      var myUser = {
+        password: 'jimminy',
+        email: 'jcricket@wonderland.com',
+        fullname: 'Jimminy Cricket'
+      };
+
+      utils.user.createCustom(myUser)
         .then(function(user){
           expect(user.get('id')).to.not.equal(null);
           expect(user.get('created_at')).to.not.equal(undefined);
           done();
         })
         .catch(done);
-    });
+      });
 
     // requires unique email
     it('Requires a unique email.', function(done){
       // this should fail since the unique user was created in the previous
       // test ('Attaches a unique id to the user')
-      utils.user.createUUser()
+      var myUser = {
+        password: 'jimminy',
+        email: 'jcricket@wonderland.com',
+        fullname: 'Jimminy Cricket'
+      };
+
+      utils.user.createCustom(myUser)
         .then(function(user){
           expect(user).to.equal(null);
           done();

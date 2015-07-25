@@ -1,25 +1,10 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var bookshelf = require("../../utils/bookshelf");
 var users = require("../../../server/controllers/users.js");
 var User = require("../../../server/models/User");
 
-function clearTables(done){
-  bookshelf.knex('accounts').del()
-  .then(function(){
-      return bookshelf.knex('orders').del();
-  })
-  .then(function(){
-      return bookshelf.knex('users').del();
-  }).then(function(){
-    done();
-  })
-  .catch(done);
-}
 describe('Users Controller', function(){
-  before(clearTables);
-  after(clearTables);
 
   describe("users.signup(email, password)", function(){
     it("should create a new user and return a token", function(done){

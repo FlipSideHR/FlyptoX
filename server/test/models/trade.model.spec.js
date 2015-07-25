@@ -21,38 +21,30 @@ describe('Trade Model', function(){
 
   before(function(done){
 
-    // clear all trades, users and orders
-    // before creating new ones
-    utils.clean(function(){
-      // big old promise chain of users and orders
-      // create some users
-      utils.user.createUser()
-        .then(function(user){
-          uid1 = user.get('id');
-          return utils.user.createUser();
-        })
-        .then(function(user){
-          uid2 = user.get('id');
-          return utils.order.createOrder(uid1);
-        })
-        // create some orders
-        .then(function(order){
-          oid1 = order.get('id');
-          return utils.order.createOrder(uid2);
-        })
-        .then(function(order){
-          oid2 = order.get('id');
-          done();
-        })
-        .catch(function(err){
-          console.error('ERROR: ', err);
-          throw err;
-        });
-    });
-  });
-
-  after(function(done){
-    utils.clean(done);
+    // big old promise chain of users and orders
+    // create some users
+    utils.user.createUser()
+      .then(function(user){
+        uid1 = user.get('id');
+        return utils.user.createUser();
+      })
+      .then(function(user){
+        uid2 = user.get('id');
+        return utils.order.createOrder(uid1);
+      })
+      // create some orders
+      .then(function(order){
+        oid1 = order.get('id');
+        return utils.order.createOrder(uid2);
+      })
+      .then(function(order){
+        oid2 = order.get('id');
+        done();
+      })
+      .catch(function(err){
+        console.error('ERROR: ', err);
+        throw err;
+      });
   });
 
   // make sure we have a Trade model object

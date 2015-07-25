@@ -17,7 +17,8 @@ require('./controllers/web-market-streamer.js')(server);
 // Set up the event logger
 require('./controllers/logger');
 
-require('./controllers/matcher');
+var marketEngine = require('./marketEngine');
+marketEngine.start();
 
 //signin and signup routes
 var authRouter = require("./routes/auth.js");

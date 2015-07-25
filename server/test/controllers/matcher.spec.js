@@ -1,9 +1,10 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-var matcher = require('../../controllers/matcher');
+var matcher = require('../../marketEngine/matcher');
 
 var bookshelf = require("../../utils/bookshelf");
+
 var User = bookshelf.model('User');
 var Order = bookshelf.model('Order');
 var Trade = bookshelf.model('Trade');
@@ -15,23 +16,14 @@ function clearTradesAndOrders(done){
       return bookshelf.knex('orders').del();
   })
   .then(function(){
-    done();
   })
-  .catch(done);
+  .catch()
+  .finally(function(){
+    //bookshelf.knex.destroy();
+    done();
+  });
 }
 
-function clearTables(done){
-  bookshelf.knex('trades').del()
-  .then(function(){
-      return bookshelf.knex('orders').del();
-  })
-  .then(function(){
-      return bookshelf.knex('users').del();
-  }).then(function(){
-    done();
-  })
-  .catch(done);
-}
 
 function makeOrder(user_id, side, price, size) {
   return {
@@ -46,8 +38,6 @@ function makeOrder(user_id, side, price, size) {
 }
 
 describe('Order Matcher', function(){
-  before(clearTables);
-  after(clearTables);
 
   beforeEach(clearTradesAndOrders);
   afterEach(clearTradesAndOrders);

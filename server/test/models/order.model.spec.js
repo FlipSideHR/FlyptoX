@@ -8,9 +8,7 @@ var Order = require('../../models/Order');
 //var Orders = bookshelf.Collection.extend({
 //  model: Order
 //});
-
 describe('Order Model', function(){
-
   // this is for certain tests that require a valid user id
   var uid;
 
@@ -28,22 +26,16 @@ describe('Order Model', function(){
 
   before(function(done){
 
-    // clean the db first
-    utils.clean(function(){
-      // create a user and get his id
-      utils.user.createUser()
-        .then(function(user){
-          uid = user.get('id');
-          done();
-        })
-        .catch(function(err){
-          console.error(err);
-        });
-    });
-  });
+    // create a user and get his id
+    utils.user.createUser()
+      .then(function(user){
+        uid = user.get('id');
+        done();
+      })
+      .catch(function(err){
+        console.error(err);
+      });
 
-  after(function(done){
-    utils.clean(done);
   });
 
   // make sure we have a Trade model object

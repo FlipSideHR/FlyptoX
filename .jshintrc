@@ -23,7 +23,10 @@
       "Backbone": false,
       "describe": false,
       "it": false,
+      "xit": false,
       "before": false,
-      "after": false
+      "after": false,
+      "beforeEach": false,
+      "afterEach": false
   }
 }
