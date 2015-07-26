@@ -5,6 +5,7 @@ var Promise = require("bluebird");
 
 var User = require("../models/User");
 var Account = require("../models/Account");
+var Transaction = require("../models/Transaction");
 
 //method for registering a new user account and returns a new token
 users.signup = Promise.method(function(email, password){
@@ -19,7 +20,20 @@ users.signup = Promise.method(function(email, password){
         ],function(info){
           return Account.forge(info)
             .save(null, {transacting: t});
-        });
+        })
+        .then(function(accounts){
+          return Transaction.forge({
+            account_id:accounts[0].id,
+            credit:100,
+            type:'open'
+          }).save(null, {transacting: t}).then(function(){
+            return Transaction.forge({
+              account_id:accounts[1].id,
+              credit:50,
+              type:'open'
+            }).save(null, {transacting: t});
+          })
+        })
       });
   }).then(function(user){
     return tokens.generateToken(user.get("id"));
