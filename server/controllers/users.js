@@ -24,12 +24,12 @@ users.signup = Promise.method(function(email, password){
         .then(function(accounts){
           return Transaction.forge({
             account_id:accounts[0].id,
-            credit:100,
+            credit:100000,
             type:'open'
           }).save(null, {transacting: t}).then(function(){
             return Transaction.forge({
               account_id:accounts[1].id,
-              credit:50,
+              credit:500,
               type:'open'
             }).save(null, {transacting: t});
           })
