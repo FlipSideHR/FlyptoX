@@ -6,7 +6,7 @@ var Promise = require("bluebird");
 var User = require("../models/User");
 var Account = require("../models/Account");
 
-//method for registering a new user account and returns a new token
+//method for registering a new user account - returns new user
 users.signup = Promise.method(function(email, password){
   if (!email || !password) throw new Error('Email and password are both required');
   return bookshelf.transaction(function(t){
@@ -21,8 +21,6 @@ users.signup = Promise.method(function(email, password){
             .save(null, {transacting: t});
         });
       });
-  }).then(function(user){
-    return tokens.generateToken(user.get("id"));
   });
 });
 
@@ -30,11 +28,7 @@ users.signup = Promise.method(function(email, password){
 //found in the database. This token is used to authenticate the user
 //when making api calls
 users.signin = function(email, password) {
-  return User.verify(email, password)
-    .then(function(user){
-      //return a token with user-id if user verified
-      return user ? tokens.generateToken(user.get("id")) : null;
-    });
+  return User.verify(email, password);
 };
 
 
