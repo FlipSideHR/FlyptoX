@@ -14,7 +14,7 @@ module.exports = function(order){
 
       .then(function(covered){
         if(!covered) {
-          return reject({message: 'Withholding requirements not met.'});
+          return reject({name: 'requirementsNotMet', message: 'Withholding requirements not met.'});
         }
         // create the order
         Order.forge({
@@ -28,12 +28,9 @@ module.exports = function(order){
         .save()
         .then(function(order){
           if(!order) {
-            console.log('WHY!!');
             // why would we get a resolved promise
             // if no order was created?
-            var err = new Error('This might be the dumbest error in the world. TODO: Customer errors ftw');
-            reject({error: err, message: 'order not accepted'});
-
+            reject({name: 'orderNotAccepted', message: 'Order not accepted.'});
           } else {
             order.load(['currency_pair']).then(function(order){
 
@@ -57,14 +54,12 @@ module.exports = function(order){
         .catch(function(err){
           console.error(err);
           // what would be best to send with rejection here?
-          reject({error: err, message: 'order not accepted'});
+          reject({name: 'orderCreationFailure', message: 'Unable to create order.'});
         });
       })
       // accountManager rejects the order....
       .catch(function(err){
-        // ermagherd! FAILCAKE!
-        console.error(err);
-        reject({error: err, message: 'Withholding requirements not met.'});
+        reject({name: typeof err, message: 'Account Manager failed to process the order'});
       });
   });
 };

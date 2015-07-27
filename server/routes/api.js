@@ -332,7 +332,20 @@ router.post("/orders", privateApi, function(req, res){
       // TODO send status based on error
       // return an error that we can use to
       // decide what type of status we want to send
-      res.status(500).json(err);
+      //if (err.name instanceOf InsufficientFundsError){ // could be done like this with custom errors
+      if (err.name){
+        // send back the error object which should be shaped like:
+        // { name: 'requirementsNotMet',
+        //   message: 'Insufficient Funds' }
+        //   or
+        // { name: 'SystemError',
+        //   message: 'Some internal server error' }
+        res.json(err);
+      } else {
+        // this error is not one of ours (doesnt have a name)
+        // respond with system error
+        res.status(500).json(err);
+      }
     });
 });
 
