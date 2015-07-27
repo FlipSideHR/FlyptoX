@@ -101,35 +101,44 @@
 
   //---------------------------------------------------------
   // controller for our root level page
-  app.controller('LandingController', ['$scope', '$state', '$http', 'AuthService', function($scope, $state, $http, AuthService){
-    // {
-    //   "id": trade-id,
-    //   "price": "301.00",
-    //   "size": "1.50000000",
-    //   "time": "2015-05-05T23:17:30.310036Z"
-    // }
+  app.controller('LandingController', ['$scope', '$state', '$http', '$timeout', 'AuthService',
+    function($scope, $state, $http, $timeout, AuthService){
+      $scope.auth = AuthService;
 
-    $scope.auth = AuthService;
+      $http({
+        method: 'GET',
+        url: '/api/v1/products/1/ticker'
+      })
+      .success(function(data, status, headers, config, statusText) {
+        // data = {
+        //   "id": trade-id,
+        //   "price": "301.00",
+        //   "size": "1.50000000",
+        //   "time": "2015-05-05T23:17:30.310036Z"
+        // }
+        $scope.lastTrade = data;
+      })
+      .error(function(data, status, headers, config, statusText) {
 
-    $http({
-      method: 'GET',
-      url: '/api/v1/products/1/ticker'
-    })
-    .success(function(data, status, headers, config, statusText) {
-      $scope.lastTrade = data;
-    })
-    .error(function(data, status, headers, config, statusText) {
+      });
 
-    });
+      socket.on('trade', function(tradeData) {
+        // Sets the tickType so that the ng-class directive gets activated
+        // TODO: What should happen when the previous trade price is the same as the most recent trade price?
+        $scope.tickType = tradeData.price > $scope.lastTrade.price ? 'uptick' : 'downtick';
 
-    socket.on('trade', function(tradeData) {
-      console.log('TradeData:', tradeData);
-      $scope.lastTrade = tradeData;
-    });
+        $timeout(function() {
+           // Clear the tickType class to reverse the transition
+          $scope.tickType = '';
+        }, 750); // FYI: Transition duration is currently 0.5s. Check app.scss
 
-    $scope.data = {};
-    $state.transitionTo('landing.home');
-  }]);
+        // Store the new trade data
+        $scope.lastTrade = tradeData;
+      });
+
+      $scope.data = {};
+      $state.transitionTo('landing.home');
+    }]);
 
 
   //---------------------------------------------------------

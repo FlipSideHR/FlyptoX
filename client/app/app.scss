@@ -218,4 +218,14 @@ h2, h3, h4, h5, h6 {
   color: white;
   margin: 0 auto;
   vertical-align: bottom;
+  transition: background-color cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  -webkit-transition: background-color cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+
+.nav-ticker.uptick {
+  background-color: green;
+}
+
+.nav-ticker.downtick {
+  background-color: red;
 }
