@@ -5,8 +5,9 @@
       <span class="nav-ticker">Last Trade: {{ lastTrade.price }}</span>
       <a ui-sref="account">Account</a>
       <a ui-sref=".marketview">Market View</a>
-      <a ui-sref=".login">Log In</a>
-      <a class="sign-up" ui-sref=".signup">Sign Up</a>
+      <a ui-sref=".login" ng-hide="auth.isAuth()">Log In</a>
+      <a ng-click="auth.signout()" ng-show"auth.isAuth()">Log Out</a>
+      <a class="sign-up" ui-sref=".signup" ng-hide="auth.isAuth()">Sign Up</a>
     </span>
   </nav>
 </header>
