@@ -3,7 +3,6 @@ var chaiAsPromised = require("chai-as-promised");
 var expect = chai.expect;
 
 var orderDesk = require('../../marketEngine/orderDesk.js');
-var utils = require('../helpers.js');
 var users = require('../../controllers/users');
 
 chai.use(chaiAsPromised);
