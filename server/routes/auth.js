@@ -4,6 +4,7 @@ var users = require("../controllers/users");
 var privateApi = require("../controllers/tokens").decodeToken;
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
+var tokens = require("../controllers/tokens");
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -27,9 +28,9 @@ router.post('/signin', function(req, res) {
     message: "Both email and password are required."
   });
   users.signin(req.body.email, req.body.password)
-    .then(function(token){
-      if(token){
-        res.json({token: token});
+    .then(function(user){
+      if(user){
+        res.json({token: tokens.generateToken(user.get("id"))});
       } else{
         res.status(401).json({message:'invalid email and password'});
       }
@@ -53,8 +54,12 @@ router.post('/signup', function(req, res) {
     message: "Both email and password are required."
   });
   users.signup(req.body.email, req.body.password)
-    .then(function(token){
-      res.json({token: token});
+    .then(function(user){
+      if(user) {
+        res.json({token: tokens.generateToken(user.get("id"))});
+      } else {
+        res.status(403).json({message:'error creating account'});
+      }
     })
     .catch(function(){
       res.status(403).json({message:'error creating account'});

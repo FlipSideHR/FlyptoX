@@ -4,6 +4,7 @@ var expect = chai.expect;
 
 var orderDesk = require('../../marketEngine/orderDesk.js');
 var utils = require('../helpers.js');
+var users = require('../../controllers/users');
 
 chai.use(chaiAsPromised);
 
@@ -19,7 +20,7 @@ describe('orderDesk', function(){
     };
 
     // create a user to test with
-    utils.user.createCustom(myUser)
+    users.signup(myUser.email, myUser.password)
       .then(function(user){
         uid = user.get('id');
       })
@@ -29,16 +30,16 @@ describe('orderDesk', function(){
       .finally(done);
   });
 
-  it('Returns a promised order containing the order id and the user id of the order', function(done){
+  it('Returns a promised order containing the order id of the order', function(done){
 
     var myOrder = {
       sequence: 1,
       currency_pair_id: 1,
       type: 'limit',
       side: 'buy',
-      price: 300.01,
-      size: 5,
-      filled_size: 5,
+      price: 1,
+      size: 1,
+      filled_size: 0,
       user_id: uid
     };
 
@@ -46,9 +47,6 @@ describe('orderDesk', function(){
     orderDesk(myOrder)
       .then(function(order){
         expect(order.id).to.not.equal(null);
-      })
-      .catch(function(err){
-        expect(err).to.equal(null);
       })
       .finally(done);
   });
