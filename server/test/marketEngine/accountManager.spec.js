@@ -29,9 +29,7 @@ describe('accountManager', function(){
           uid = user.get('id');
           Account.forge({
             user_id: uid,
-            balance: 100000,
-            currency_id: 1,
-            available: 10000
+            currency_id: 1
           })
           .save()
           .then(function(account){
@@ -47,9 +45,7 @@ describe('accountManager', function(){
             // create a new BTC Wallet for this user
             Account.forge({
               user_id: uid,
-              balance: 100,
-              currency_id: 2,
-              available: 100
+              currency_id: 2
             })
             .save()
             .then(function(account){
@@ -106,9 +102,7 @@ describe('accountManager', function(){
       var user_id = 1;
       new Account.forge({
         user_id: user_id,
-        currency_id: 1,
-        balance: 10000,
-        available: 10000
+        currency_id: 1
       })
       .save()
       .then(function(){
