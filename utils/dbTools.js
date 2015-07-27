@@ -1,6 +1,9 @@
 "use strict";
 
 var utils = module.exports;
+var argv = require('yargs').argv;
+var testDB = 'flyptox_test';
+var DB = 'flyptox';
 
 // clean the db in the proper order
 utils.clean = function(done){
@@ -13,6 +16,7 @@ utils.clean = function(done){
   // use travis stuff if travis made the command
   // otherwise use normal test environment
   var kConfig = null;
+
   if (process.env.TRAVIS){
     kConfig = knexConfig.travis;
   } else {
@@ -60,7 +64,15 @@ utils.recreateDB = recreateDB;
 
 // if run as a script/from console run it this way
 if (!module.parent){
-  recreateDB();
+  if (argv.all){
+    recreateDB(testDB, 'test');
+    console.log('---------------------------------');
+    recreateDB(DB, 'development');
+  } else if (argv.dev) {
+    recreateDB(DB, 'development');
+  } else {
+    recreateDB(testDB, 'test');
+  }
 }
 
 // create or recreate the DB.
@@ -70,7 +82,7 @@ function recreateDB(database, env, kConfig){
   var knexConfig = require('../knexfile');
 
   // assume its the test db unless otherwise specified
-  database = database || 'flyptox_test';
+  database = database || testDB;
 
   // default knex config to use
   // (should be a local pg account with admin access)
@@ -91,30 +103,20 @@ function recreateDB(database, env, kConfig){
   // if this is a script check for
   // --options
   if (!module.parent){
-    // see if an options switch was used
-    // always ignore first 2 args
-    process.argv.slice(2).forEach(function(val){
-      if (val[0] === '-'){
-        // option switch used -check flag
-        // check for dev flag
-        if (val.slice(1) === 'dev'){
-          // set database to development
-          console.log('Setting ENV and db to dev');
-          database = 'flyptox';
-          ENV = 'development';
-        // give travis a switch to run so we can use his creds
-        } else if (val.slice(1) === 'travis'){
-          // set user to travis
-          kConfig = knexConfig.travis;
-        }
-      }
-    });
-    console.log('Done sorting args');
+    if (argv.dev){
+      // set database to development
+      console.log('Setting ENV and db to dev');
+      database = 'flyptox';
+      ENV = 'development';
+    } else if (argv.travis){
+      // set user to travis
+      kConfig = knexConfig.travis;
+    }
   }
 
   var knex = require('knex')(kConfig);
 
-  console.log('Dropping database!' + database);
+  console.log('Dropping database! -> ' + database);
   knex.raw('DROP DATABASE IF EXISTS ' + database + ';')
     .then(function(){
       console.log('Creating new database: ' + database);

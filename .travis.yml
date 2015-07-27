@@ -4,7 +4,7 @@ services:
 install:
   - npm install 
 before_script:
-  - node server/utils/recreateDB.js -travis
+  - node utils/dbTools --travis
 
 language: node_js
 node_js:
