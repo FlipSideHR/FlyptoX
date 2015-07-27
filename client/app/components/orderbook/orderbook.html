@@ -1,5 +1,5 @@
 <div class="ob-wrap">
-  <div class="tx">
+  <div class="tx" ng-init="getBook()">
     <div class="offerList" ng-repeat="a in asks">
       <h7 class="ask"> {{ a[0] }} </h7>
       <h7 class="ask ask-price"> {{ a[1] }} </h7>
@@ -29,7 +29,7 @@
   </div>
 
   <div class="orderbook-right-col" ng-if="auth.isAuth()">
-    <div class="execution" data-ng-init="getBook()">
+    <div class="execution" >
       <h5>Order Entry</h5>
       <form class="orderForm" ng-submit="placeOrder()">
 
@@ -71,7 +71,7 @@
       </form>
     </div>
 
-    <div class="myOrders" ng-init="getOrders()">
+    <div class="myOrders" ng-init="(auth.isAuth === true) && getOrders()">
       <table>
         <tr>
           <th>Price</th>
