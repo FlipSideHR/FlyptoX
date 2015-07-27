@@ -19,7 +19,6 @@
   // for convenience when defining controllers, services, etc.
   var app = angular.module('FlyptoX', dependencies);
 
-
   // ROUTING
   //---------------------------------------------------------
   app.config(['$locationProvider', '$httpProvider', '$stateProvider', '$urlRouterProvider',

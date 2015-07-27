@@ -1,13 +1,13 @@
 <header>
   <nav>
     <a class="home" ui-sref="landing.home">FlyptoX || Currency Exchange</a>
+    <span class="nav-ticker">Last Trade: {{ lastTrade.price }}</span>
     <span class="nav-rest">
-      <span class="nav-ticker">Last Trade: {{ lastTrade.price }}</span>
-      <a ui-sref="account">Account</a>
+      <a ui-sref="account" ng-if="auth.isAuth()">Account</a>
       <a ui-sref=".marketview">Market View</a>
-      <a ui-sref=".login" ng-hide="auth.isAuth()">Log In</a>
-      <a ng-click="auth.signout()" ng-show"auth.isAuth()">Log Out</a>
-      <a class="sign-up" ui-sref=".signup" ng-hide="auth.isAuth()">Sign Up</a>
+      <a ui-sref=".login" ng-if="!auth.isAuth()">Log In</a>
+      <a ng-click="auth.signout()" ng-if="auth.isAuth()">Log Out</a>
+      <a class="sign-up" ui-sref=".signup" ng-if="!auth.isAuth()">Sign Up</a>
     </span>
   </nav>
 </header>
