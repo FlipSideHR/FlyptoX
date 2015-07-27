@@ -149,7 +149,10 @@ router.get("/products/:id/ticker", function(req, res){
     if(data) {
       res.json(data);
     } else{
-      res.status(404).json({message:'currency pair not found'});
+      // No trades have happened yet!!
+      // send an empty array.
+      res.json([]);
+      //res.status(404).json({message:'currency pair not found'});
     }
   })
   .catch(function(err){
