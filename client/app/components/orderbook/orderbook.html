@@ -28,7 +28,7 @@
           <nvd3 options="options" data="priceData"></nvd3>
   </div>
 
-  <div class="orderbook-right-col">
+  <div class="orderbook-right-col" ng-if="auth.isAuth()">
     <div class="execution" data-ng-init="getBook()">
       <h5>Order Entry</h5>
       <form class="orderForm" ng-submit="placeOrder()">

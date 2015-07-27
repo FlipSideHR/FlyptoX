@@ -1,12 +1,12 @@
 (function(){
   var app = angular.module('FlyptoX.auth', []);
-  app.controller('AuthController', ['$scope', '$window', '$state', 'Auth',
-    function ($scope, $window, $state, Auth) {
+  app.controller('AuthController', ['$scope', '$window', '$state', 'AuthService',
+    function ($scope, $window, $state, AuthService) {
       $scope.user = {};
       $scope.visible = false;
 
       $scope.signin = function () {
-        Auth.signin($scope.user)
+        AuthService.signin($scope.user)
           .then(function (token) {
             $window.localStorage.setItem('com.flyptox', token);
 
@@ -26,7 +26,7 @@
       };
 
       $scope.signup = function () {
-        Auth.signup($scope.user)
+        AuthService.signup($scope.user)
           .then(function (token) {
             $window.localStorage.setItem('com.flyptox', token);
             $scope.error = ''; // Clear any previous error messages.
@@ -44,7 +44,7 @@
       };
 
       $scope.signout = function() {
-        Auth.signout();
+        AuthService.signout();
         //redirect after logout
         $state.go('landing.login');
       };

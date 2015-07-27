@@ -9,6 +9,7 @@
     'FlyptoX.auth',
     'FlyptoX.orderbook',
     'FlyptoX.chart',
+    'FlyptoX.authService',
     'FlyptoX.account'
   ];
 
@@ -17,7 +18,6 @@
   // the ng-app directive in index.html. Assigned to 'app'
   // for convenience when defining controllers, services, etc.
   var app = angular.module('FlyptoX', dependencies);
-
 
   // ROUTING
   //---------------------------------------------------------
@@ -90,21 +90,26 @@
         });
 
       $httpProvider.interceptors.push('AttachTokens');
+      $httpProvider.interceptors.push('authHttpResponseInterceptor');
+
       // use the HTML5 History API
       $locationProvider.html5Mode(true);
+
   }]);
 
 
 
   //---------------------------------------------------------
   // controller for our root level page
-  app.controller('LandingController', ['$scope', '$state', '$http', function($scope, $state, $http){
+  app.controller('LandingController', ['$scope', '$state', '$http', 'AuthService', function($scope, $state, $http, AuthService){
     // {
     //   "id": trade-id,
     //   "price": "301.00",
     //   "size": "1.50000000",
     //   "time": "2015-05-05T23:17:30.310036Z"
     // }
+
+    $scope.auth = AuthService;
 
     $http({
       method: 'GET',
@@ -127,10 +132,10 @@
   }]);
 
 
-
-  // AUTHENTICATION
   //---------------------------------------------------------
 
+
+  // Attach tokens to all outbound requests
   app.factory('AttachTokens', ['$window', function ($window) {
       // this is an $httpInterceptor
       // its job is to stop all out going request
@@ -147,113 +152,26 @@
         }
       };
       return attach;
-    }])
+    }]);
 
-    .factory('Auth', ['$http', '$location', '$window', function ($http, $location, $window) {
-      // This service responsible for authenticating our user
-      // by exchanging the user's email and password
-      // for a JWT from the server
-      // that JWT is then stored in localStorage as 'com.flyptox'
-
-      // user: {email:string, password:string}
-      var signin = function (user) {
-        return $http({
-          method: 'POST',
-          url: '/api/auth/signin',
-          data: user
-        })
-        .then(function (resp) {
-          return resp.data.token;
-        });
-      };
-
-      // user: {email:string, password:string}
-      var signup = function (user) {
-        return $http({
-          method: 'POST',
-          url: '/api/auth/signup',
-          data: user
-        })
-        .then(function (resp) {
-          return resp.data.token;
-        });
-      };
-
-      var isAuth = function () {
-        return !!$window.localStorage.getItem('com.flyptox');
-      };
-
-      var signout = function () {
-        $window.localStorage.removeItem('com.flyptox');
-        $location.path('/');
-      };
-
-      var verifyToken = function () {
-        //TODO
-      };
-
-      var whoami = function () {
-        //TODO
-      };
-
-      return {
-        signin: signin,
-        signup: signup,
-        isAuth: isAuth,
-        signout: signout
-      };
-    }])
-  //---------------------------------------------------------
-
-   app.controller('walletCtrl', ['$scope',
-      '$interval', '$http', function($scope, $interval, $http, AccountsService){
-        console.log("got here");
-        var blockApiKey = '6cc7-b07d-b22b-f6d2';
-        $scope.showWallet;
-
-       $scope.getAddress = function() {
-         console.log("GOT HERE");
-         $http({
-            method: 'GET',
-            url: 'https://block.io/api/v2/get_new_address/?api_key='+blockApiKey})
-            .success(function(data) {
-              console.log(data);
-              console.log("walllet", data.data.address);
-              $scope.showWallet = data.data.address;
-            })
-            .error(function(data, status) {
-                console.log(data);
-            });
-       };
-
-   // $scope.serverCall = function() {
-   //      $http({method : 'POST',
-   //          url : 'https://api.parse.com/1/classes/formData',
-   //          data: $scope.formData,
-   //          headers: { 'X-Parse-Application-Id':'SwuUqXIiEBCTe0CZ4MdpHY5ehTgFjstgtyaPlQuY',
-   //          'X-Parse-REST-API-Key':'raPMJmJxlZvFhx2xGlqkWIKCS5Unuapy2NAQfmr1'}})
-   //          .success(function(data) {
-   //              console.log("Working!");
-   //          })
-   //          .error(function(data, status) {
-   //              alert("Error");
-   //          });
-   //  };
-
-
-      // Parse.Cloud.httpRequest({
-      // url: 'https://block.io/api/v2/get_new_address/?api_key='+blockApiKey,
-      // success: function (response) {
-      //   var walletData = JSON.parse(response.text);
-
+  // listen for 401's and move user to signin page when they happen
+  app.factory('authHttpResponseInterceptor',['$q', '$location', function($q, $location){
+    return {
+      response: function(response){
+        if (response.status === 401) {
+          console.log("Response 401");
+          $location.path('/signin');
+        }
+        return response || $q.when(response);
+      },
+      responseError: function(rejection) {
+        if (rejection.status === 401) {
+          console.log("Response Error 401",rejection);
+          $location.path('/signin');
+        }
+        return $q.reject(rejection);
+      }
+    }
   }]);
 
-  app.controller('signUpCtrl', ['$scope',
-      '$interval', function($scope, $interval, AccountsService){
-      $scope.visible = false;
-      $scope.toggle = function() {
-              $scope.visible = !$scope.visible;
-          };
-      $scope.authData = {};
-  }]);
 })();
