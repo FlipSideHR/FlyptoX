@@ -5,8 +5,8 @@ exports.up = function(knex, Promise) {
         knex.schema.createTable('transactions', function(table) {
             table.uuid("id").primary();
             table.uuid("account_id").references("id").inTable("accounts");
-            table.float("amount", 16, 8);
-            table.float("balance", 16, 8);
+            table.float("credit", 16, 8).defaultTo(0);
+            table.float("debit", 16, 8).defaultTo(0);
             table.string("type");
             table.uuid("trade_id").references("id").inTable("trades");
             //user's order that resulted in this transaction
@@ -27,3 +27,9 @@ exports.down = function(knex, Promise) {
         knex.schema.dropTableIfExists('transactions')
     ]);
 };
+
+
+/*
+https://in.answers.yahoo.com/question/index?qid=20061107052207AA05Oxf
+https://en.wikipedia.org/wiki/Debits_and_credits
+*/

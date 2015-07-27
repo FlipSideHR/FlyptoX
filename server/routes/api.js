@@ -5,6 +5,7 @@ var router = module.exports = express.Router();
 var debug = require("debug")("api");
 var appEvents = require("../controllers/app-events");
 var marketEngine = require('../marketEngine');
+var accountManager = require('../marketEngine/accountManager');
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
@@ -422,13 +423,11 @@ query params: none
 */
 router.get('/accounts', privateApi, function(req, res){
   Account.where({user_id:req.userId})
-  .fetchAll({withRelated:['currency'], columns:['id','balance','available','currency_id']})
+  .fetchAll({withRelated:['currency'], columns:['id','currency_id']})
   .then(function(accounts){
     return accounts.map(function(account){
       return {
         id: account.id,
-        balance: account.get('balance'),
-        available: account.get('available'),
         currency: account.related('currency').get('currency')
       }
     });
@@ -452,15 +451,20 @@ query params: none
 */
 router.get('/accounts/:id', privateApi, function(req, res){
   Account.where({user_id:req.userId, id:req.params.id})
-  .fetch({withRelated:['currency'], columns:['id','balance','available','currency_id']})
+  .fetch({withRelated:['currency'], columns:['id','currency_id']})
   .then(function(account){
     if(!account) return;
-    return {
-      id: account.id,
-      balance: account.get('balance'),
-      available: account.get('available'),
-      currency: account.related('currency').get('currency')
-    };
+    return Promise.all([
+      accountManager.getAccountBalance(account),
+      accountManager.getAccountAvailableBalance(account),
+    ]).then(function(balances){
+      return {
+        id: account.id,
+        currency: account.related('currency').get('currency'),
+        balance: balances[0],
+        available: balances[1]
+      };
+    });
   })
   .then(function(data){
     if(data){

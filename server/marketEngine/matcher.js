@@ -16,7 +16,7 @@ module.exports.queueOrder = function(order){
 
 //this should only be used for unit testing
 module.exports._processOrder = function(order){
-  return matchingWorker(order);
+  return matchingWorker(order, function(){});
 };
 
 function matchingWorker(newOrder, doneMatching) {

@@ -8,14 +8,14 @@ var appEvents = require("../controllers/app-events");
 module.exports = function(order){
 
   return new Promise(function(resolve, reject){
-    // ask account manager to hold the funds
-    // required for this order
-    accountManager.withhold(order)
+    // ask account manager if user's available balance
+    //covers the order requirements
+    accountManager.orderIsCovered(order)
 
-      // if account manager resolves the promise
-      // it means the requirements have been met
-      // and we can proceed with creating the order
-      .then(function(){
+      .then(function(covered){
+        if(!covered) {
+          return reject({message: 'Withholding requirements not met.'});
+        }
         // create the order
         Order.forge({
           user_id: order.user_id,
