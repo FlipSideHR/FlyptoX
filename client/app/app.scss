@@ -229,3 +229,50 @@ h2, h3, h4, h5, h6 {
 .nav-ticker.downtick {
   background-color: red;
 }
+
+.section {
+  margin: 0 auto;
+  padding: 50px 5px 18% 5px;
+  background-color: #FFF;
+  height: 60%;
+  width: 100%;
+  text-align: center;  
+}
+
+#sectionHead {
+  font-size: 28px;
+  color: black;
+}
+
+#sectionCenter {
+  position: absolute;
+  margin-left: 42%;
+  margin-top: 2%;
+}
+
+#landingHeader {
+  font-size: 20px;
+  color: black;
+  margin-top: 4%;
+}
+
+#landingFont {
+  font-size: 12px;
+  color: black;
+  margin-top: 5%;
+}
+
+#sectionRight {
+  font-size: 20px;
+  color: black;
+  position: absolute;
+  margin-left: 20%;
+  margin-top: 2%;
+}
+#sectionLeft {
+  font-size: 20px;
+  color: black;
+  position: absolute;
+  margin-left: 65%;
+  margin-top: 2%;
+}
