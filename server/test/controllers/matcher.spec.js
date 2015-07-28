@@ -1,17 +1,20 @@
 var chai = require('chai');
 var expect = chai.expect;
+var users = require('../../controllers/users');
 
 var matcher = require('../../marketEngine/matcher');
 
 var bookshelf = require("../../utils/bookshelf");
 
-var User = bookshelf.model('User');
 var Order = bookshelf.model('Order');
 var Trade = bookshelf.model('Trade');
 var Promise = require('bluebird');
 
 function clearTradesAndOrders(done){
-  bookshelf.knex('trades').del()
+  bookshelf.knex('transactions').del()
+  .then(function(){
+    return bookshelf.knex('trades').del()
+  })
   .then(function(){
       return bookshelf.knex('orders').del();
   })
@@ -45,8 +48,7 @@ describe('Order Matcher', function(){
   var alice_id, bob_id;
 
   before(function(done){
-    User.forge({email:"alice", password:"alice"})
-    .save()
+    users.signup("alice", "alice")
     .then(function(user){
       alice_id = user.id;
     })
@@ -54,15 +56,14 @@ describe('Order Matcher', function(){
   });
 
   before(function(done){
-    User.forge({email:"bob", password:"bob"})
-    .save()
+    users.signup("bob", "bob")
     .then(function(user){
       bob_id = user.id;
     })
     .finally(done);
   });
 
-  it('shout create one trade from two exact matching orders', function(done){
+  it('shoud create one trade from two exact matching orders', function(done){
     Promise.map([
       Order.forge(makeOrder(alice_id, 'buy', 200, 1)),
       Order.forge(makeOrder(bob_id, 'sell', 200, 1))
@@ -81,7 +82,7 @@ describe('Order Matcher', function(){
     .catch(done);
   });
 
-  it('shout create two trades..', function(done){
+  it('shoud create two trades..', function(done){
     Promise.map([
       Order.forge(makeOrder(alice_id, 'buy', 200, 1)),
       Order.forge(makeOrder(bob_id, 'sell', 200, 0.4)),
