@@ -276,3 +276,8 @@ h2, h3, h4, h5, h6 {
   margin-left: 65%;
   margin-top: 2%;
 }
+
+img #reverse {
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
