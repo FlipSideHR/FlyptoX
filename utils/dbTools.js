@@ -1,3 +1,4 @@
+#!/usr/local/bin/node
 "use strict";
 
 var utils = module.exports;
