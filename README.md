@@ -2,15 +2,19 @@
 
 # FlyptoX
 
-> FlyptoX is an open-source crypto currency exchange generator.
-####**Currently under development and not ready for production use.
-- A generator that allows you to configure, create, and deploy your own crypto-currency exchange.
+> FlyptoX is an open-source, node.js crypto currency exchange. 
+
+####**Currently in beta. Thourough testing is suggested.
+
+- Our quick and easy setup tools allow you to configure, create, and deploy your own crypto-currency exchange.
 - The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
 - Crypto->Fiat exchange requires extra setup for regulation compliance and chargeback protections. This is the responsibility of the exchange operator to implement.
 - *Fiat currency withdrawals, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.*
 
 TODO:
-- Everything.
+- Wallet integrations.
+- Tests.
+- Admin tools.
 
 ## Team
 
@@ -30,12 +34,14 @@ TODO:
 
 ## Usage
 
-**NOT IMPLEMENTED**
-> `npm install flyptox`
+> `git clone https://github.com/FlipSideHR/FlyptoX.git`
 
-> `yo flyptox`
+> `cd FlyptoX`
+> `./FlyptoX setup`
 
-> Follow the prompts to custom generate your exchange package.
+####TODO: Write better instructions and tools for this part of the process.
+Deploy to your hosting environment.
+
 
 ## Requirements
 
@@ -43,58 +49,72 @@ TODO:
 - Express 4.4.4
 - Angular 1.2.26
 - Postgresql 9.1.x
+- Socket.io  1.3.6
 - Bookshelfjs 0.7.7 
-- ~~Redis 2.6.x~~
 
 ## Development
 
-### Installing Dependencies
+### Setup
 
-From within the root directory:
+From within the projects root directory:
 
-```sh
-sudo npm install -g bower
-sudo npm install -g knex
-npm install
-bower install
+```
+./Flyptox setup
 ```
 
 ### Database setup
 
-Linex users:
+[Install Postgres.](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
+
+
+The flyptox database setup is set to use your username as its admin user/database. From here it will create the other databases it needs. If for some reason your database was not configured like this, you will have to setup a database and user with your username that has admin privileges (this is dev, not production).
+
+Linux users:
+
+You may have exta security measures to deal with as most distros tend to lock things down a bit more by default.
+
+The quick and dirty solution looks like this:
 
 In pg_hba.conf, ensure you have entries for your user and database set to 'trust'.
 In this example, we use flyptox for both user role and database name.
 
+```
 local	flyptox 	flyptox 					trust
 host	flyptox 	flyptox 	127.0.0.1/32 	trust
+```
 
-##### Edit the knexfile.js
- - The knexfile has 4 configs: test, development, travis, and admin.
- - Test and development should always stay as they are.
- - Admin should be the postgres username and database you use on your dev machine (almost definitely your username)
+**As always, you should follow your own security best practices.**
 
-##### run the db create/migrate/seed script
-- `node server/utils/recreateDB -dev` to build out the dev db
-- `node server/utils/recreateDB` to build out the test db (tests run against this)
+### Now you are ready to devel!
 
-### Now You are ready to develop!
 - `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes. 
-- `gulp serverTestRunner` runs a watcher on server files, and runs linting and tests when they change.
 
 ### Testing
 
 #### Server side
+- `gulp serverTestRunner` runs a watcher on server files, and runs linting and tests when they change.
 - `gulp test:server` to run all server tests
 
 #### Client side
+- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes. 
 - `gulp test:client` to run all client tests
 
+- Gulp uses nyan cat for server test by default.
+- You can use the switch `--spec` to get full test reports
+    - `gulp --spec`
+    - `gulp serverTestRunner --spec`
+    - `gulp server:test --spec`
+
+#### DB Tools
+> In utils/dbTools.js there are several utilities for working with the DB.
+> Run `./utils/dbTools` to overwrite the test db.
+> Run `./utils/dbTools --dev` to overwrite the dev db.
+> Run `./utils/dbTools --` to overwrite the dev and test db's.
 ### Roadmap
 
 View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
 
 ## Contributing
 
-PR's are welcome.
+PR's are welcome. Especially for tests.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.

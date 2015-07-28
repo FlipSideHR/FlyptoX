@@ -1,0 +1,211 @@
+#!/usr/local/bin/node
+
+"use strict";
+
+// track if we are doing a package setup
+var setup = false;
+
+// check arguments
+process.argv.forEach(function(val){
+  if(val === 'setup'){
+    setup = true;
+  }
+});
+
+// if use used the setup argument `./flyptox setup`
+if (setup){
+  runSetup();
+} else {
+  runAdminTool();
+}
+
+// run application setup
+// this should really only ever happen once
+function runSetup(){
+
+  var banner = '-------------------------------\n' +
+               'FlyptoX Setup Tool\n' +
+               '---------------------------------' +
+               ' Skip this step for development. ' +
+               '                                 ' +
+               ' Otherwise follow the prompts.   ' +
+               '                                 ' +
+               '                                 ' +
+               '                                 ' +
+               '---------------------------------';
+
+  var exec = require('child_process').exec;
+  exec('npm install && bower install && utils/dbTools.js --all && gulp build',
+    function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+
+      // get our modules
+      var chalk = require('chalk');
+      var prompt = require('prompt');
+
+      // customize the prompt
+      prompt.message = "FX>".green;
+      // prompt.delimitier = "><".green;
+
+      // store our config info
+      var config = {}
+
+      // Run Setup Tool
+      console.log(chalk.yellow(banner));
+      console.log(chalk.red('Beginning Setup Process'));
+      prompt.start();
+
+      prompt.get([{
+        name: 'doAdminSetup',
+        description: 'Setup Administration Account ((y)es/no)',
+        type: 'string',
+        conform: function(value){
+          value = value.toLowerCase();
+          if (value === 'y' || value === 'yes' || value === 'no' || value === 'n'){
+            return true;
+          } else {
+            return false;
+          }
+        },
+        default: 'yes'
+      }], function(err, result){
+
+        if (result.doAdminSetup.toLowerCase() === 'no' || result.doAdminSetup.toLowerCase() === 'n'){
+          console.log(chalk.yellow('Done!'));
+          return;
+        }
+
+        // get user settings
+        prompt.get([{
+            name: 'username',
+            required: true
+          }, {
+            name: 'password',
+            hidden: true,
+            required: true,
+            message: 'Must be 8 characters or more',
+            conform: function (value) {
+              if (value.length >= 8){
+                return true;
+              } else {
+                return false;
+              }
+            }
+          }, {
+            name: 'exchangeName',
+            type: 'string',
+            description: 'The exchange name',
+            required: true,
+          }, {
+            name: 'marginRequirements',
+            type: 'number',
+            message: 'Must be a number between 1 and 100',
+            conform: function(value){
+              if (value < 0 || value > 100){
+                return false;
+              } else {
+                return true;
+              }
+            },
+            description: 'Margin requirements:\ndefault: 100%\nMeaning 0 margin is allowed and 100% of the order cost is required for the order to post.\n',
+            default: 100
+          }],
+
+          function (err, result) {
+            config.username = result.username;
+            config.password = result.password;
+            config.email = result.email;
+            config.exchangeName = result.exchangeName;
+            config.marginRequirements = result.marginRequirements;
+
+            console.log(config);
+
+            // write this config somewhere?
+
+          });
+      });
+    });
+}
+
+// the admin console tool
+// currently just a mock - but this tool has the potential to be helpful
+function runAdminTool() {
+
+  // Run admin Tool
+
+  // Create a new instance of vantage.
+  var vantage = require('vantage')();
+  var chalk = require('chalk');
+
+  var banner = '-----------------------------\n' +
+               'FlyptoX Administration Tool\n' +
+               '-----------------------------';
+
+  // display an intro banner
+  console.log(chalk.blue(banner));
+
+  // set the exchange margin rate
+  vantage
+    .command("margin get")
+    .description("Reports current margin requirements.")
+    .action(function(args, callback) {
+      // check margin reqs from db
+      this.log('Margin requirments set to: ', 100);
+      callback();
+    });
+
+  vantage
+    .command("margin set <val>")
+    .description("Takes a number between 0 and 100 that represents the margin requirement for an order.")
+    .action(function(args, callback) {
+      this.log('Setting margin to: ', args.val);
+      callback();
+    });
+
+  // add a currency to the pool of currencies
+  vantage
+    .command("currency add <currency>")
+    .description("Takes a 3 character string that represents a currency and adds it to the pool of usable currencies")
+    .action(function(args, callback) {
+      this.log('Adding currency: ', args.currency);
+      callback();
+    });
+
+  // create a new pair from 2 existing currencies
+  vantage
+    .command("pair add <base> <quote>")
+    .description("Takes 2 arguments. First the base currency and then the quote currency.")
+    .action(function(args, callback) {
+      this.log('Adding pair: ' + args.base + '/' + args.quote);
+      callback();
+    });
+
+  // find a user
+  vantage
+    .command("user get <user>")
+    .description("")
+    .action(function(args, callback) {
+      this.log('Getting user info for: ', args.user);
+      callback();
+    });
+
+  vantage
+    .command("user set <user> [property] [value]")
+    .description("")
+    .action(function(args, callback) {
+      this.log('Setting user info ' + args.property + ' to ' + args.value + ' for: ', args.user);
+      callback();
+    });
+
+
+  // set prompt, port
+  // and show the Vantage prompt.
+  vantage
+    .delimiter("flyptoX$")
+    .listen(8888)
+    .show();
+}
