@@ -128,3 +128,33 @@ accountManager.createTransactionsFromMatch = function(T,
         })
       ]);
 };
+
+accountManager.withdrawFromAccount = function(account_id, amount, ref) {
+  return bookshelf.model('Account')
+    .where({id:account_id})
+    .fetch({required:true})
+    .then(getAccountAvailableBalance)
+    .then(function(available){
+      if(available < amount) throw new Error('Insufficient Funds');
+      return bookshelf.model('Transaction').forge({
+        ref: ref,
+        type: 'transfer',
+        debit: amount,
+        account_id: account_id
+      });
+    });
+};
+
+accountManager.depositToAccount = function(account_id, amount, ref) {
+  return bookshelf.model('Account')
+    .where({id:account_id})
+    .fetch({required:true})
+    .then(function(account){
+      return bookshelf.model('Transaction').forge({
+        ref: ref,
+        type: 'transfer',
+        credit: amount,
+        account_id: account_id
+      });
+    });
+};
