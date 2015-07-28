@@ -2,6 +2,7 @@ var bookshelf = require('../utils/bookshelf');
 var Promise = require('bluebird');
 var appEvents = require('../controllers/app-events');
 var async = require('async');
+var accountManager = require('./accountManager');
 
 var orderQueue = async.queue(matchingWorker);
 
@@ -38,11 +39,9 @@ function matchingWorker(newOrder, doneMatching) {
         //limit orders
         //the starting price level is the price set in the order
         qb = qb.query('where', 'price', range, startPrice);
-        console.log('processing limit order');
       } else {
         //market orders
         //starting price level is the best offer price in the orderbook
-        console.log('processing market order');
       }
 
       return qb
@@ -166,5 +165,14 @@ function create_trade(T, order, offer, size){
     "maker_order_id": offer.get('id'),
     "taker_order_id": order.get('id'),
     "currency_pair_id": order.get('currency_pair_id')
-  }).save(null, {transacting: T});
+  })
+  .save(null, {transacting: T, method: 'insert'})
+  .tap(function(trade){
+    return Promise.all([
+      accountManager.createTransactionsFromMatch(T, order.get('user_id'),
+        order.get('currency_pair_id'), order.get('id'), trade.id, order.get('side'), size, offer.get('price')),
+      accountManager.createTransactionsFromMatch(T, offer.get('user_id'),
+        offer.get('currency_pair_id'), offer.get('id'), trade.id, offer.get('side'), size, offer.get('price'))
+    ]);
+  });
 }

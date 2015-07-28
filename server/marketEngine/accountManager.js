@@ -60,7 +60,8 @@ accountManager.getUserBaseCurrencyAccount = function(user_id, currency_pair_id) 
     .where({id:currency_pair_id}).fetch({required:true})
     .then(function(pair){
       return bookshelf.model('Account')
-        .where({user_id:user_id, currency_id:pair.get('base_currency_id')}).fetch({required:true});
+        .where({user_id:user_id, currency_id:pair.get('base_currency_id')})
+        .fetch({required:true});
     });
 };
 
@@ -90,4 +91,40 @@ accountManager.orderIsCovered = function(orderRequest) {
         return available >= orderRequest.size * orderRequest.price; //todo available >= order.size + fees?
       });
   }
+};
+
+accountManager.createTransactionsFromMatch = function(T,
+  user_id, currency_pair_id, order_id, trade_id, side, size, price) {
+    return Promise.all([
+      accountManager.getUserBaseCurrencyAccount(user_id, currency_pair_id)
+        .then(function(account){
+          return bookshelf.model('Transaction').forge({
+            account_id: account.get('id'),
+            trade_id: trade_id,
+            order_id: order_id,
+            credit: side === 'buy' ? size : 0,
+            debit: side === 'sell' ? size : 0,
+            type: 'match'
+          })
+          .save(null, {transacting:T})
+          .catch(function(err){
+            console.log(err);
+          })
+      }),
+      accountManager.getUserQuoteCurrencyAccount(user_id, currency_pair_id)
+        .then(function(account){
+          return bookshelf.model('Transaction').forge({
+              account_id: account.get('id'),
+              trade_id: trade_id,
+              order_id: order_id,
+              credit: side === 'sell' ? size * price : 0,
+              debit: side === 'buy' ? size * price : 0,
+              type: 'match'
+            })
+            .save(null, {transacting:T})
+            .catch(function(err){
+              console.log(err);
+            })
+        })
+      ]);
 };
