@@ -1,11 +1,9 @@
-<!-- <pre ng-init="getTrades()">
-  {{trades}}
+<pre ng-init="getTrades()">
 </pre>
 
 <pre ng-init="getOrders()">
-  {{myOrders}}
 </pre>
- -->
+
 <!-- Container -->
 <div class="account">
   <!-- Section Navigation -->
@@ -13,7 +11,6 @@
     <a ng-click="section='history'">Account History</a>
     <a ng-click="section='wallets'">Add Account / Wallet</a>
     <a ng-click="section='settings'">Settings</a>
-    Section: {{section}}
   </div>
 
   <!-- Latest (Transactions | Trades | Orders) -->
@@ -23,18 +20,17 @@
       <button ng-click="filter='orders'">Orders</button>
       <button ng-click="filter='trades'">Trades</button>
       <button ng-click="filter='transactions'">Transactions</button>
-      Filter: {{filter}}
     </div>
 
     <!-- Record Listing -->
-    <!-- <table>
+    <table>
       <tr>
-        <th ng-repeat="column in columns[filter] track by $index">{{column}}</th>
+        <th ng-repeat="column in columns[filter]">{{column}}</th>
       </tr>
       <tr ng-repeat="record in records[filter]">
-        <td ng-repeat="column in columns track by $index">{{record[$index]}}</td>
+        <td ng-repeat="column in columns[filter]">{{record[column]}}</td>
       </tr>
-    </table> -->
+    </table>
   </div>
 
   <!-- Add Account / Wallet -->

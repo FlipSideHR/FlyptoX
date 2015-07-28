@@ -5,6 +5,12 @@
     function($scope, $http) {
       $scope.section = 'history';
       $scope.filter = 'orders';
+      $scope.columns = {
+        'trades': ['currency_pair', 'price', 'size'],
+        'orders': ['currency_pair', 'price', 'size', 'side', 'status'],
+        'transactions': []
+      };
+      $scope.records = {};
 
       $scope.getTrades = function() {
         // Sample of return data
@@ -27,7 +33,7 @@
           url: '/api/v1/trades'
         })
         .success(function(data, status, headers, config, statusText) {
-          $scope.trades = data;
+          $scope.records['trades'] = data;
         })
         .error(function(data, status, headers, config, statusText) {
 
@@ -35,45 +41,30 @@
       };
 
       $scope.getOrders = function() {
+        // [
+        //  {
+        //    "id":"418dac00-34a5-11e5-9537-73b2a3c55ecd",
+        //    "size":"13.00000000",
+        //    "price":"290.00000000",
+        //    "currency_pair":"BTC-USD",
+        //    "status":"open",
+        //    "side":"sell",
+        //    "created_at":"2015-07-27T21:20:07.872Z",
+        //    "done_reason":null
+        //  },
+        //  ...
+        // ]
         $http({
           method: 'GET',
           url: '/api/v1/orders'
         })
         .success(function(data, status, headers, config, statusText){
-          $scope.myOrders = data;
+          $scope.records['orders'] = data;
         })
         .error(function(data, status, headers, config, statusText) {
 
         });
       };
-      // $scope.placeOrder = function() {
-      //   $http({
-      //     method: 'POST',
-      //     url: '/api/v1/orders',
-      //     data: $scope.orderData
-      //   })
-      //   .success(function(data, status, headers, config, statusText) {
-      //     // data – {string|Object} – The response body transformed with the transform functions.
-      //     // status – {number} – HTTP status code of the response.
-      //     // headers – {function([headerName])} – Header getter function.
-      //     // config – {Object} – The configuration object that was used to generate the request.
-      //     // statusText – {string} – HTTP status text of the response.
-      //     console.log(data, status, statusText);
-      //     $scope.getBook();
-      //     $scope.getOrders();
-      //     console.log('Success');
-      //   })
-      //   .error(function(data, status, headers, config, statusText) {
-      //     console.log('Error');
-      //   });
-
-      // };
-
-      // socket.on('trade', function(order) {
-      //   console.log('Trade occurred!');
-      //   $scope.getBook();
-      //   $scope.getOrders();
-      // });
 
     }]); // app.controller
 })(); // anonymous function
