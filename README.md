@@ -34,7 +34,6 @@ TODO:
 
 ## Usage
 
-> Fork us and clone your own fork.. OR:
 > `git clone https://github.com/FlipSideHR/FlyptoX.git`
 
 > `cd FlyptoX`
