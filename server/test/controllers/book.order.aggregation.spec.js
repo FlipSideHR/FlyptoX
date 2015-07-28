@@ -52,7 +52,6 @@ function makeOrderBook(done){
 
       return Promise.all(orders.invoke('save'));
     })
-    .catch(done)
     .finally(function(){
       done();
     });

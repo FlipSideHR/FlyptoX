@@ -41,6 +41,9 @@ var paths = {
 
     },
 
+    // assets directory
+    assets: 'client/assets/**/*.*',
+
     html: ['client/app/**/*.html'],
     sass: [
       'client/app/**/*.scss',
@@ -83,6 +86,11 @@ gulp.task('clean-html', function(cb){
   del([paths.client.dist + '**/*.html'], cb);
 });
 
+// clean assets
+gulp.task('clean-assets', function(cb){
+  del([paths.client.dist + 'assets/**/*.*'], cb);
+});
+
 // Clean the database
 gulp.task('clean-db', function(done){
   dbTools.clean(function(){
@@ -121,6 +129,14 @@ gulp.task('copy-html', ['clean-html'], function() {
   return gulp.src(paths.client.html)
     // Perform minification tasks, etc here
     .pipe(gulp.dest(paths.client.dist + 'app'));
+});
+
+// this copies html from our app components
+// into the dist dir.
+gulp.task('copy-assets', ['clean-assets'], function() {
+  return gulp.src(paths.client.assets)
+    // Perform minification tasks, etc here
+    .pipe(gulp.dest(paths.client.dist + 'assets/'));
 });
 
 // MINIFY the concatted js
@@ -166,9 +182,16 @@ gulp.task('test:client', ['lint:client'], function(done) {
 
 
 // test server files
-gulp.task('test:server', ['lint:server'], function() {
+gulp.task('test:server', ['lint:server', 'clean-db'], function() {
   var startEnv = process.env.NODE_ENV;
   process.env.NODE_ENV = 'test';
+
+  // set reporting options
+  if (!argv.spec){
+    argv.reporter = 'nyan';
+  } else {
+    argv.reporter = 'spec';
+  }
 
   if (argv.travis){
     process.env.TRAVIS = true;
@@ -278,10 +301,10 @@ gulp.task('browser-sync', ['nodemon'], function(cb) {
 // concats and minifies all .js out to dist
 // and copys all html out to dist
 // always clean dist dir first
-gulp.task('build', ['sass', 'scripts-concat', 'copy-html']);
+gulp.task('build', ['sass', 'scripts-concat', 'copy-html', 'copy-assets']);
 
 // use this when building for production.
-gulp.task('build-dist', ['sass', 'scripts-concat', 'copy-html'], function(){
+gulp.task('build-dist', ['build'], function(){
   gulp.start('scripts-minify');
   //TODO: make gulp use minified files
 });
