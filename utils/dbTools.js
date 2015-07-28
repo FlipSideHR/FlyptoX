@@ -6,11 +6,9 @@ var argv = require('yargs').argv;
 var testDB = 'flyptox_test';
 var DB = 'flyptox';
 
-// clean the db in the proper order
-utils.clean = function(done){
-
-  var startENV = process.env.NODE_ENV;
-  process.env.NODE_ENV = 'test';
+// create a knex connection based on the
+// current process env.
+var getKnex = utils.getKnex = function() {
 
   var knexConfig = require('../knexfile');
 
@@ -24,7 +22,17 @@ utils.clean = function(done){
     kConfig = knexConfig.test;
   }
 
-  var knex = require('knex')(kConfig);
+  return require('knex')(kConfig);
+
+};
+
+// clean the db in the proper order
+utils.clean = function(done){
+
+  var startENV = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'test';
+
+  var knex = getKnex();
 
   knex.raw('delete from transactions')
     .then(function(){
@@ -60,7 +68,6 @@ utils.clean = function(done){
       }
     });
 };
-
 utils.recreateDB = recreateDB;
 
 // if run as a script/from console run it this way
