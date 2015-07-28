@@ -4,7 +4,7 @@
 
 > FlyptoX is an open-source, node.js crypto currency exchange. 
 
-####**Currently in beta. Thourough testing is suggested.
+####**Currently in alpha development. Thorough testing is suggested and PR's are welcome.
 
 - Our quick and easy setup tools allow you to configure, create, and deploy your own crypto-currency exchange.
 - The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
