@@ -3,7 +3,8 @@
 
   app.controller('AccountCtrl', ['$scope', '$http',
     function($scope, $http) {
-      
+      $scope.section = 'history';
+      $scope.filter = 'orders';
 
       $scope.getTrades = function() {
         // Sample of return data

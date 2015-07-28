@@ -5,7 +5,6 @@
   // Dependencies for module 'FlyptoX'
   var dependencies = [
     'ui.router',
-    'angular-chartist',
     'FlyptoX.auth',
     'FlyptoX.orderbook',
     'FlyptoX.chart',
@@ -57,37 +56,46 @@
           templateUrl: 'app/components/auth/login.html',
           controller: 'AuthController as auth'
         })
+        .state('landing.account', {
+          url: 'account',
+          templateUrl: 'app/components/account/account.html',
+          controller: 'AccountCtrl as account'
+        });
         // .state('dashboard', {
         //   url: '/dashboard',
         //   templateUrl: 'app/app.html'
         //   // this needs a controller
         //   // but right now its a mishmash
         // })
-        .state('orderbook', {
-          url: '/orderbook',
-          templateUrl: 'app/components/orderbook/orderbook.html',
-          controller: 'OrderbookCtrl as orderbook'
-        })
-        .state('login', {
-          url: '/login',
-          templateUrl: 'app/components/login/login.html',
-          controller: 'AuthController as auth'
-        })
-        .state('signup', {
-          url: '/signup',
-          templateUrl: 'app/components/signup/signup.html',
-          controller: 'AuthController as auth'
-        })
-        .state('chart', {
-          url: '/chart',
-          templateUrl: 'app/components/chart/chart.html',
-          controller: 'chartCtrl'
-        })
-        .state('account', {
-          url: '/account',
-          templateUrl: 'app/components/account/account.html',
-          controller: 'AccountCtrl as account'
-        });
+
+        // (DT) Can probably be deleted
+        //------------------------------------------------------------
+        // .state('orderbook', {
+        //   url: '/orderbook',
+        //   templateUrl: 'app/components/orderbook/orderbook.html',
+        //   controller: 'OrderbookCtrl as orderbook'
+        // })
+        // .state('login', {
+        //   url: '/login',
+        //   templateUrl: 'app/components/login/login.html',
+        //   controller: 'AuthController as auth'
+        // })
+        // .state('signup', {
+        //   url: '/signup',
+        //   templateUrl: 'app/components/signup/signup.html',
+        //   controller: 'AuthController as auth'
+        // })
+        // .state('chart', {
+        //   url: '/chart',
+        //   templateUrl: 'app/components/chart/chart.html',
+        //   controller: 'chartCtrl'
+        // })
+        // .state('account', {
+        //   url: '/account',
+        //   templateUrl: 'app/components/account/account.html',
+        //   controller: 'AccountCtrl as account'
+        // });
+        //-----------------------------------------------------
 
       $httpProvider.interceptors.push('AttachTokens');
       $httpProvider.interceptors.push('authHttpResponseInterceptor');
