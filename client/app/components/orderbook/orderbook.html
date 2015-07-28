@@ -1,27 +1,33 @@
 <div class="ob-wrap">
-  <div class="tx" ng-init="getBook() ">
-    <div class="askList" ng-repeat="a in asks">
-      <h7 class="ask"> {{ a[1] }} </h7>
-      <h7 class="ask ask-price"> {{ a[0] }} </h7>
-        <svg height="1" width="500">
-            <line x1="0" y1="0" x2="300" y2="0"/>
-        </svg>
-    </div>
-
-    <div class="close">
-      <span class="askLabel">Ask</span>
-      <span class="bidLabel">Bid</span>
-      <span class="priceLabel">Price</span>
-      <span class="volumeLabel">Volume</span>
-    </div>
-
-    <div class="bidList" ng-repeat="b in bids">
-      <h7 class="bid"> {{ b[1] }} </h7>
-      <h7 class="bid bid-price"> {{ b[0] }} </h7>
-        <svg height="1" width="500">
-            <line x1="0" y1="0" x2="300" y2="0"/>
-        </svg>
-    </div>
+  <div class="tx" ng-init="getBook()">
+    <table class="orderbook">
+      <tr class="orderbookRow"><td class="orderbookAsksCol">
+        <div class="offerListItem" ng-repeat="a in asks">
+          <h7 class="ask"> {{ a[1] }} </h7>
+          <h7 class="ask ask-price"> {{ a[0] }} </h7>
+          <svg height="1" width="500">
+              <line x1="0" y1="0" x2="300" y2="0"/>
+          </svg>
+        </div>
+      </td></tr>
+      <tr class="orderbookRowMiddle"><td class="orderbookMidlineCol">
+        <div class="close">
+          <span class="askLabel">Ask</span>
+          <span class="bidLabel">Bid</span>
+          <span class="priceLabel">Price</span>
+          <span class="volumeLabel">Volume</span>
+        </div>
+      </td></tr>
+      <tr class="orderbookRow"><td class="orderbookBidsCol">
+        <div class="bidListItem" ng-repeat="b in bids">
+          <h7 class="bid"> {{ b[1] }} </h7>
+          <h7 class="bid bid-price"> {{ b[0] }} </h7>
+            <svg height="1" width="500">
+                <line x1="0" y1="0" x2="300" y2="0"/>
+            </svg>
+        </div>
+      </td></tr>
+    </table>
   </div>
 
   <div ng-controller="chartCtrl" class="chart">
