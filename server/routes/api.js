@@ -511,8 +511,8 @@ router.get('/accounts/:id/ledger', privateApi, function(req, res){
       return {
         id: transaction.id,
         created_at: transaction.get('created_at'),
-        amount: transaction.get('amount').toFixed(8),
-        balance: transaction.get('balance').toFixed(8),
+        credit: transaction.get('credit').toFixed(8),
+        debit: transaction.get('debit').toFixed(8),
         type: transaction.get('type'),
         order_id: transaction.get('order_id'),
         trade_id: transaction.get('trade_id')

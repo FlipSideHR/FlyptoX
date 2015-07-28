@@ -5,7 +5,7 @@
 </pre>
 
 <!-- Container -->
-<div class="account">
+<div class="account" ng-init="getTransactions()">
   <!-- Section Navigation -->
   <div class="sections">
     <a ng-click="section='history'">Account History</a>
@@ -14,7 +14,7 @@
   </div>
 
   <!-- Latest (Transactions | Trades | Orders) -->
-  <div class="history" ng-show="section === 'history'">
+  <div class=" history" ng-show="section === 'history'">
     <!-- Filter Buttons -->
     <div class="filters">
       <button ng-click="filter='orders'">Orders</button>
@@ -23,11 +23,11 @@
     </div>
 
     <!-- Record Listing -->
-    <table>
-      <tr>
+    <table class="records">
+      <tr class="headings">
         <th ng-repeat="column in columns[filter]">{{column}}</th>
       </tr>
-      <tr ng-repeat="record in records[filter]">
+      <tr class="record" ng-repeat="record in records[filter]">
         <td ng-repeat="column in columns[filter]">{{record[column]}}</td>
       </tr>
     </table>
@@ -43,44 +43,3 @@
     Settings
   </div>
 </div>
-<!-- <div class="orderbook-right-col">
-  <div class="execution" data-ng-init="getBook()">
-    <h5>Order Entry</h5>
-    <form class="orderForm" ng-submit="placeOrder()">
-
-      <div class="execDetails">
-        <label>Currency</label>
-        <select ng-model="orderData.currency_pair_id"
-                ng-options="pair.value as pair.label for pair in pairs"
-                required>
-        </select>
-      </div>
-
-      <div class="execDetails">
-        <label>Type</label>
-        <select ng-model="orderData.type"
-                ng-options="type for type in types"
-                required>
-        </select>
-      </div>
-
-      <button type="submit">Submit</button>
-
-    </form>
-  </div>
-
-  <div class="myOrders" ng-init="getOrders()">
-    <table>
-      <tr>
-        <th>Price</th>
-        <th>Size</th>
-        <th>Cancel</th>
-      </tr>
-      <tr ng-repeat="order in myOrders track by $index">
-        <td>{{order.price}}</td>
-        <td>{{order.size}}</td>
-        <td><button ng-click="cancelOrder($index)">X</button></td>
-      </tr>
-    </table>
-  </div>
-</div> -->

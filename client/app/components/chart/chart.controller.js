@@ -23,14 +23,14 @@ app.controller('chartCtrl', ['$scope', '$interval', '$http', function($scope, $i
           url: '/api/v1/products/1/trades'
           })
         .success(function(data, status, headers, config, statusText){
-          console.log("success", data);
+          // console.log("success", data);
           for (var i =0; i < data.length; i++){
             $scope.priceData[i] = {
               y: parseFloat(data[i].price),
               x: Date.parse(data[i].time)
             };
-            console.log("saved data of: ", $scope.priceData[i]);
-            console.log("final data", $scope.priceData);
+            // console.log("saved data of: ", $scope.priceData[i]);
+            // console.log("final data", $scope.priceData);
           }
         })
         .error(function(data, status, headers, config, statusText) {
@@ -42,7 +42,7 @@ app.controller('chartCtrl', ['$scope', '$interval', '$http', function($scope, $i
 
         //$scope.data = sine();
         $scope.data = volatileChart(130.0, 0.02);
-        console.log("nvd3 data", $scope.data);
+        // console.log("nvd3 data", $scope.data);
         //$scope.data = volatileChart(25.0, 0.09,30);
 
         /* Random Data Generator (took from nvd3.org) */
