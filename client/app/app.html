@@ -3,7 +3,7 @@
     <a class="home" ui-sref="landing.home">FlyptoX || Currency Exchange</a>
     <span class="nav-ticker" ng-class="tickType">Last Trade: {{ lastTrade.price }}</span>
     <span class="nav-rest">
-      <a ui-sref="account" ng-if="auth.isAuth()">Account</a>
+      <a ui-sref=".account" ng-if="auth.isAuth()">Account</a>
       <a ui-sref=".marketview">Market View</a>
       <a ui-sref=".login" ng-if="!auth.isAuth()">Log In</a>
       <a ng-click="auth.signout()" ng-if="auth.isAuth()">Log Out</a>
