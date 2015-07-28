@@ -1,11 +1,52 @@
-<pre ng-init="getTrades()">
+<!-- <pre ng-init="getTrades()">
   {{trades}}
 </pre>
 
 <pre ng-init="getOrders()">
   {{myOrders}}
 </pre>
+ -->
+<!-- Container -->
+<div class="account">
+  <!-- Section Navigation -->
+  <div class="sections">
+    <a ng-click="section='history'">Account History</a>
+    <a ng-click="section='wallets'">Add Account / Wallet</a>
+    <a ng-click="section='settings'">Settings</a>
+    Section: {{section}}
+  </div>
 
+  <!-- Latest (Transactions | Trades | Orders) -->
+  <div class="history" ng-show="section === 'history'">
+    <!-- Filter Buttons -->
+    <div class="filters">
+      <button ng-click="filter='orders'">Orders</button>
+      <button ng-click="filter='trades'">Trades</button>
+      <button ng-click="filter='transactions'">Transactions</button>
+      Filter: {{filter}}
+    </div>
+
+    <!-- Record Listing -->
+    <!-- <table>
+      <tr>
+        <th ng-repeat="column in columns[filter] track by $index">{{column}}</th>
+      </tr>
+      <tr ng-repeat="record in records[filter]">
+        <td ng-repeat="column in columns track by $index">{{record[$index]}}</td>
+      </tr>
+    </table> -->
+  </div>
+
+  <!-- Add Account / Wallet -->
+  <div class="wallets" ng-show="section === 'wallets'">
+    Wallets
+  </div>
+
+  <!-- Settings -->
+  <div class="settings" ng-show="section === 'settings'">
+    Settings
+  </div>
+</div>
 <!-- <div class="orderbook-right-col">
   <div class="execution" data-ng-init="getBook()">
     <h5>Order Entry</h5>
