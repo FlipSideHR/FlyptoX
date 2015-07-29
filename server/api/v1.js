@@ -187,7 +187,7 @@ query params: none
 router.get("/products/:id/trades", function(req, res){
   Trade.where({currency_pair_id:req.params.id})
   .query('orderBy', 'created_at', 'desc')
-  .query('limit', 50)
+  .query('limit', 500)
   .fetchAll({columns:['id','price','size','created_at']})
   .then(function(trades){
     return trades.map(function(trade){
@@ -201,7 +201,7 @@ router.get("/products/:id/trades", function(req, res){
     });
   })
   .then(function(data){
-    res.json(data);
+    res.json(data.reverse());
   })
   .catch(function(err){
     debug(err);
