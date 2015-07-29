@@ -6,6 +6,7 @@ var debug = require("debug")("api");
 var appEvents = require("../controllers/app-events");
 var marketEngine = require('../marketEngine');
 var accountManager = require('../marketEngine/accountManager');
+var Promise = require('bluebird');
 
 router.use(partials());
 // Parse JSON (uniform resource locators)
