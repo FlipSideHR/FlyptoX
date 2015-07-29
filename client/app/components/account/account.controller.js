@@ -8,12 +8,11 @@
       $scope.columns = {
         'trades': ['currency_pair', 'price', 'size'],
         'orders': ['currency_pair', 'price', 'size', 'side', 'status'],
-        'transactions': []
+        'transactions': ['credit', 'debit', 'type']
       };
       $scope.records = {};
 
       $scope.getTrades = function() {
-        // Sample of return data
         // [
         //   {
         //     "id": trade-id,
@@ -63,6 +62,41 @@
         })
         .error(function(data, status, headers, config, statusText) {
 
+        });
+      };
+
+      $scope.getTransactions = function() {
+        $http({
+          method: 'GET',
+          url: '/api/v1/accounts'
+        })
+        .success(function(data){
+          // [
+          //  {
+          //   id: account.id,
+          //   currency: 'USD'
+          //  },
+          //  ...
+          // ]
+          $http({
+            method: 'GET',
+            url: '/api/v1/accounts/' + data[0].id + '/ledger'
+          })
+          .success(function(data, status, headers, config, statusText){
+            // [
+            //  {
+            //   id: transaction.id,
+            //   created_at: transaction.get('created_at'),
+            //   credit: 
+            //   debit: 
+            //   type: transaction.get('type'),
+            //   order_id: transaction.get('order_id'),
+            //   trade_id: transaction.get('trade_id')
+            //   //transfer_id: transaction.get('transfer_id'),
+            //  }
+            // ]
+            $scope.records['transactions'] = data;
+          });
         });
       };
 
