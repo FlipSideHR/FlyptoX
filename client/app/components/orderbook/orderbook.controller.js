@@ -18,13 +18,60 @@
 
       $scope.myOrders = [];
 
+      $scope.balances = {
+        'usd': 0,
+        'usd-available': 0,
+        'btc': 0,
+        'btc-available': 0
+      };
+
+      $scope.getBalance = function() {
+        //  return {
+        //    id: account.id,
+        //    currency: account.related('currency').get('currency'),
+        //    balance: balances[0],
+        //    available: balances[1]
+        //  };
+        $http({
+          method:'GET',
+          url: '/api/v1/accounts'
+        })
+        .success(function(data) {
+          $http({
+            method: 'GET',
+            url: '/api/v1/accounts/' + data[0].id
+          })
+          .success(function(data, status, headers, config, statusText){
+            $scope.balances['usd'] = data.balance;
+            $scope.balances['usd-available'] = data.available;
+          })
+          .error(function(data, status, headers, config, statusText){
+
+          });
+
+          $http({
+            method: 'GET',
+            url: '/api/v1/accounts/' + data[1].id
+          })
+          .success(function(data, status, headers, config, statusText){
+            $scope.balances['btc'] = data.balance;
+            $scope.balances['btc-available'] = data.available;
+          })
+          .error(function(data, status, headers, config, statusText){
+
+          });
+        })
+        .error(function(data) {
+
+        });
+      };
+
       $scope.cancelOrder = function(index) {
-        // Cancel the order at index of $scope.myOrders
-          // Post a delete call to the API for that order by using its id
-          // Refresh the list of 'my orders'...it should not be there anymore
+        // Cancel the order at index of $scope.myOrders:
+        // Post a delete call to the API for that order by using its id
+        // Refresh the list of 'my orders'...it should not be there anymore
 
         var orderId = $scope.myOrders[index].id;
-        console.log('orderId', orderId);
 
         $http({
           method: 'DELETE',
@@ -86,14 +133,10 @@
           data: $scope.orderData
         })
         .success(function(data, status, headers, config, statusText) {
-          // data – {string|Object} – The response body transformed with the transform functions.
-          // status – {number} – HTTP status code of the response.
-          // headers – {function([headerName])} – Header getter function.
-          // config – {Object} – The configuration object that was used to generate the request.
-          // statusText – {string} – HTTP status text of the response.
           console.log(data, status, statusText);
           $scope.getBook();
           $scope.getOrders();
+          $scope.getBalance();
           console.log('Success');
         })
         .error(function(data, status, headers, config, statusText) {
@@ -107,21 +150,11 @@
         $scope.getBook();
       });
 
-      // socket.on('order:cancelled', function(orderData) {
-      //   console.log('Server says an order has been cancelled. Remove it!');
-      //   for (var i = 0; i < $scope.orders.length; i++) {
-      //     if ($scope.orders[i].id === orderData.id) {
-      //       $scope.orders.splice(i, 1);
-      //       break;
-      //     }
-      //   }
-      // });
-
       socket.on('trade', function(order) {
         console.log('Trade occurred!');
         $scope.getBook();
         $scope.getOrders();
       });
 
-    }]);
-})();
+    }]); // app controller
+})(); // anonymous function

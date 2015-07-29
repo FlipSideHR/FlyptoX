@@ -1,5 +1,5 @@
 <div class="ob-wrap">
-  <div class="tx" ng-init="getBook()">
+  <div class="tx" ng-init="getBook() ">
     <div class="askList" ng-repeat="a in asks">
       <h7 class="ask"> {{ a[1] }} </h7>
       <h7 class="ask ask-price"> {{ a[0] }} </h7>
@@ -29,8 +29,11 @@
   </div>
 
   <div class="orderbook-right-col" ng-if="auth.isAuth()">
-    <div class="execution">
+    <div class="execution" ng-init="getBalance()">
       <h5>Order Entry</h5>
+      <div class="usd-balance">USD Balance: {{balances['usd']}} / {{balances['usd-available']}}</div>
+      <div class="btc-balance">BTC Balance: {{balances['btc']}} / {{balances['btc-available']}}</div>
+
       <form class="orderForm" ng-submit="placeOrder()">
 
         <div class="execDetails">
