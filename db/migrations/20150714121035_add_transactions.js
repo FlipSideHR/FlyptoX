@@ -11,6 +11,7 @@ exports.up = function(knex, Promise) {
             table.uuid("trade_id").references("id").inTable("trades");
             //user's order that resulted in this transaction
             table.uuid("order_id").references("id").inTable("orders");
+            table.string("ref");//general reference information related to transaction
             table.timestamps();
 
             //we might need a transfer_id and a new transfers
