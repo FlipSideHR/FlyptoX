@@ -72,6 +72,28 @@ app.controller('chartCtrl', ['$scope', '$interval', '$http', function($scope, $i
             }
             return rval;
         }
+
+
+
+  socket.on('trade', function(tradeData) {
+        // trade = {
+        //   type: 'buy',
+        //   price: 286,
+        //   size: 1,
+        //   maker_id: 'c33767d9-3c1f-4833-91af-863f976f3f4a',
+        //   taker_id: 'c33767d9-3c1f-4833-91af-863f976f3f4a',
+        //   maker_order_id: 'e0ba9920-34ad-11e5-827e-ab2fa4070236',
+        //   taker_order_id: '62061980-34b5-11e5-ab7b-c782cd928800',
+        //   currency_pair_id: 1,
+        //   updated_at: Mon Jul 27 2015 19:15:34 GMT-0400 (EDT),
+        //   created_at: Mon Jul 27 2015 19:15:34 GMT-0400 (EDT),
+        //   id: '620c3400-34b5-11e5-ab7b-c782cd928800'
+        // }
+        $scope.priceData.push({
+          y: parseFloat(tradeData.price),
+          x: Date.parse(tradeData.time)
+        });
+      });
   }]);
 })();
 
