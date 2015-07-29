@@ -58,13 +58,13 @@
           </select>
         </div>
 
-        <div class="execDetails">
+        <div class="execDetails" ng-if="orderData.type !== 'market'">
           <label>Price</label>
           <input ng-model="orderData.price" type="number" step="any" required>
         </div>
 
         <div class="execDetails">
-          <label>Type</label>
+          <label>Side</label>
           <select ng-model="orderData.side"
                   ng-options="side for side in sides" required>
           </select>
