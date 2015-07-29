@@ -14,18 +14,15 @@ app.set('view engine', 'html');
 // Configure the socket.io object with our Express app
 require('./controllers/web-market-streamer.js')(server);
 
-// Set up the event logger
-require('./controllers/logger');
-
 var marketEngine = require('./marketEngine');
 marketEngine.start();
 
 //signin and signup routes
-var authRouter = require("./routes/auth.js");
+var authRouter = require("./api/auth.js");
 app.use('/api/auth', authRouter);
 
 //api routes
-var apiRouter = require("./routes/api.js");
+var apiRouter = require("./api/v1.js");
 app.use('/api/v1', apiRouter);
 
 // serve all files from client/dist
