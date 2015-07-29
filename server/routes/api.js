@@ -467,7 +467,7 @@ query params: none
 */
 router.get('/accounts/:id', privateApi, function(req, res){
   Account.where({user_id:req.userId, id:req.params.id})
-  .fetch({withRelated:['currency'], columns:['id','currency_id']})
+  .fetch({withRelated:['currency'], columns:['id','currency_id', 'user_id']})
   .then(function(account){
     if(!account) return;
     return Promise.all([
