@@ -162,7 +162,7 @@
         request: function (object) {
           //only attach token to api calls to same origin
           if(object.url.toLowerCase().indexOf('/api/') === 0) {
-            var jwt = $window.localStorage.getItem('com.flyptox');
+            var jwt = $window.sessionStorage.getItem('com.flyptox');
             if (jwt) {
               object.headers['x-access-token'] = jwt;
             }
