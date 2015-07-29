@@ -58,13 +58,13 @@
           </select>
         </div>
 
-        <div class="execDetails">
+        <div class="execDetails" ng-if="orderData.type !== 'market'">
           <label>Price</label>
           <input ng-model="orderData.price" type="number" step="any" required>
         </div>
 
         <div class="execDetails">
-          <label>Type</label>
+          <label>Side</label>
           <select ng-model="orderData.side"
                   ng-options="side for side in sides" required>
           </select>
@@ -75,12 +75,12 @@
           <input ng-model="orderData.size" type="number" step="any" required>
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit">{{orderData.side}}</button>
 
       </form>
     </div>
 
-    <div class="myOrders" ng-init="(auth.isAuth === true) && getOrders()">
+    <div class="myOrders" ng-if="auth.isAuth()" ng-init="getOrders()">
       <table>
         <tr>
           <th>Price</th>
