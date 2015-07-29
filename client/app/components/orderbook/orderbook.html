@@ -80,7 +80,7 @@
       </form>
     </div>
 
-    <div class="myOrders" ng-init="(auth.isAuth === true) && getOrders()">
+    <div class="myOrders" ng-if="auth.isAuth()" ng-init="getOrders()">
       <table>
         <tr>
           <th>Price</th>
