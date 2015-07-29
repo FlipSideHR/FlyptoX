@@ -133,7 +133,7 @@ accountManager.withdrawFromAccount = function(account_id, amount, ref) {
   return bookshelf.model('Account')
     .where({id:account_id})
     .fetch({required:true})
-    .then(getAccountAvailableBalance)
+    .then(accountManager.getAccountAvailableBalance)
     .then(function(available){
       if(available < amount) throw new Error('Insufficient Funds');
       return bookshelf.model('Transaction').forge({
@@ -141,7 +141,8 @@ accountManager.withdrawFromAccount = function(account_id, amount, ref) {
         type: 'transfer',
         debit: amount,
         account_id: account_id
-      });
+      })
+      .save();
     });
 };
 
@@ -149,12 +150,13 @@ accountManager.depositToAccount = function(account_id, amount, ref) {
   return bookshelf.model('Account')
     .where({id:account_id})
     .fetch({required:true})
-    .then(function(account){
+    .then(function(){
       return bookshelf.model('Transaction').forge({
         ref: ref,
         type: 'transfer',
         credit: amount,
         account_id: account_id
-      });
+      })
+      .save();
     });
 };

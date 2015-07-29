@@ -18,9 +18,17 @@ function clearTradesAndOrders(done){
   .then(function(){
       return bookshelf.knex('orders').del();
   })
+  .finally(function(){
+    //bookshelf.knex.destroy();
+    done();
+  });
+}
+
+function clearUsers(done){
+  bookshelf.knex('accounts').del()
   .then(function(){
+    return bookshelf.knex('users').del()
   })
-  .catch()
   .finally(function(){
     //bookshelf.knex.destroy();
     done();
@@ -47,6 +55,9 @@ describe('Order Matcher', function(){
 
   var alice_id, bob_id;
 
+  before(clearTradesAndOrders);
+  before(clearUsers);
+
   before(function(done){
     users.signup("alice", "alice")
     .then(function(user){
@@ -62,6 +73,8 @@ describe('Order Matcher', function(){
     })
     .finally(done);
   });
+
+  after(clearUsers);
 
   it('shoud create one trade from two exact matching orders', function(done){
     Promise.map([
