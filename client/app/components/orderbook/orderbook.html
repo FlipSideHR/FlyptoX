@@ -4,7 +4,7 @@
       <tr class="orderbookRow"><td class="orderbookAsksCol">
         <div class="offerListItem" ng-repeat="a in asks">
           <h7 class="ask"> {{ a[1] }} </h7>
-          <h7 class="ask ask-price"> {{ a[0] }} </h7>
+          <h7 class="ask ask-price"> {{ a[0] | currency}} </h7>
           <svg height="1" width="500">
               <line x1="0" y1="0" x2="300" y2="0"/>
           </svg>
@@ -21,7 +21,7 @@
       <tr class="orderbookRow"><td class="orderbookBidsCol">
         <div class="bidListItem" ng-repeat="b in bids">
           <h7 class="bid"> {{ b[1] }} </h7>
-          <h7 class="bid bid-price"> {{ b[0] }} </h7>
+          <h7 class="bid bid-price"> {{ b[0] | currency}} </h7>
             <svg height="1" width="500">
                 <line x1="0" y1="0" x2="300" y2="0"/>
             </svg>
@@ -37,8 +37,8 @@
   <div class="orderbook-right-col" ng-if="auth.isAuth()">
     <div class="execution" ng-init="getBalance()">
       <h5>Order Entry</h5>
-      <div class="usd-balance">USD Balance: {{balances['usd']}} / {{balances['usd-available']}}</div>
-      <div class="btc-balance">BTC Balance: {{balances['btc']}} / {{balances['btc-available']}}</div>
+      <div class="usd-balance">USD Balance: {{balances['usd'] | currency}} / Avail: {{balances['usd-available'] | currency}}</div>
+      <div class="btc-balance">BTC Balance: {{balances['btc'] | currency}} / Avail: {{balances['btc-available'] | currency}}</div>
 
       <form class="orderForm" ng-submit="placeOrder()">
 
@@ -88,7 +88,7 @@
           <th>Cancel</th>
         </tr>
         <tr ng-repeat="order in myOrders track by $index">
-          <td>{{order.price}}</td>
+          <td>{{order.price | currency}}</td>
           <td>{{order.size}}</td>
           <td><a class="x" ng-click="cancelOrder($index)">X</a></td>
         </tr>
