@@ -27,11 +27,11 @@
     };
 
     auth.isAuth = function () {
-      return !!$window.localStorage.getItem('com.flyptox');
+      return !!$window.sessionStorage.getItem('com.flyptox');
     };
 
     auth.signout = function () {
-      $window.localStorage.removeItem('com.flyptox');
+      $window.sessionStorage.removeItem('com.flyptox');
       $state.go('^.home');
     };
 

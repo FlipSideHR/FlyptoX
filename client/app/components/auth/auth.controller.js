@@ -8,7 +8,7 @@
       $scope.signin = function () {
         AuthService.signin($scope.user)
           .then(function (token) {
-            $window.localStorage.setItem('com.flyptox', token);
+            $window.sessionStorage.setItem('com.flyptox', token);
 
             $scope.error = ''; // Clear any previous error messages.
 
@@ -28,7 +28,7 @@
       $scope.signup = function () {
         AuthService.signup($scope.user)
           .then(function (token) {
-            $window.localStorage.setItem('com.flyptox', token);
+            $window.sessionStorage.setItem('com.flyptox', token);
             $scope.error = ''; // Clear any previous error messages.
             //redirect user after successful login
             $state.go('landing.marketview');

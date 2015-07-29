@@ -160,11 +160,14 @@
       // then add it to the header so the server can validate the request
       var attach = {
         request: function (object) {
-          var jwt = $window.localStorage.getItem('com.flyptox');
-          if (jwt) {
-            object.headers['x-access-token'] = jwt;
+          //only attach token to api calls to same origin
+          if(object.url.toLowerCase().indexOf('/api/') === 0) {
+            var jwt = $window.sessionStorage.getItem('com.flyptox');
+            if (jwt) {
+              object.headers['x-access-token'] = jwt;
+            }
+            object.headers['Allow-Control-Allow-Origin'] = '*';
           }
-          object.headers['Allow-Control-Allow-Origin'] = '*';
           return object;
         }
       };
