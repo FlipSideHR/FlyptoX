@@ -32,7 +32,7 @@
 
     auth.signout = function () {
       $window.localStorage.removeItem('com.flyptox');
-      $state.go('landing.home');
+      $state.go('^.home');
     };
 
     //var verifyToken = function () {
