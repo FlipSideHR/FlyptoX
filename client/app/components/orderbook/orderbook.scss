@@ -155,7 +155,7 @@ svg {
   -moz-border-radius: 4px;
   border-radius: 4px;
   flex: 1 1 auto;
-  margin: 10px;
+  margin: 5% 0 2% 42%;
   padding: 8px 15px;
   border: 2px solid #beb8b8;
   text-align: center;
@@ -188,12 +188,6 @@ div.tx {
   float: left;
 }
 
-div.myOrders {
-  width: 100%;
-  border-radius: 2px;
-  border: 1px solid #dfdfdf;
-}
-
 div.orderbook-right-col {
   float: right;
   display: inline-block;
@@ -210,11 +204,11 @@ div.orderbook-right-col div{
 }
 
 .myOrders td {
+  text-align: center;
   padding: 3px;
 }
 
 .x {
-  margin-left: 20px;
   text-align: center;
   background: #eee;
 }
