@@ -5,6 +5,7 @@
   // Dependencies for module 'FlyptoX'
   var dependencies = [
     'ui.router',
+    'FlyptoX.api',
     'FlyptoX.auth',
     'FlyptoX.orderbook',
     'FlyptoX.chart',
@@ -14,8 +15,7 @@
 
   // Create a new module named 'FlyptoX' using 'dependencies'.
   // This is the main module for the app, and is expected by
-  // the ng-app directive in index.html. Assigned to 'app'
-  // for convenience when defining controllers, services, etc.
+  // the ng-app directive in index.html.
   var app = angular.module('FlyptoX', dependencies);
 
   // ROUTING

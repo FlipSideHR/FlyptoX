@@ -1,8 +1,8 @@
 (function(){
   var app = angular.module('FlyptoX.orderbook', []);
 
-  app.controller('OrderbookCtrl', ['$scope', '$http', 'AuthService',
-    function($scope, $http, AuthService) {
+  app.controller('OrderbookCtrl', ['$scope', '$http', 'AuthService', 'APIService',
+    function($scope, $http, AuthService, APIService) {
       $scope.pairs = [{label: 'BTC-USD', value: 1}];
       $scope.types = ['limit', 'market'];
       $scope.sides = ['buy', 'sell'];
@@ -32,37 +32,44 @@
         //    balance: balances[0],
         //    available: balances[1]
         //  };
-        $http({
-          method:'GET',
-          url: '/api/v1/accounts'
-        })
-        .success(function(data) {
-          $http({
-            method: 'GET',
-            url: '/api/v1/accounts/' + data[0].id
-          })
-          .success(function(data, status, headers, config, statusText){
+        APIService.get('accounts', function(accounts) {
+          APIService.get('accounts/' + accounts[0].id, function(data) {
             $scope.balances['usd'] = data.balance;
             $scope.balances['usd-available'] = data.available;
-          })
-          .error(function(data, status, headers, config, statusText){
-
           });
 
-          $http({
-            method: 'GET',
-            url: '/api/v1/accounts/' + data[1].id
-          })
-          .success(function(data, status, headers, config, statusText){
+          APIService.get('accounts/' + accounts[1].id, function(data) {
             $scope.balances['btc'] = data.balance;
             $scope.balances['btc-available'] = data.available;
-          })
-          .error(function(data, status, headers, config, statusText){
-
           });
-        })
-        .error(function(data) {
+        });
+      };
 
+      $scope.getBook = function () {
+        APIService.get('products/1/book/?level=2', function(data) {
+          $scope.asks = data.asks.reverse();
+          $scope.bids = data.bids.reverse();
+        });
+      };
+
+      $scope.getOrders = function() {
+        APIService.get('orders', function(data) {
+          $scope.myOrders = data;
+        });
+      };
+
+      $scope.getOrderBook = function(id) {
+        // Assumes the only product is 'BTC-USD', as shown by the /1 parameter
+        APIService.get('products/1/book?level=' + id, function(data) {
+          $scope.orderbook = data;
+        });
+      };
+
+      $scope.placeOrder = function() {
+        APIService.post('orders', $scope.orderData, function(data) {
+          $scope.getBook();
+          $scope.getOrders();
+          $scope.getBalance();
         });
       };
 
@@ -70,79 +77,12 @@
         // Cancel the order at index of $scope.myOrders:
         // Post a delete call to the API for that order by using its id
         // Refresh the list of 'my orders'...it should not be there anymore
-
         var orderId = $scope.myOrders[index].id;
 
-        $http({
-          method: 'DELETE',
-          url: '/api/v1/orders/' + orderId
-        })
-        .success(function(data, status, headers, config, statusText){
+        APIService.delete('orders/' + orderId, function(data) {
           $scope.getOrders();
           $scope.getBook();
-        })
-        .error(function(data, status, headers, config, statusText){
-
         });
-      };
-
-      $scope.getBook = function () {
-        $http({
-          method: 'GET',
-          url: '/api/v1/products/1/book/?level=2'
-          })
-        .success(function(data, status, headers, config, statusText){
-          $scope.asks = data.asks.reverse();
-          $scope.bids = data.bids.reverse();
-        })
-        .error(function(data, status, headers, config, statusText) {
-
-        });
-      };
-
-      $scope.getOrders = function() {
-        $http({
-          method: 'GET',
-          url: '/api/v1/orders'
-        })
-        .success(function(data, status, headers, config, statusText){
-          $scope.myOrders = data;
-        })
-        .error(function(data, status, headers, config, statusText) {
-
-        });
-      };
-
-      $scope.getOrderBook = function(id) {
-        $http({
-          method: 'GET',
-          url: '/api/v1/products/1/book?level=' + id
-        })
-        .success(function(data, status, headers, config, statusText){
-          $scope.orderbook = data;
-        })
-        .error(function(data, status, headers, config, statusText) {
-
-        });
-      };
-
-      $scope.placeOrder = function() {
-        $http({
-          method: 'POST',
-          url: '/api/v1/orders',
-          data: $scope.orderData
-        })
-        .success(function(data, status, headers, config, statusText) {
-          console.log(data, status, statusText);
-          $scope.getBook();
-          $scope.getOrders();
-          $scope.getBalance();
-          console.log('Success');
-        })
-        .error(function(data, status, headers, config, statusText) {
-          console.log('Error');
-        });
-
       };
 
       socket.on('order:new', function(orderData) {

@@ -1,8 +1,8 @@
 (function(){
   var app = angular.module('FlyptoX.account', []);
 
-  app.controller('AccountCtrl', ['$scope', '$http',
-    function($scope, $http) {
+  app.controller('AccountCtrl', ['$scope', '$http', 'APIService',
+    function($scope, $http, APIService) {
       $scope.section = 'history';
       $scope.filter = 'orders';
       $scope.columns = {
@@ -11,6 +11,7 @@
         'transactions': ['credit', 'debit', 'type']
       };
       $scope.records = {};
+
 
       $scope.getTrades = function() {
         // [
@@ -27,15 +28,8 @@
         //    ...
         // ]
 
-        $http({
-          method: 'GET',
-          url: '/api/v1/trades'
-        })
-        .success(function(data, status, headers, config, statusText) {
+        APIService.get('trades', function(data) {
           $scope.records['trades'] = data;
-        })
-        .error(function(data, status, headers, config, statusText) {
-
         });
       };
 
@@ -53,48 +47,34 @@
         //  },
         //  ...
         // ]
-        $http({
-          method: 'GET',
-          url: '/api/v1/orders'
-        })
-        .success(function(data, status, headers, config, statusText){
-          $scope.records['orders'] = data;
-        })
-        .error(function(data, status, headers, config, statusText) {
 
+        APIService.get('orders', function(data) {
+          $scope.records['orders'] = data;
         });
       };
 
       $scope.getTransactions = function() {
-        $http({
-          method: 'GET',
-          url: '/api/v1/accounts'
-        })
-        .success(function(data){
+        // [
+        //  {
+        //   id: account.id,
+        //   currency: 'USD'
+        //  },
+        //  ...
+        // ]
+        APIService.get('accounts', function(accounts) {
           // [
           //  {
-          //   id: account.id,
-          //   currency: 'USD'
-          //  },
-          //  ...
+          //   id: transaction.id,
+          //   created_at: transaction.get('created_at'),
+          //   credit: 
+          //   debit: 
+          //   type: transaction.get('type'),
+          //   order_id: transaction.get('order_id'),
+          //   trade_id: transaction.get('trade_id')
+          //   //transfer_id: transaction.get('transfer_id'),
+          //  }
           // ]
-          $http({
-            method: 'GET',
-            url: '/api/v1/accounts/' + data[0].id + '/ledger'
-          })
-          .success(function(data, status, headers, config, statusText){
-            // [
-            //  {
-            //   id: transaction.id,
-            //   created_at: transaction.get('created_at'),
-            //   credit: 
-            //   debit: 
-            //   type: transaction.get('type'),
-            //   order_id: transaction.get('order_id'),
-            //   trade_id: transaction.get('trade_id')
-            //   //transfer_id: transaction.get('transfer_id'),
-            //  }
-            // ]
+          APIService.get('accounts/' + accounts[0].id + '/ledger', function(data) {
             $scope.records['transactions'] = data;
           });
         });
