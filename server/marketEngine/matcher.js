@@ -70,7 +70,6 @@ function processOffers(info) {
     var offers = info.offers;
     var order = info.order;
     var availableBalance = 0;
-    var base_currency_id = order.related('currency_pair').get('base_currency_id');
     var quote_currency_id = order.related('currency_pair').get('quote_currency_id');
 
     if(order.get('type') === 'market' && order.get('side') === 'buy') {
@@ -129,16 +128,19 @@ function processOffers(info) {
             executionSize = Math.min(maxSize, offer_remaining_size);
 
             if(executionSize < 0.00000001) {
-              //TODO - howto handle this case - size less than 1 satoshi?
+              return [
+                done_order(T, order),
+                null,
+                null
+              ];
             }
-            if(executionSize > 0) {
-              availableBalance -= executionSize * offer.get('price');
-              return Promise.all([
-                partial_fill_final(T, order, executionSize),
-                partial_fill(T, offer, executionSize),
-                create_trade(T, order, offer, executionSize)
-              ]);
-            }
+
+            availableBalance -= executionSize * offer.get('price');
+            return Promise.all([
+              partial_fill_final(T, order, executionSize),
+              partial_fill(T, offer, executionSize),
+              create_trade(T, order, offer, executionSize)
+            ]);
           }
         }
 
@@ -182,7 +184,9 @@ function processOffers(info) {
         }
       })
       .then(function(results){
-        appEvents.emit('trade', results[2].toJSON());
+        if(results[2]){
+          appEvents.emit('trade', results[2].toJSON());
+        }
 
         if (order.get('status') === 'done') {
           resolve();
@@ -206,6 +210,13 @@ function cancel_order(order){
   order.set('filled_size', 0);
   order.set('done_at', new Date());
   return order.save();
+}
+
+function done_order(T, order){
+  order.set('status', 'done');
+  order.set('done_reason', 'match');
+  order.set('done_at', new Date());
+  return order.save(null, {transacting: T});
 }
 
 function complete_fill(T, order) {
