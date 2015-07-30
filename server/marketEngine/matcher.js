@@ -6,11 +6,10 @@ var accountManager = require('./accountManager');
 
 var orderQueue = async.queue(matchingWorker);
 
-//new orders can be queued by bit emitting the 'order:new' event
-//new orders may also be queued by invoking the
-
+//new orders can be queued by emitting the 'order:new' event
 appEvents.on('order:new', orderQueue.push);
 
+//new orders may also be queued by invoking the queueOrder method
 module.exports.queueOrder = function(order){
   orderQueue.push(order);
 };
@@ -25,7 +24,7 @@ function matchingWorker(newOrder, doneMatching) {
 
 	// Select the order specified by orderID
 	return bookshelf.model('Order').where({id:orderId})
-    .fetch({required:true}) // required:true throws an error if the desired order is not found
+    .fetch({required:true, withRelated:'currency_pair'}) // required:true throws an error if the desired order is not found
     .then(function(order){
       var startPrice = order.get('price');
       var side = order.get('side');
@@ -70,8 +69,30 @@ function processOffers(info) {
   return new Promise(function(resolve, reject){
     var offers = info.offers;
     var order = info.order;
+    var availableBalance = 0;
+    var base_currency_id = order.related('currency_pair').get('base_currency_id');
+    var quote_currency_id = order.related('currency_pair').get('quote_currency_id');
 
-    matchOrder(0); //start at index 0
+    if(order.get('type') === 'market' && order.get('side') === 'buy') {
+      accountManager.getUserQuoteCurrencyAccount(order.get('user_id'), quote_currency_id)
+        .then(accountManager.getAccountAvailableBalance)
+        .then(function(available){
+          //will need to keep track of balance to ensure we only fill a market order
+          //upto a size which doesn't exceed user's available funds
+          if(available > 0) {
+            availableBalance = available;
+            //start order matching
+            matchOrder(0);
+          } else {
+            cancel_order(order)
+            .finally(resolve);
+          }
+        })
+        .catch(reject);
+    } else {
+      matchOrder(0);
+    }
+
 
     function matchOrder(index) {
       index = index || 0;
@@ -93,9 +114,40 @@ function processOffers(info) {
       var offer_remaining_size = offer.get('size') - offer.get('filled_size');
       var diff = order_remaining_size - offer_remaining_size;
 
+      //market order checking
+      var maxSize;
+      var executionSize;
+
       bookshelf.transaction(function(T){
+        //find case when market order can only be partially filled otherwise it would
+        //result in negative balance
+        if(order.get('type') === 'market' && order.get('side') === 'buy'){
+          if(order_remaining_size * offer.get('price') > availableBalance){
+            //at this offer price we cannot do a complete fill of the market order
+            //so find the max size - do partial fills and end the processing
+            maxSize = availableBalance / offer.get('price');
+            executionSize = Math.min(maxSize, offer_remaining_size);
+
+            if(executionSize < 0.00000001) {
+              //TODO - howto handle this case - size less than 1 satoshi?
+            }
+            if(executionSize > 0) {
+              availableBalance -= executionSize * offer.get('price');
+              return Promise.all([
+                partial_fill_final(T, order, executionSize),
+                partial_fill(T, offer, executionSize),
+                create_trade(T, order, offer, executionSize)
+              ]);
+            }
+          }
+        }
+
         if (diff === 0) {
           //perfect match
+          if(order.get('type') === 'market'  && order.get('side') === 'buy') {
+            availableBalance -= order_remaining_size * offer.get('price');
+          }
+
           return Promise.all([
             complete_fill(T, order),
             complete_fill(T, offer),
@@ -105,6 +157,10 @@ function processOffers(info) {
         } else if (diff > 0){
           //partial fill of order
           //complete fill of the offer
+          if(order.get('type') === 'market' && order.get('side') === 'buy') {
+            availableBalance -= offer_remaining_size * offer.get('price');
+          }
+
           return Promise.all([
             partial_fill(T, order, offer_remaining_size),
             complete_fill(T, offer),
@@ -114,6 +170,10 @@ function processOffers(info) {
         } else {
           //partial fill of offer
           //complete fill of the order
+          if(order.get('type') === 'market' && order.get('side') === 'buy') {
+            availableBalance -= order_remaining_size * offer.get('price');
+          }
+
           return Promise.all([
             partial_fill(T, offer, order_remaining_size),
             complete_fill(T, order),
@@ -140,6 +200,13 @@ function processOffers(info) {
 
 }
 
+function cancel_order(order){
+  order.set('status', 'done');
+  order.set('done_reason', 'not_processed');
+  order.set('filled_size', 0);
+  order.set('done_at', new Date());
+  return order.save();
+}
 
 function complete_fill(T, order) {
     order.set('status', 'done');
@@ -151,6 +218,14 @@ function complete_fill(T, order) {
 
 function partial_fill(T, order, size) {
   order.set('filled_size', order.get('filled_size') + size);
+  return order.save(null, {transacting: T});
+}
+
+function partial_fill_final(T, order, size) {
+  order.set('status', 'done');
+  order.set('done_reason', 'match');
+  order.set('filled_size', size);
+  order.set('done_at', new Date());
   return order.save(null, {transacting: T});
 }
 
