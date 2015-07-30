@@ -74,36 +74,39 @@ svg {
  max-height: 100%;
 }
 
-.main {
+.main, .main-bottom {
   margin: 0 auto;
   padding: 50px 5px 18% 5px;
   background-color: #000;
-  height: 10%;
   width: 100%;
   text-align: center;
 }
 
-.main > h3 {
+.main-bottom {
+  height: 350px;
+}
+
+.main > h3, .main-bottom > h3 {
   margin-top: 40px;
   font-size: 36px;
   line-height: 40px;
   color: #fff;
 }
 
-.main > h3:before, .main > h3:after, .main > p:after {
+.main > h3:before, .main > h3:after, .main > p:after, .main-bottom > h3:after {
   clear: both;
   content: "\00a0";
   display: table;
 }
 
-.main > p {
+.main > p, .main-bottom > p {
   font-size: 16px;
   line-height: 20px;
   color: #fff;
   margin-bottom: 40px;
 }
 
-.main > a {
+.main > a, .main-bottom > a {
   color: #000;
   background: #fff;
   padding: 15px 30px;
@@ -113,18 +116,25 @@ svg {
   border-radius: 2px;
 }
 
-.main > a:hover {
-  background: rgba(255,255,255,0.8);
+.main > a:hover, .main-bottom > a:hover {
+  background: rgb(255,255,255);
   color: #c50000;
 }
 
 footer {
   position: fixed;
   bottom: 0;
-  width: 100%;  text-align: center;
+  width: 100%;
+  text-align: center;
   font-size: .75em;
   letter-spacing: 3px;
-  padding-bottom: 2px;
+  padding: 3px 0px;
+  background: #000;
+  color: #fff;
+}
+
+footer > a {
+  color: #fff;
 }
 
 nav {
@@ -210,14 +220,16 @@ h2, h3, h4, h5, h6 {
   font-style: normal;
   font-variant: normal;
   font-weight: 500;
-  line-height: 15.3999996185303px;
+  line-height: 15px;
   margin-top: 5px;
 }
 
 .nav-ticker {
-  color: white;
+  color: #fff;
   margin: 0 auto;
-  vertical-align: bottom;
+  display: inline-block;
+  line-height: 20px;
+  padding: 7px 0px;
   transition: background-color cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
   -webkit-transition: background-color cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 }
@@ -232,8 +244,12 @@ h2, h3, h4, h5, h6 {
 .section {
   background-color: #FFF;
   width: 100%;
-  padding: 25px;
+  padding-top: 25px;
   text-align: center;
+}
+
+.bottom {
+  padding-bottom: 25px;
 }
 
 #sectionHead {
@@ -244,20 +260,26 @@ h2, h3, h4, h5, h6 {
 
 #landingHeader {
   font-size: 20px;
+  line-height: 22px;
   color: black;
   margin-top: 4%;
+  height: 44px;
 }
 
 #landingFont {
   font-size: 12px;
+  line-height: 16px;
   color: black;
   margin-top: 5%;
+  min-width: 160px;
+  height: 96px;
+
 }
 
 .infoSection {
   display: inline-block;
   vertical-align: top;
-  height: 150px;
+  min-height: 150px;
   width: 15%;
   margin: 25px;
   font-size: 20px;
@@ -265,9 +287,10 @@ h2, h3, h4, h5, h6 {
 }
 
 img #reverse {
-    -webkit-filter: invert(1);
-    filter: invert(1);
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
 }
+
 .forkBtn{
   position: relative;
   top: 10px;
@@ -275,6 +298,6 @@ img #reverse {
   margin-bottom: 10px;
 }
 
-#drop {
+.drop {
   margin-top: 5%;
 }

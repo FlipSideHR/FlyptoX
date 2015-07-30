@@ -1,6 +1,6 @@
 .log {
-/*  background: red;*/
-  width: 80%;
+  width: 90%;
+  min-width: 340px;
   margin: auto;
 }
 
@@ -15,12 +15,7 @@
 .loginBox {
   margin: 100px auto;
   padding: 10px;
-  border: 2px solid black;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  width: 40%;
-  background-color: #fff;
+  width: 45%;
   color: white;
 }
 
@@ -29,19 +24,26 @@
   display: block;
   margin: auto;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   padding: 10px;
-  border: 1px solid #dfdfdf;
   background: #f7f7f7;
+  border: 1px solid #dfdfdf;
+  font-size: 14px;
+  outline: none;
+}
+
+.log > input:focus {
+  border: 1px solid #b2b2b2;
+  background: #fff;
 }
 
 .log > a {
   text-decoration: none;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .log > a:hover {
-  font-weight: bold;
+  color: #c50000;
 }
 
 .log > button {
@@ -51,10 +53,15 @@
   background: #4a90e2;
   color: #fff;
   font-size: 14px;
-  padding: 10px 5px;
+  padding: 12px 5px;
   border: 1px solid #fff;
+  margin-bottom: 10px;
+}
+
+.log > input, .log > button {
   border-radius: 2px;
-  margin-bottom: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
 }
 
 .log > button:hover {
