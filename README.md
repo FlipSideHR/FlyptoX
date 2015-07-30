@@ -37,7 +37,7 @@ TODO:
 > `git clone https://github.com/FlipSideHR/FlyptoX.git`
 
 > `cd FlyptoX`
-> `./FlyptoX setup`
+> `./flyptoX setup`
 
 ####TODO: Write better instructions and tools for this part of the process.
 Deploy to your hosting environment.
@@ -59,29 +59,29 @@ Deploy to your hosting environment.
 From within the projects root directory:
 
 ```
-./Flyptox setup
+./flyptox setup
 ```
 
 ### Database setup
 
-[Install Postgres.](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
+1. [Install Postgres.](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
 
 
-The flyptox database setup is set to use your username as its admin user/database. From here it will create the other databases it needs. If for some reason your database was not configured like this, you will have to setup a database and user with your username that has admin privileges (this is dev, not production).
+    The flyptox database setup is set to use your username as its admin user/database. From here it will create the     other databases it needs. If for some reason your database was not configured like this, you will have to setup     a database and user with your username that has admin privileges (this is dev, not production).
 
-Linux users:
+    Linux users:
 
-You may have exta security measures to deal with as most distros tend to lock things down a bit more by default.
+    You may have exta security measures to deal with as most distros tend to lock things down a bit more by default.
 
-The quick and dirty solution looks like this:
+    The quick and dirty solution looks like this:
 
-In pg_hba.conf, ensure you have entries for your user and database set to 'trust'.
-In this example, we use flyptox for both user role and database name.
+    In pg_hba.conf, ensure you have entries for your user and database set to 'trust'.
+    In this example, we use flyptox for both user role and database name.
 
-```
-local	flyptox 	flyptox 					trust
-host	flyptox 	flyptox 	127.0.0.1/32 	trust
-```
+    ```
+    local	flyptox 	flyptox 					trust
+    host	flyptox 	flyptox 	127.0.0.1/32 	trust
+    ```
 
 **As always, you should follow your own security best practices.**
 
@@ -109,7 +109,7 @@ host	flyptox 	flyptox 	127.0.0.1/32 	trust
 > In utils/dbTools.js there are several utilities for working with the DB.
 > Run `./utils/dbTools` to overwrite the test db.
 > Run `./utils/dbTools --dev` to overwrite the dev db.
-> Run `./utils/dbTools --` to overwrite the dev and test db's.
+> Run `./utils/dbTools --all` to overwrite the dev and test db's.
 ### Roadmap
 
 View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
