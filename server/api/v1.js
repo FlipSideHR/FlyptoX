@@ -248,7 +248,7 @@ body json: none
 query params: none
 */
 router.get("/orders", privateApi, function(req, res){
-  Order.where({status:'open', user_id:req.userId})
+  Order.where({status:'open', user_id:req.userId, type:'limit'})
     .fetchAll({withRelated:['currency_pair']})
     .then(function(orders){
       return orders.map(function(order){
@@ -359,12 +359,12 @@ body json: none
 query params: none
 */
 router.delete("/orders/:id", privateApi, function(req, res){
-  Order.where({user_id:req.userId, id:req.params.id, status:'open'})
+  Order.where({user_id:req.userId, id:req.params.id, status:'open', type:'limit'})
     .fetch({withRelated:'currency_pair'})
     .then(function(order){
       if(order){
         order.set('status', 'done');
-        order.set('done_reason', 'canceled');
+        order.set('done_reason', 'cancelled');
         order.set('done_at', new Date());
         return order.save();
       }

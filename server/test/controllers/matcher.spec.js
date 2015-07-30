@@ -10,29 +10,21 @@ var Order = bookshelf.model('Order');
 var Trade = bookshelf.model('Trade');
 var Promise = require('bluebird');
 
-function clearTradesAndOrders(done){
+function clearTables(done){
   bookshelf.knex('transactions').del()
   .then(function(){
-    return bookshelf.knex('trades').del()
+      return bookshelf.knex('trades').del();
   })
   .then(function(){
       return bookshelf.knex('orders').del();
   })
-  .finally(function(){
-    //bookshelf.knex.destroy();
-    done();
-  });
-}
-
-function clearUsers(done){
-  bookshelf.knex('accounts').del()
+  .then(function(){
+    return bookshelf.knex('accounts').del();
+  })
   .then(function(){
     return bookshelf.knex('users').del()
   })
-  .finally(function(){
-    //bookshelf.knex.destroy();
-    done();
-  });
+  .finally(done);
 }
 
 
@@ -50,15 +42,11 @@ function makeOrder(user_id, side, price, size) {
 
 describe('Order Matcher', function(){
 
-  beforeEach(clearTradesAndOrders);
-  afterEach(clearTradesAndOrders);
-
   var alice_id, bob_id;
 
-  before(clearTradesAndOrders);
-  before(clearUsers);
+  beforeEach(clearTables);
 
-  before(function(done){
+  beforeEach(function(done){
     users.signup("alice", "alice")
     .then(function(user){
       alice_id = user.id;
@@ -66,7 +54,7 @@ describe('Order Matcher', function(){
     .finally(done);
   });
 
-  before(function(done){
+  beforeEach(function(done){
     users.signup("bob", "bob")
     .then(function(user){
       bob_id = user.id;
@@ -74,8 +62,8 @@ describe('Order Matcher', function(){
     .finally(done);
   });
 
-  after(clearUsers);
-
+  after(clearTables);
+  
   it('shoud create one trade from two exact matching orders', function(done){
     Promise.map([
       Order.forge(makeOrder(alice_id, 'buy', 200, 1)),

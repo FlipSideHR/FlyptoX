@@ -3,6 +3,7 @@ var socketio = require('socket.io');
 var io;
 
 appEvents.on('order:new', function(order) {
+  if(order.type !== 'limit') return;
   console.log('New order created server-side! Notifying clients...');
   io.emit('order:new', order);
 });
