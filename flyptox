@@ -225,40 +225,38 @@ function runAdminTool() {
       this.log('Getting user info for: ', args.userEmail);
       User.forge({email: args.userEmail}).fetch({withRelated: ['accounts']})
         .then(function(user){
-          console.log(user.get('email'));
-          console.log(user.related('accounts').at(0).toJSON());
-          console.log(user.related('accounts').at(1).toJSON());
-          callback();
-        })
-        .catch(function(err){
-          console.log(err);
-          callback();
-        });
-    });
 
-  // Get user data
-  vantage
-    .command("user get balance <userEmail>")
-    .description("get a user balance by email")
-    .action(function(args, callback) {
-      this.log('Getting user balance for: ', args.userEmail);
-      User.forge({email: args.userEmail}).fetch({withRelated: ['accounts']})
-        .then(function(user){
-
+          // non-relational accounts
           var account1 = user.related('accounts').at(0);
           var account2 = user.related('accounts').at(1);
 
-          //return user.related('accounts').at(0).related('currency').fetch();
+          return new Promise.all([
+            account1,
+            account2,
 
-          console.log(account1.get('id'), account2.get('id'));
+            // get some related data too
+            user.related('accounts').at(0).related('currency').fetch(),
+            user.related('accounts').at(1).related('currency').fetch()
+          ]);
+
+        })
+        .then(function(accountData){
 
           return new Promise.all([
-            am.getAccountBalance(account1),
-            am.getAccountBalance(account2)
+            // currency strings
+            accountData[2].get('currency'),
+            accountData[3].get('currency'),
+
+            // must use non-relational account data for balance
+            am.getAccountBalance(accountData[0]),
+            am.getAccountBalance(accountData[1])
+
             ]);
         })
         .then(function(balances){
-          console.log('Balance is: ', balances);
+          console.log('Balance:');
+          console.log(balances[0] + ': ' + balances[2]);
+          console.log(balances[1] + ': ' + balances[3]);
           callback();
         })
         .catch(function(err){
@@ -270,7 +268,7 @@ function runAdminTool() {
   // SET USER DATA
   vantage
     .command("user set <user> [property] [value]")
-    .description("")
+    .description("Set a user property")
     .action(function(args, callback) {
       this.log('Setting user info ' + args.property + ' to ' + args.value + ' for: ', args.user);
       callback();
