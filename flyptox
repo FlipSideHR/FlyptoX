@@ -1,6 +1,16 @@
 #!/usr/local/bin/node
-
 "use strict";
+
+var bookshelf = require("./server/utils/bookshelf");
+var am = require("./server/marketEngine/accountManager");
+var Promise = require('bluebird');
+
+var User = require('./server/models/User');
+var Account = require('./server/models/Account');
+var Trade = require('./server/models/Trade');
+var Currency = require('./server/models/Currency');
+var CurrencyPair = require('./server/models/CurrencyPair');
+var Order = require('./server/models/Order');
 
 // track if we are doing a package setup
 var setup = false;
@@ -188,15 +198,76 @@ function runAdminTool() {
       callback();
     });
 
-  // find a user
+  // list all users (with filter)
   vantage
-    .command("user get <user>")
-    .description("")
-    .action(function(args, callback) {
-      this.log('Getting user info for: ', args.user);
-      callback();
+    .command("user list")
+    .description("Get a list of all users.")
+    .action(function(args, callback){
+      this.log('Listing all users:');
+      User.fetchAll()
+        .then(function(users){
+          users.forEach(function(model){
+            console.log(model.get('email'));
+          });
+          callback();
+        })
+        .catch(function(err){
+          console.log(err);
+          callback();
+        });
     });
 
+  // find a user
+  vantage
+    .command("user get <userEmail>")
+    .description("get a user by email")
+    .action(function(args, callback) {
+      this.log('Getting user info for: ', args.userEmail);
+      User.forge({email: args.userEmail}).fetch({withRelated: ['accounts']})
+        .then(function(user){
+          console.log(user.get('email'));
+          console.log(user.related('accounts').at(0).toJSON());
+          console.log(user.related('accounts').at(1).toJSON());
+          callback();
+        })
+        .catch(function(err){
+          console.log(err);
+          callback();
+        });
+    });
+
+  // Get user data
+  vantage
+    .command("user get balance <userEmail>")
+    .description("get a user balance by email")
+    .action(function(args, callback) {
+      this.log('Getting user balance for: ', args.userEmail);
+      User.forge({email: args.userEmail}).fetch({withRelated: ['accounts']})
+        .then(function(user){
+
+          var account1 = user.related('accounts').at(0);
+          var account2 = user.related('accounts').at(1);
+
+          //return user.related('accounts').at(0).related('currency').fetch();
+
+          console.log(account1.get('id'), account2.get('id'));
+
+          return new Promise.all([
+            am.getAccountBalance(account1),
+            am.getAccountBalance(account2)
+            ]);
+        })
+        .then(function(balances){
+          console.log('Balance is: ', balances);
+          callback();
+        })
+        .catch(function(err){
+          console.log('-->', err);
+          callback();
+        });
+    });
+
+  // SET USER DATA
   vantage
     .command("user set <user> [property] [value]")
     .description("")

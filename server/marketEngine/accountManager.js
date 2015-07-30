@@ -8,11 +8,17 @@ var accountManager = module.exports;
 
 accountManager.getAccountBalance = function(account){
   return bookshelf.model('Account')
-    .where({id:account.get('id')}).fetch({withRelated:'transactions', required:true})
+    .where({id:account.get('id')})
+    .fetch({withRelated:'transactions'})
     .then(function(account){
-      return account.related('transactions').reduce(function(balance, transaction){
-        return balance + transaction.get('credit') - transaction.get('debit');
-      },0);
+      return account.related('transactions')
+        .reduce(function(balance, transaction){
+          return balance + transaction.get('credit') - transaction.get('debit');
+        },0);
+    })
+    .catch(function(err){
+      console.log(err);
+      return err;
     });
 };
 
