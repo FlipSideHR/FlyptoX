@@ -34,14 +34,18 @@ function runSetup(){
                '                                 ' +
                '---------------------------------';
 
+  console.log('Starting installation....');
+
   var exec = require('child_process').exec;
-  exec('npm install && bower install && utils/dbTools.js --all && gulp build',
-    function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
+  var child = exec('npm install && bower install && utils/dbTools.js --all && gulp build');
+  child.stdout.on('data', function(data) {
+      console.log(data.toString());
+  });
+  child.stderr.on('data', function(data) {
+      console.log(data.toString());
+  });
+  child.on('close', function(code) {
+      console.log(code.toString());
 
       // get our modules
       var chalk = require('chalk');
