@@ -93,6 +93,10 @@ div.filters {
   height: 25px;
 }
 
+.settings h1 {
+  margin-bottom: 20px;
+}
+
 .settingsForm label {
   width: 100%;
   padding-left: 35%;
@@ -103,9 +107,17 @@ div.filters {
 .settingsForm input[type=text] {
   margin: 2% 0;
   width: 40%;
+  outline: none;
+  padding: 5px 3px;
+  border: 1px solid #999;
 }
 
 .settingsForm button {
   display: block;
-  margin: 1% auto 0 auto;
+  margin: 1% auto;
+  outline: none;
+}
+
+.br {
+  display: block;
 }
