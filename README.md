@@ -2,7 +2,7 @@
 
 # FlyptoX
 
-> FlyptoX is an open-source, node.js crypto currency exchange. 
+> FlyptoX is an open-source, node.js crypto currency exchange.
 
 ####**Currently in alpha development. Thorough testing is suggested and PR's are welcome.
 
@@ -37,7 +37,14 @@ TODO:
 > `git clone https://github.com/FlipSideHR/FlyptoX.git`
 
 > `cd FlyptoX`
-> `./flyptoX setup`
+> `./flyptox setup`
+
+#### Administration
+Rudimentery CLI for administration.
+
+> `./flyptox`
+> `flyptox$: help`
+
 
 ####TODO: Write better instructions and tools for this part of the process.
 Deploy to your hosting environment.
@@ -50,7 +57,7 @@ Deploy to your hosting environment.
 - Angular 1.2.26
 - Postgresql 9.1.x
 - Socket.io  1.3.6
-- Bookshelfjs 0.7.7 
+- Bookshelfjs 0.7.7
 
 ## Development
 
@@ -87,7 +94,7 @@ From within the projects root directory:
 
 ### Now you are ready to devel!
 
-- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes. 
+- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes.
 
 ### Testing
 
@@ -96,7 +103,7 @@ From within the projects root directory:
 - `gulp test:server` to run all server tests
 
 #### Client side
-- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes. 
+- `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes.
 - `gulp test:client` to run all client tests
 
 - Gulp uses nyan cat for server test by default.
