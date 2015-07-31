@@ -11,7 +11,7 @@
         'transactions': ['credit', 'debit', 'type']
       };
       $scope.records = {};
-
+      $scope.balances = {};
 
       $scope.getTrades = function() {
         // [
@@ -53,7 +53,7 @@
         });
       };
 
-      $scope.getTransactions = function() {
+      $scope.getTransactions = function(currency_id) {
         // [
         //  {
         //   id: account.id,
@@ -74,11 +74,26 @@
           //   //transfer_id: transaction.get('transfer_id'),
           //  }
           // ]
-          APIService.get('accounts/' + accounts[0].id + '/ledger', function(data) {
+          APIService.get('accounts/' + accounts[currency_id].id + '/ledger', function(data) {
             $scope.records['transactions'] = data;
           });
         });
       };
+
+      // Initialize account balances
+      (function(){
+        APIService.get('accounts', function(accounts) {
+          APIService.get('accounts/' + accounts[0].id, function(data) {
+            $scope.balances['usd'] = data.balance;
+            $scope.balances['usd-available'] = data.available;
+          });
+
+          APIService.get('accounts/' + accounts[1].id, function(data) {
+            $scope.balances['btc'] = data.balance;
+            $scope.balances['btc-available'] = data.available;
+          });
+        });
+      })();
 
     }]); // app.controller
 })(); // anonymous function

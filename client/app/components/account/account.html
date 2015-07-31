@@ -5,7 +5,7 @@
 </pre>
 
 <!-- Container -->
-<div class="account" ng-init="getTransactions()">
+<div class="account" ng-init="getTransactions(0)">
   <!-- Section Navigation -->
   <div class="sections">
     <a ng-click="section='history'">Account History</a>
@@ -15,6 +15,7 @@
 
   <!-- Latest (Transactions | Trades | Orders) -->
   <div class=" history" ng-show="section === 'history'">
+    <h1>Last 20 {{filter}}</h1>
     <!-- Filter Buttons -->
     <div class="filters">
       <button ng-click="filter='orders'">Orders</button>
@@ -27,7 +28,7 @@
       <tr class="headings">
         <th ng-repeat="column in columns[filter]">{{column}}</th>
       </tr>
-      <tr class="record" ng-repeat="record in records[filter]">
+      <tr class="record" ng-repeat="record in records[filter] | limitTo: 20">
         <td ng-repeat="column in columns[filter]">{{record[column]}}</td>
       </tr>
     </table>
@@ -35,11 +36,65 @@
 
   <!-- Add Account / Wallet -->
   <div class="wallets" ng-show="section === 'wallets'">
-    Wallets
+    <h1>Wallet Balances</h1>
+    <table>
+      <tr class="headings">
+        <th>Currency</th>
+        <th>Total Balance</th>
+        <th>Available Balance</th>
+      </tr>
+      <tr class="record">
+        <td>USD</td>
+        <td>{{balances['usd'] | currency}}</td>
+        <td>{{balances['usd-available'] | currency}}</td>
+      </tr>
+      <tr class="record">
+        <td>BTC</td>
+        <td>{{balances['btc']}}</td>
+        <td>{{balances['btc-available']}}</td>
+      </tr>
+    </table>
   </div>
 
   <!-- Settings -->
   <div class="settings" ng-show="section === 'settings'">
-    Settings
+    <form class="settingsForm">
+
+        <div class="execDetails">
+          <label>Currency</label>
+          <select ng-model="orderData.currency_pair_id"
+                  ng-options="pair.value as pair.label for pair in pairs"
+                  required>
+          </select>
+        </div>
+
+        <div class="execDetails">
+          <label>Type</label>
+          <select ng-model="orderData.type"
+                  ng-options="type for type in types"
+                  required>
+          </select>
+        </div>
+
+        <div class="execDetails" ng-if="orderData.type !== 'market'">
+          <label>Price</label>
+          <input ng-model="orderData.price" type="number" step="any" required>
+        </div>
+
+        <div class="execDetails">
+          <label>Side</label>
+          <select ng-model="orderData.side"
+                  ng-options="side for side in sides" required>
+          </select>
+        </div>
+
+        <div class="execDetails">
+          <label>Size</label>
+          <input ng-model="orderData.size" type="number" step="any" required>
+        </div>
+
+        <button type="submit">Submit<button>
+
+      </form>
   </div>
 </div>

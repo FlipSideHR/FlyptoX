@@ -23,7 +23,7 @@ div.sections {
   margin-top: 50%;
 }
 
-div.history {
+div.history, div.wallets {
   width: 80%;
   display: inline-block;
   float: right;
@@ -73,11 +73,11 @@ div.filters {
   }
 }
 
-.history table {
+.history table, .wallets table {
   margin: 1% auto 0 auto;
 }
 
-.history td {
+.history td, .wallets td {
   width: 10%;
   text-align: center;
   padding-top: 5px;
