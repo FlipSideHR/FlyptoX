@@ -109,31 +109,24 @@
 
   //---------------------------------------------------------
   // controller for our root level page
-  app.controller('LandingController', ['$scope', '$state', '$http', '$timeout', 'AuthService',
-    function($scope, $state, $http, $timeout, AuthService){
+  app.controller('LandingController', ['$scope', '$state', '$http',
+                                       '$timeout', 'AuthService', 'APIService',
+    function($scope, $state, $http, $timeout, AuthService, APIService){
       $scope.auth = AuthService;
 
-      $http({
-        method: 'GET',
-        url: '/api/v1/products/1/ticker'
-      })
-      .success(function(data, status, headers, config, statusText) {
-        // data = {
-        //   "id": trade-id,
-        //   "price": "301.00",
-        //   "size": "1.50000000",
-        //   "time": "2015-05-05T23:17:30.310036Z"
-        // }
+      APIService.get('products/1/ticker', function(data) {
         $scope.lastTrade = data;
-      })
-      .error(function(data, status, headers, config, statusText) {
-
       });
 
       socket.on('trade', function(tradeData) {
         // Sets the tickType so that the ng-class directive gets activated
-        // TODO: What should happen when the previous trade price is the same as the most recent trade price?
-        $scope.tickType = tradeData.price > $scope.lastTrade.price ? 'uptick' : 'downtick';
+        if (tradeData.price > $scope.lastTrade.price) {
+          $scope.tickType = 'uptick';
+        } else if (tradeData.price < $scope.lastTrade.price) {
+          $scope.tickType = 'downtick';
+        } else {
+          $scope.tickType = 'equaltick';
+        }
 
         $timeout(function() {
            // Clear the tickType class to reverse the transition

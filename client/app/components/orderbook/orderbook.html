@@ -38,7 +38,7 @@
     <div class="balances execution">
       <h5>Wallet Balances</h5>
       <div class="usd-balance">USD Balance: {{balances['usd'] | currency}} / Avail: {{balances['usd-available'] | currency}}</div>
-      <div class="btc-balance">BTC Balance: {{balances['btc'] | currency}} / Avail: {{balances['btc-available'] | currency}}</div>
+      <div class="btc-balance">BTC Balance: {{balances['btc']}} / Avail: {{balances['btc-available']}}</div>
     </div>
 
     <div class="execution" ng-init="getBalance()">
