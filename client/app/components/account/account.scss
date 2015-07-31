@@ -1,9 +1,14 @@
+.account {
+  height: 100%;
+}
+
 div.sections {
-  border: 1px solid green;
   width: 20%;
   max-width: 20%;
+  min-width: 180px;
   display: inline-block;
   vertical-align: top;
+  background: rgb(49,52,66);
 }
 
 .sections a {
@@ -11,6 +16,7 @@ div.sections {
   width: 100%;
   margin-bottom: 7%;
   text-align: center;
+  color: rgb(152,152,159);
 }
 
 .sections a:first-child {
@@ -18,10 +24,12 @@ div.sections {
 }
 
 div.history {
-  border: 1px solid magenta;
-  width: 79%;
+  width: 80%;
   display: inline-block;
-  vertical-align: top;
+  float: right;
+  padding: 9px 0px;
+  height: 100%;
+  background: rgb(230,230,230);
 }
 
 div.filters {
@@ -29,9 +37,40 @@ div.filters {
 }
 
 .filters button {
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  flex: 1 1 auto;
   margin: 1% 4%;
-  width: 10%;
-  line-height: 3em;
+  padding: 8px 15px;
+  border: 2px solid #000;
+  text-align: center;
+  text-transform: uppercase;
+  position: relative;
+  overflow:hidden;
+  background: transparent;
+  transition: .3s;
+  &:after {
+    position: absolute;
+    transition: .3s;
+    content: '';
+    width: 0;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: #000;
+  }
+  &:hover {
+    cursor: pointer;
+    &:after {
+      width: 100%;
+      left: 0;
+    }
+  }
 }
 
 .history table {
@@ -44,3 +83,6 @@ div.filters {
   padding-top: 5px;
 }
 
+.headings {
+  font-weight: bold;
+}
