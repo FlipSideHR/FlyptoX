@@ -68,15 +68,15 @@
         </div>
 
         <div class="execDetails">
+          <label>Size</label>
+          <input ng-model="orderData.size" type="number" step="any" required>
+        </div>
+
+        <div class="execDetails">
           <label>Side</label>
           <select ng-model="orderData.side"
                   ng-options="side for side in sides" required>
           </select>
-        </div>
-
-        <div class="execDetails">
-          <label>Size</label>
-          <input ng-model="orderData.size" type="number" step="any" required>
         </div>
 
         <button type="submit">{{orderData.side}}</button>
