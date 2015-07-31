@@ -90,8 +90,7 @@
         $scope.getBook();
       });
 
-      socket.on('trade', function(order) {
-        console.log('Trade occurred!');
+      socket.on('trade', function(trade) {
         $scope.getBook();
         $scope.getOrders();
       });
