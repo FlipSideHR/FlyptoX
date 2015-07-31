@@ -1,13 +1,18 @@
 .account {
   height: 100%;
+  display: table;
+}
+
+.account > div {
+  float: none;
+  display: table-cell;
+  vertical-align: top;
 }
 
 div.sections {
   width: 20%;
   max-width: 20%;
   min-width: 180px;
-  display: inline-block;
-  vertical-align: top;
   background: rgb(49,52,66);
 }
 
@@ -25,8 +30,6 @@ div.sections {
 
 div.history, div.wallets {
   width: 80%;
-  display: inline-block;
-  float: right;
   padding: 9px 0px;
   height: 100%;
   background: rgb(230,230,230);
@@ -74,15 +77,18 @@ div.filters {
 }
 
 .history table, .wallets table {
-  margin: 1% auto 0 auto;
+  margin: 2% auto 1% auto;
+  width: 80%;
 }
 
 .history td, .wallets td {
   width: 10%;
   text-align: center;
   padding-top: 5px;
+  height: 25px;
 }
 
 .headings {
   font-weight: bold;
+  height: 25px;
 }
