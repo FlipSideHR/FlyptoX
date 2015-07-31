@@ -1,6 +1,10 @@
 #!/usr/local/bin/node
-
 "use strict";
+
+var am = require("./server/marketEngine/accountManager");
+var Promise = require('bluebird');
+
+var User = require('./server/models/User');
 
 // track if we are doing a package setup
 var setup = false;
@@ -34,18 +38,14 @@ function runSetup(){
                '                                 ' +
                '---------------------------------';
 
-  console.log('Starting installation....');
-
   var exec = require('child_process').exec;
-  var child = exec('npm install && bower install && utils/dbTools.js --all && gulp build');
-  child.stdout.on('data', function(data) {
-      console.log(data.toString());
-  });
-  child.stderr.on('data', function(data) {
-      console.log(data.toString());
-  });
-  child.on('close', function(code) {
-      console.log(code.toString());
+  exec('npm install && bower install && utils/dbTools.js --all && gulp build',
+    function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
 
       // get our modules
       var chalk = require('chalk');
@@ -188,23 +188,144 @@ function runAdminTool() {
       callback();
     });
 
+  // list all users (with filter)
+  vantage
+    .command("user list")
+    .description("Get a list of all users.")
+    .action(function(args, callback){
+      this.log('Listing all users:');
+      User.fetchAll()
+        .then(function(users){
+          users.forEach(function(model){
+            console.log(model.get('email'));
+          });
+          callback();
+        })
+        .catch(function(err){
+          console.log(err);
+          callback();
+        });
+    });
+
   // find a user
   vantage
-    .command("user get <user>")
-    .description("")
+    .command("user get <userEmail>")
+    .description("get a user by email")
     .action(function(args, callback) {
-      this.log('Getting user info for: ', args.user);
-      callback();
+      this.log('Getting user info for: ', args.userEmail);
+      User.forge({email: args.userEmail}).fetch({withRelated: ['accounts']})
+        .then(function(user){
+
+          // non-relational accounts
+          var account1 = user.related('accounts').at(0);
+          var account2 = user.related('accounts').at(1);
+
+          return new Promise.all([
+            account1,
+            account2,
+
+            // get some related data too
+            user.related('accounts').at(0).related('currency').fetch(),
+            user.related('accounts').at(1).related('currency').fetch()
+          ]);
+
+        })
+        .then(function(accountData){
+
+          return new Promise.all([
+            // currency strings
+            accountData[2].get('currency'),
+            accountData[3].get('currency'),
+
+            // must use non-relational account data for balance
+            am.getAccountBalance(accountData[0]),
+            am.getAccountBalance(accountData[1])
+
+            ]);
+        })
+        .then(function(balances){
+          console.log('Balance:');
+          console.log(balances[0] + ': ' + balances[2]);
+          console.log(balances[1] + ': ' + balances[3]);
+          callback();
+        })
+        .catch(function(err){
+          console.log('-->', err);
+          callback();
+        });
     });
 
+  // CREATE USER
   vantage
-    .command("user set <user> [property] [value]")
-    .description("")
+    .command("user create")
+    .description("Create a user account")
     .action(function(args, callback) {
-      this.log('Setting user info ' + args.property + ' to ' + args.value + ' for: ', args.user);
-      callback();
+      var self = this;
+      this.prompt([{
+        type: "input",
+        name: "email",
+        message: "Provide a user email address.",
+      }, {
+        type: "input",
+        name: "lsd",
+        message: "Provide a user password.",
+      }], function(result){
+          self.log("Good move.", result);
+          callback();
+        }
+      );
     });
 
+        //console.log(result);
+        //User.forge({email: result.email, password: result.password})
+        //  .fetch()
+        //  .save()
+        //  .finally(callback);
+
+  // SET USER DATA
+  vantage
+    .command("user [email]")
+    .description("Make changes to a user account")
+    .option('-w, --withdraw [amount]', 'Withdraw amount')
+    .option('-d, --deposit [amount]', 'Deposit amount')
+    .option('-c, --currency [type]', 'Currency to transact in.')
+    .action(function(args, callback) {
+
+      this.log('Executing: ', args.options, ' on user: ', args.email);
+
+      // get the user / accounts info based on email
+      getUserInfo(args)
+        .then(function(userAccountsInfo){
+          var accountIndex = 0;
+
+          if (args.options.currency !== 'BTC' && args.options.currency !== 'USD') {
+            console.log('Must select currency');
+            callback();
+          }
+
+          // fine out which account to use
+          userAccountsInfo.forEach(function(account, index){
+            if (account[1] === args.options.currency){
+              console.log('You chose ', account[0] + ' of type: ', account[1]);
+              accountIndex = index;
+            }
+          });
+
+          // find out which action to use
+          if (args.options.withdraw){
+            am.withdrawFromAccount(userAccountsInfo[accountIndex][0], args.options.withdraw)
+              .finally(callback);
+          } else if (args.options.deposit){
+            am.depositToAccount(userAccountsInfo[accountIndex][0], args.options.deposit)
+              .finally(callback);
+          }
+
+        })
+        .catch(function(err){
+          console.log(err);
+          callback();
+        });
+    });
 
   // set prompt, port
   // and show the Vantage prompt.
@@ -212,4 +333,64 @@ function runAdminTool() {
     .delimiter("flyptoX$")
     .listen(8888)
     .show();
+}
+
+
+//
+// call the db and get info about the user and his accounts
+// return a promise
+function getUserInfo(args){
+  return new Promise(function(resolve, reject){
+    User.forge({email: args.email}).fetch({withRelated: ['accounts']})
+      .then(function(user){
+
+        // non-relational accounts
+        var account1 = user.related('accounts').at(0);
+        var account2 = user.related('accounts').at(1);
+
+        return new Promise.all([
+          account1,
+          account2,
+
+          // get some related data too
+          user.related('accounts').at(0).related('currency').fetch(),
+          user.related('accounts').at(1).related('currency').fetch(),
+
+          // pass along account ids as well
+          account1.id,
+          account2.id
+
+        ]);
+
+      })
+      .then(function(accountData){
+
+        return new Promise.all([
+          // currency strings
+          accountData[2].get('currency'),
+          accountData[3].get('currency'),
+
+
+          // must use non-relational account data for balance
+          am.getAccountBalance(accountData[0]),
+          am.getAccountBalance(accountData[1]),
+
+          accountData[4],
+          accountData[5]
+
+          ]);
+      })
+      .then(function(balances){
+        // return an array of tuples
+        // [[accountID, 'USD', 1000], [accountID, 'BTC', 500]]
+        resolve([
+          [balances[4], balances[0], balances[2]],
+          [balances[5], balances[1], balances[3]]
+        ]);
+      })
+      .catch(function(err){
+        console.log('-->', err);
+        reject(err);
+      });
+  });
 }
