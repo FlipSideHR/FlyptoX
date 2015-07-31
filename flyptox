@@ -334,64 +334,66 @@ function runAdminTool() {
     .delimiter("flyptoX$")
     .listen(8888)
     .show();
-}
 
 
-//
-// call the db and get info about the user and his accounts
-// return a promise
-function getUserInfo(args){
-  return new Promise(function(resolve, reject){
-    User.forge({email: args.email}).fetch({withRelated: ['accounts']})
-      .then(function(user){
+  //
+  // call the db and get info about the user and his accounts
+  // return a promise
+  function getUserInfo(args){
+    return new Promise(function(resolve, reject){
+      User.forge({email: args.email}).fetch({withRelated: ['accounts']})
+        .then(function(user){
 
-        // non-relational accounts
-        var account1 = user.related('accounts').at(0);
-        var account2 = user.related('accounts').at(1);
+          // non-relational accounts
+          var account1 = user.related('accounts').at(0);
+          var account2 = user.related('accounts').at(1);
 
-        return new Promise.all([
-          account1,
-          account2,
+          return new Promise.all([
+            account1,
+            account2,
 
-          // get some related data too
-          user.related('accounts').at(0).related('currency').fetch(),
-          user.related('accounts').at(1).related('currency').fetch(),
+            // get some related data too
+            user.related('accounts').at(0).related('currency').fetch(),
+            user.related('accounts').at(1).related('currency').fetch(),
 
-          // pass along account ids as well
-          account1.id,
-          account2.id
-
-        ]);
-
-      })
-      .then(function(accountData){
-
-        return new Promise.all([
-          // currency strings
-          accountData[2].get('currency'),
-          accountData[3].get('currency'),
-
-
-          // must use non-relational account data for balance
-          am.getAccountBalance(accountData[0]),
-          am.getAccountBalance(accountData[1]),
-
-          accountData[4],
-          accountData[5]
+            // pass along account ids as well
+            account1.id,
+            account2.id
 
           ]);
-      })
-      .then(function(balances){
-        // return an array of tuples
-        // [[accountID, 'USD', 1000], [accountID, 'BTC', 500]]
-        resolve([
-          [balances[4], balances[0], balances[2]],
-          [balances[5], balances[1], balances[3]]
-        ]);
-      })
-      .catch(function(err){
-        console.log('-->', err);
-        reject(err);
-      });
-  });
+
+        })
+        .then(function(accountData){
+
+          return new Promise.all([
+            // currency strings
+            accountData[2].get('currency'),
+            accountData[3].get('currency'),
+
+
+            // must use non-relational account data for balance
+            am.getAccountBalance(accountData[0]),
+            am.getAccountBalance(accountData[1]),
+
+            accountData[4],
+            accountData[5]
+
+            ]);
+        })
+        .then(function(balances){
+          // return an array of tuples
+          // [[accountID, 'USD', 1000], [accountID, 'BTC', 500]]
+          resolve([
+            [balances[4], balances[0], balances[2]],
+            [balances[5], balances[1], balances[3]]
+          ]);
+        })
+        .catch(function(err){
+          console.log('-->', err);
+          reject(err);
+        });
+    });
+  }
 }
+
+
