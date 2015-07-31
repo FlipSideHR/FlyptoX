@@ -1,10 +1,6 @@
 #!/usr/local/bin/node
 "use strict";
 
-var am = require("./server/marketEngine/accountManager");
-var Promise = require('bluebird');
-
-var User = require('./server/models/User');
 
 // track if we are doing a package setup
 var setup = false;
@@ -140,6 +136,9 @@ function runSetup(){
 function runAdminTool() {
 
   // Run admin Tool
+  var am = require("./server/marketEngine/accountManager");
+  var Promise = require('bluebird');
+  var User = require('./server/models/User');
 
   // Create a new instance of vantage.
   var vantage = require('vantage')();
