@@ -35,10 +35,14 @@
   </div>
 
   <div class="orderbook-right-col" ng-if="auth.isAuth()">
-    <div class="execution" ng-init="getBalance()">
-      <h5>Order Entry</h5>
+    <div class="balances execution">
+      <h5>Wallet Balances</h5>
       <div class="usd-balance">USD Balance: {{balances['usd'] | currency}} / Avail: {{balances['usd-available'] | currency}}</div>
       <div class="btc-balance">BTC Balance: {{balances['btc'] | currency}} / Avail: {{balances['btc-available'] | currency}}</div>
+    </div>
+
+    <div class="execution" ng-init="getBalance()">
+      <h5>Order Entry</h5>
 
       <form class="orderForm" ng-submit="placeOrder()">
 
@@ -80,7 +84,8 @@
       </form>
     </div>
 
-    <div class="myOrders" ng-if="auth.isAuth()" ng-init="getOrders()">
+    <div class="myOrders execution" ng-if="auth.isAuth()" ng-init="getOrders()">
+      <h5>My Orders</h5>
       <table>
         <tr>
           <th>Price</th>
@@ -96,23 +101,3 @@
     </div>
   </div>
 </div>
-
-
-<!--
-<pre>
-  Order Data: {{orderData}}
-</pre> -->
-
-<!-- <button ng-click='getOrders()'>Get Orders</button>
-<button ng-click='getOrderBook(1)'>Level 1</button>
-<button ng-click='getOrderBook(2)'>Level 2</button>
-<button ng-click='getOrderBook(3)'>Level 3</button>
-
-<pre>
-  Orders: {{orders}}
-</pre>
-
-<pre>
-  OrderBook: {{orderbook}}
-</pre>
- -->
