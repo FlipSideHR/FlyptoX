@@ -28,7 +28,7 @@ div.sections {
   margin-top: 50%;
 }
 
-div.history, div.wallets {
+div.history, div.wallets, div.settings {
   width: 80%;
   padding: 9px 0px;
   height: 100%;
@@ -39,7 +39,7 @@ div.filters {
   text-align: center;
 }
 
-.filters button {
+.filters button, .settingsForm button {
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -91,4 +91,21 @@ div.filters {
 .headings {
   font-weight: bold;
   height: 25px;
+}
+
+.settingsForm label {
+  width: 100%;
+  padding-left: 35%;
+  display: block;
+  margin: 5px 0;
+}
+
+.settingsForm input[type=text] {
+  margin: 2% 0;
+  width: 40%;
+}
+
+.settingsForm button {
+  display: block;
+  margin: 1% auto 0 auto;
 }

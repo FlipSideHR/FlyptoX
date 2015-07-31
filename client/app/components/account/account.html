@@ -1,11 +1,5 @@
-<pre ng-init="getTrades()">
-</pre>
-
-<pre ng-init="getOrders()">
-</pre>
-
 <!-- Container -->
-<div class="account" ng-init="getTransactions(0)">
+<div class="account">
   <!-- Section Navigation -->
   <div class="sections">
     <a ng-click="section='history'">Account History</a>
@@ -58,43 +52,12 @@
 
   <!-- Settings -->
   <div class="settings" ng-show="section === 'settings'">
+    <h1>Account Settings</h1>
     <form class="settingsForm">
-
-        <div class="execDetails">
-          <label>Currency</label>
-          <select ng-model="orderData.currency_pair_id"
-                  ng-options="pair.value as pair.label for pair in pairs"
-                  required>
-          </select>
-        </div>
-
-        <div class="execDetails">
-          <label>Type</label>
-          <select ng-model="orderData.type"
-                  ng-options="type for type in types"
-                  required>
-          </select>
-        </div>
-
-        <div class="execDetails" ng-if="orderData.type !== 'market'">
-          <label>Price</label>
-          <input ng-model="orderData.price" type="number" step="any" required>
-        </div>
-
-        <div class="execDetails">
-          <label>Side</label>
-          <select ng-model="orderData.side"
-                  ng-options="side for side in sides" required>
-          </select>
-        </div>
-
-        <div class="execDetails">
-          <label>Size</label>
-          <input ng-model="orderData.size" type="number" step="any" required>
-        </div>
-
-        <button type="submit">Submit<button>
-
-      </form>
+      <label>First Name: <input type="text" placeholder="First Name"></label>
+      <label>Last Name: <input type="text" placeholder="Last Name"></label>
+      <label>Email: <input type="text" placeholder="me@example.com"></label>
+      <button type="submit">Submit</button>
+    </form>
   </div>
 </div>

@@ -80,8 +80,9 @@
         });
       };
 
-      // Initialize account balances
+      // Initialize data
       (function(){
+        // Balances
         APIService.get('accounts', function(accounts) {
           APIService.get('accounts/' + accounts[0].id, function(data) {
             $scope.balances['usd'] = data.balance;
@@ -93,6 +94,11 @@
             $scope.balances['btc-available'] = data.available;
           });
         });
+
+        // Trades, orders, and transactions
+        $scope.getTrades();
+        $scope.getOrders();
+        $scope.getTransactions(0); // 0 is USD
       })();
 
     }]); // app.controller
