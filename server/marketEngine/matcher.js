@@ -128,11 +128,9 @@ function processOffers(info) {
             executionSize = Math.min(maxSize, offer_remaining_size);
 
             if(executionSize < 0.00000001) {
-              return [
-                done_order(T, order),
-                null,
-                null
-              ];
+              return Promise.all([
+                done_order(T, order)
+              ]);
             }
 
             availableBalance -= executionSize * offer.get('price');
