@@ -13,7 +13,7 @@
 
 TODO:
 - Wallet integrations.
-- More ests.
+- More tests.
 - Admin tools.
 
 ## Team
@@ -124,5 +124,5 @@ View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
 
 ## Contributing
 
-PR's are welcome. Especially for tests.
+Pull requests are welcome. Especially for tests.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
