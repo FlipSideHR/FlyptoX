@@ -2,18 +2,18 @@
 
 # FlyptoX
 
-> FlyptoX is an open-source, node.js crypto currency exchange.
+> FlyptoX is an open-source Node.js cryptocurrency exchange.
 
-####**Currently in alpha development. Thorough testing is suggested and PR's are welcome.
+####**Currently in alpha development. Thorough testing is suggested. Pull requests are welcome.
 
-- Our quick and easy setup tools allow you to configure, create, and deploy your own crypto-currency exchange.
+- Our quick and easy setup tools allow you to configure, create, and deploy your own cryptocurrency exchange.
 - The exchange supports crypto->crypto, testnet->testnet, testnet->virtualUSD exchanges out of the box.
 - Crypto->Fiat exchange requires extra setup for regulation compliance and chargeback protections. This is the responsibility of the exchange operator to implement.
 - *Fiat currency withdrawals, deposits, wallets, and trading is supported - but you as exchange operator must enable these processes and the required compliance processes required in your region.*
 
 TODO:
 - Wallet integrations.
-- Tests.
+- More ests.
 - Admin tools.
 
 ## Team
@@ -37,18 +37,15 @@ TODO:
 > `git clone https://github.com/FlipSideHR/FlyptoX.git`
 
 > `cd FlyptoX`
+
 > `./flyptox setup`
 
 #### Administration
-Rudimentery CLI for administration.
+Rudimentary CLI for administration.
 
 > `./flyptox`
+
 > `flyptox$: help`
-
-
-####TODO: Write better instructions and tools for this part of the process.
-Deploy to your hosting environment.
-
 
 ## Requirements
 
@@ -74,7 +71,7 @@ From within the projects root directory:
 1. [Install Postgres.](https://wiki.postgresql.org/wiki/Detailed_installation_guides)
 
 
-    The flyptox database setup is set to use your username as its admin user/database. From here it will create the     other databases it needs. If for some reason your database was not configured like this, you will have to setup     a database and user with your username that has admin privileges (this is dev, not production).
+    The flyptox database setup is set to use your username as its admin user/database. From here it will create the other databases it needs. If for some reason your database was not configured like this, you will have to set up a database and user with your username that has admin privileges (this is dev, not production).
 
     Linux users:
 
@@ -92,7 +89,7 @@ From within the projects root directory:
 
 **As always, you should follow your own security best practices.**
 
-### Now you are ready to devel!
+### Now you are ready to develop!
 
 - `gulp` builds the client, starts nodemon running the server, and launches browser-sync to auto inject any clientside changes.
 
@@ -113,10 +110,14 @@ From within the projects root directory:
     - `gulp server:test --spec`
 
 #### DB Tools
-> In utils/dbTools.js there are several utilities for working with the DB.
-> Run `./utils/dbTools` to overwrite the test db.
-> Run `./utils/dbTools --dev` to overwrite the dev db.
-> Run `./utils/dbTools --all` to overwrite the dev and test db's.
+In utils/dbTools.js there are several utilities for working with the DB.
+
+Run `./utils/dbTools` to overwrite the test db.
+
+Run `./utils/dbTools --dev` to overwrite the dev db.
+
+Run `./utils/dbTools --all` to overwrite the dev and test db's.
+
 ### Roadmap
 
 View the project roadmap [here](https://github.com/FlipSideHR/FlyptoX/issues)
